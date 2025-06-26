@@ -94,7 +94,7 @@ fun Greeting() {
             )
         }
     ) { paddingValues ->
-        var contacts = listOf(
+        val grouped = listOf(
             "Lena Schröder",
             "Maximilian Weber",
             "Sofia Richter",
@@ -115,58 +115,12 @@ fun Greeting() {
             "Elias König",
             "Johanna Peters",
             "David Schuster"
-        ).sorted()
+        ).sorted().groupBy { it[0] }
 
-        val grouped = contacts.groupBy { it[0] }
-
-        LazyColumn(
-            contentPadding = paddingValues,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            grouped.forEach { (initial, contactsForInitial) ->
-                stickyHeader {
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color(0, 0, 0, 1),
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            text = initial.toString(),
-                            modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
-                            style = TextStyle(
-                                fontWeight = FontWeight.Bold
-                            )                        )
-                    }
-                }
-
-                items(contactsForInitial) { c ->
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color(0, 0, 0, 1),
-                        ),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp)
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.profile_picture), // oder eine dynamische ID
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .clip(CircleShape)
-                            )
-                            Spacer(modifier = Modifier.width(12.dp))
-                            Text(text = c)
-                        }
-                    }
-                }
-            }
-        }
+        ContactsList(
+            grouped = grouped,
+            paddingValues = paddingValues
+        )
     }
 }
 
