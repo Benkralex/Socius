@@ -6,8 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.content.MediaType.Companion.Image
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,12 +27,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -80,38 +75,23 @@ fun Greeting() {
             }
         },
         bottomBar = {
-            var selectedItem by remember { mutableIntStateOf(0) }
-            val items = listOf(
-                stringResource(R.string.menu_bar_contacts),
-                stringResource(R.string.menu_bar_highlights),
-                stringResource(R.string.menu_bar_manage)
+            CustomNavigationBar (
+                items = listOf(
+                    R.string.menu_bar_contacts,
+                    R.string.menu_bar_highlights,
+                    R.string.menu_bar_manage
+                ),
+                selectedIcons = listOf(
+                    Icons.Filled.Person,
+                    Icons.Filled.Favorite,
+                    Icons.Filled.Build
+                ),
+                unselectedIcons = listOf(
+                    Icons.Outlined.Person,
+                    Icons.Outlined.FavoriteBorder,
+                    Icons.Outlined.Build
+                ),
             )
-            val selectedIcons = listOf(
-                Icons.Filled.Person,
-                Icons.Filled.Favorite,
-                Icons.Filled.Build
-            )
-            val unselectedIcons = listOf(
-                Icons.Outlined.Person,
-                Icons.Outlined.FavoriteBorder,
-                Icons.Outlined.Build
-            )
-
-            NavigationBar {
-                items.forEachIndexed { index, item ->
-                    NavigationBarItem(
-                        icon = {
-                            Icon(
-                                if (selectedItem == index) selectedIcons[index] else unselectedIcons[index],
-                                contentDescription = item,
-                            )
-                        },
-                        label = { Text(item) },
-                        selected = selectedItem == index,
-                        onClick = { selectedItem = index },
-                    )
-                }
-            }
         }
     ) { paddingValues ->
         var contacts = listOf(
