@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kontakte</string>
+    <string name="menu_bar_contacts">Kontakte</string>
+    <string name="menu_bar_highlights">Highlights</string>
+    <string name="menu_bar_manage">Verwalten</string>
+</resources>
