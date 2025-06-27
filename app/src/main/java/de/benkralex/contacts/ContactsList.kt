@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,16 +29,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import de.benkralex.contacts.backend.Contact
+import de.benkralex.contacts.backend.PhoneNumber
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ContactsList(
-    contacts: List<Pair<String?, Bitmap?>>,
+    contacts: List<Contact>,
     paddingValues: PaddingValues
 ) {
     // Group contacts by the first letter of their name
     val grouped = contacts.groupBy {
-        it.first?.firstOrNull()?.uppercase() ?: "?"
+        it.displayName?.firstOrNull()?.uppercase() ?: "?"
     }.toSortedMap(compareBy { it })
     // Display the contacts in a LazyColumn with sticky headers
     LazyColumn(
@@ -52,8 +56,8 @@ fun ContactsList(
             }
             items(contactsForInitial) { c ->
                 ContactCard(
-                    name = c.first ?: "Unknown",
-                    profilePicture = c.second,
+                    name = c.displayName ?: "Unknown",
+                    profilePicture = c.photoBitmap,
                 )
             }
         }
@@ -74,7 +78,7 @@ fun ContactsListHeading(
     ) {
         Text(
             text = text,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
             style = TextStyle(
                 fontWeight = FontWeight.Bold
             )
@@ -97,7 +101,7 @@ fun ContactCard(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp)
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp)
         ) {
             if (profilePicture != null) {
                 Image(
@@ -117,7 +121,9 @@ fun ContactCard(
                 )
             }
             Spacer(modifier = Modifier.width(12.dp))
-            Text(text = name)
+            Column {
+                Text(text = name)
+            }
         }
     }
 }
