@@ -1,5 +1,7 @@
 package de.benkralex.contacts
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -42,12 +44,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import de.benkralex.contacts.backend.getAndroidSystemContacts
 import de.benkralex.contacts.ui.theme.ContactsTheme
 
 class MainActivity : ComponentActivity() {
@@ -58,6 +64,15 @@ class MainActivity : ComponentActivity() {
             ContactsTheme {
                 Greeting()
             }
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
+            != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.READ_CONTACTS),
+                1
+            )
         }
     }
 }
@@ -94,31 +109,10 @@ fun Greeting() {
             )
         }
     ) { paddingValues ->
-        val grouped = listOf(
-            "Lena Schröder",
-            "Maximilian Weber",
-            "Sofia Richter",
-            "Jonas Meier",
-            "Emily Schneider",
-            "Felix Hoffmann",
-            "Laura Wagner",
-            "Niklas Becker",
-            "Anna Scholz",
-            "Tim Schäfer",
-            "Mia Krämer",
-            "Ben Zimmermann",
-            "Lea Hartmann",
-            "Noah Lorenz",
-            "Pauline Busch",
-            "Luca Frank",
-            "Marie Neumann",
-            "Elias König",
-            "Johanna Peters",
-            "David Schuster"
-        ).sorted().groupBy { it[0] }
+        val contacts = getAndroidSystemContacts(context = LocalContext.current)
 
         ContactsList(
-            grouped = grouped,
+            contacts = contacts,
             paddingValues = paddingValues
         )
     }

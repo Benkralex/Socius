@@ -1,5 +1,8 @@
 package de.benkralex.contacts
 
+import android.R.attr.contentDescription
+import android.graphics.Bitmap
+import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,19 +23,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import kotlin.collections.component1
-import kotlin.collections.component2
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ContactsList(
-    grouped: Map<Char, List<String>>,
+    contacts: List<Pair<String?, Bitmap?>>,
     paddingValues: PaddingValues
 ) {
+    // Group contacts by the first letter of their name
+    val grouped = contacts.groupBy {
+        it.first?.firstOrNull()?.uppercase() ?: "?"
+    }.toSortedMap(compareBy { it })
+    // Display the contacts in a LazyColumn with sticky headers
     LazyColumn(
         contentPadding = paddingValues,
         modifier = Modifier.fillMaxWidth()
@@ -45,7 +52,8 @@ fun ContactsList(
             }
             items(contactsForInitial) { c ->
                 ContactCard(
-                    name = c
+                    name = c.first ?: "Unknown",
+                    profilePicture = c.second,
                 )
             }
         }
@@ -77,6 +85,7 @@ fun ContactsListHeading(
 @Composable
 fun ContactCard(
     name: String,
+    profilePicture: Bitmap? = null,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -90,13 +99,23 @@ fun ContactCard(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.profile_picture), // oder eine dynamische ID
-                contentDescription = null,
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-            )
+            if (profilePicture != null) {
+                Image(
+                    bitmap = profilePicture.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                )
+            } else {
+                Image(
+                    painter = painterResource(id = R.drawable.profile_picture),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                )
+            }
             Spacer(modifier = Modifier.width(12.dp))
             Text(text = name)
         }
