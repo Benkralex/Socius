@@ -34,6 +34,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -83,7 +84,7 @@ class MainActivity : ComponentActivity() {
 fun Greeting() {
     Scaffold(
         topBar = {
-            TopAppBar(title = {Text("PLACEHOLDER SEARCHBAR")})
+            //TopAppBar(title = {Text("PLACEHOLDER SEARCHBAR")})
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { /* do something */ }) {
