@@ -1,4 +1,4 @@
-package de.benkralex.contacts.contactListPageWidgets
+package de.benkralex.contacts.widgets
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

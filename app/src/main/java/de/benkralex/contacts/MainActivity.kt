@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import de.benkralex.contacts.Pages.ContactListPage
 import de.benkralex.contacts.navigation.NavigationRoot
 import de.benkralex.contacts.ui.theme.ContactsTheme
 

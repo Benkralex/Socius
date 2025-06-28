@@ -1,4 +1,4 @@
-package de.benkralex.contacts.Pages
+package de.benkralex.contacts.pages
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -15,7 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import de.benkralex.contacts.contactListPageWidgets.ContactsList
+import de.benkralex.contacts.widgets.ContactsList
 import de.benkralex.contacts.backend.Contact
 import de.benkralex.contacts.backend.getAndroidSystemContacts
 import kotlinx.coroutines.Dispatchers

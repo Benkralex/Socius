@@ -17,11 +17,11 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
-import de.benkralex.contacts.CustomNavigationBar
-import de.benkralex.contacts.Pages.ContactListPage
-import de.benkralex.contacts.Pages.HighlightsPage
-import de.benkralex.contacts.Pages.ManagePage
-import de.benkralex.contacts.Pages.SettingsPage
+import de.benkralex.contacts.widgets.CustomNavigationBar
+import de.benkralex.contacts.pages.ContactListPage
+import de.benkralex.contacts.pages.HighlightsPage
+import de.benkralex.contacts.pages.ManagePage
+import de.benkralex.contacts.pages.SettingsPage
 import de.benkralex.contacts.R
 import kotlinx.serialization.Serializable
 

@@ -1,4 +1,4 @@
-package de.benkralex.contacts.contactListPageWidgets
+package de.benkralex.contacts.widgets
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image

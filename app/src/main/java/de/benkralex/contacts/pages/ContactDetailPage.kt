@@ -1,4 +1,4 @@
-package de.benkralex.contacts.Pages
+package de.benkralex.contacts.pages
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

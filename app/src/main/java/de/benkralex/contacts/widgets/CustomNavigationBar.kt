@@ -1,4 +1,4 @@
-package de.benkralex.contacts
+package de.benkralex.contacts.widgets
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
