@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SearchBar
@@ -38,7 +39,8 @@ import kotlin.comparisons.compareBy
 @Composable
 fun ContactsList(
     contacts: List<Contact>,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    onContactSelected: (Int) -> Unit = {}
 ) {
     val textFieldState = rememberTextFieldState()
     var searchQuery by rememberSaveable { mutableStateOf("") }
@@ -127,9 +129,31 @@ fun ContactsList(
                     ContactCard(
                         name = c.displayName ?: stringResource(R.string.contact_no_name),
                         profilePicture = c.photoBitmap,
+                        modifier = Modifier.clickable(
+                            onClick = { onContactSelected(contacts.indexOf(c)) }
+                        )
                     )
                 }
             }
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

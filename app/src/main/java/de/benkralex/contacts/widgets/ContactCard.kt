@@ -26,15 +26,15 @@ import de.benkralex.contacts.R
 
 @Composable
 fun ContactCard(
+    modifier: Modifier = Modifier,
     name: String,
-    profilePicture: Bitmap? = null,
-    modifier: Modifier = Modifier
+    profilePicture: Bitmap? = null
 ) {
     Card(
         colors = CardDefaults.cardColors(
             containerColor = Color(0, 0, 0, 1),
         ),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
     ) {
         Row(

@@ -8,7 +8,13 @@ import androidx.compose.material.icons.outlined.Build
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
@@ -23,6 +29,11 @@ import de.benkralex.contacts.pages.HighlightsPage
 import de.benkralex.contacts.pages.ManagePage
 import de.benkralex.contacts.pages.SettingsPage
 import de.benkralex.contacts.R
+import de.benkralex.contacts.backend.Contact
+import de.benkralex.contacts.backend.getAndroidSystemContacts
+import de.benkralex.contacts.pages.ContactDetailPage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -34,13 +45,21 @@ data object ManagePageNavKey: NavKey
 @Serializable
 data object SettingsPageNavKey: NavKey
 @Serializable
-data class ContactDetailPageNavKey(val contactId: String): NavKey
+data class ContactDetailPageNavKey(val contactId: Int): NavKey
 
 
 @Composable
 fun NavigationRoot(
     modifier: Modifier
 ) {
+    val context = LocalContext.current
+    var contacts by remember { mutableStateOf<List<Contact>?>(null) }
+    LaunchedEffect(Unit) {
+        withContext(Dispatchers.IO) {
+            contacts = getAndroidSystemContacts(context = context)
+        }
+    }
+
     val backStack = rememberNavBackStack(ContactListPageNavKey)
     NavDisplay(
         backStack = backStack,
@@ -57,7 +76,8 @@ fun NavigationRoot(
                         key = key
                     ) {
                         ContactListPage(
-                            {
+                            contacts = contacts,
+                            menuBar = {
                                 CustomNavigationBar(
                                     items = listOf(
                                         stringResource(R.string.menu_bar_contacts),
@@ -82,6 +102,11 @@ fun NavigationRoot(
                                         }
                                     },
                                     selectedIndex = 0
+                                )
+                            },
+                            onContactSelected = { contactIdx ->
+                                backStack.add(
+                                    ContactDetailPageNavKey(contactIdx)
                                 )
                             }
                         )
@@ -164,12 +189,31 @@ fun NavigationRoot(
                         SettingsPage()
                     }
                 }
+                is ContactDetailPageNavKey -> {
+                    NavEntry(
+                        key = key
+                    ) {
+                        if (contacts?.get(key.contactId) == null) {
+                            throw IllegalArgumentException(
+                                "Contact with ID ${key.contactId} not found in contacts list."
+                            )
+                        } else {
+                            ContactDetailPage(
+                                contact = contacts?.get(key.contactId)!!,
+                                onBackClick = {
+                                    backStack.removeAt(backStack.size - 1)
+                                }
+                            )
+                        }
+                    }
+                }
                 else -> {
                     NavEntry(
                         key = key
                     ) {
                         ContactListPage(
-                            {
+                            contacts = contacts,
+                            menuBar = {
                                 CustomNavigationBar(
                                     items = listOf(
                                         stringResource(R.string.menu_bar_contacts),
@@ -194,6 +238,11 @@ fun NavigationRoot(
                                         }
                                     },
                                     selectedIndex = 0
+                                )
+                            },
+                            onContactSelected = { contactIdx ->
+                                backStack.add(
+                                    ContactDetailPageNavKey(contactIdx)
                                 )
                             }
                         )
