@@ -94,11 +94,21 @@ fun getAndroidSystemContacts(context: Context): List<Contact> {
             // Beziehungen laden
             contact.relations = loadRelations(contentResolver, contactId)
 
-            contacts.add(contact)
+            if (!displayName.isNullOrBlank() || hasRelevantData(contact)) {
+                contacts.add(contact)
+            }
         }
     }
 
     return contacts
+}
+
+private fun hasRelevantData(contact: Contact): Boolean {
+    return contact.phoneNumbers.isNotEmpty() ||
+            contact.emails.isNotEmpty() ||
+            contact.addresses.isNotEmpty() ||
+            contact.organization != null ||
+            contact.note != null
 }
 
 private fun loadStructuredName(contentResolver: android.content.ContentResolver, contactId: String, contact: Contact) {
