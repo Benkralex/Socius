@@ -5,4 +5,9 @@
     <string name="menu_bar_highlights">Highlights</string>
     <string name="menu_bar_manage">Verwalten</string>
     <string name="contact_no_name">Unbekannt</string>
+    <string name="type_home">Privat</string>
+    <string name="type_mobile">Mobil</string>
+    <string name="type_work">Arbeit</string>
+    <string name="type_other">Sonstiges</string>
+    <string name="type_unknown">Unbekannt</string>
 </resources>

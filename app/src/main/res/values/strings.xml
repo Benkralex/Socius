@@ -4,4 +4,9 @@
     <string name="menu_bar_highlights">Highlights</string>
     <string name="menu_bar_manage">Manage</string>
     <string name="contact_no_name">Unknown</string>
+    <string name="type_home">Home</string>
+    <string name="type_mobile">Mobile</string>
+    <string name="type_work">Work</string>
+    <string name="type_other">Other</string>
+    <string name="type_unknown">Unknown</string>
 </resources>

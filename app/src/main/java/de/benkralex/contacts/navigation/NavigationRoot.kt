@@ -52,8 +52,8 @@ data class ContactDetailPageNavKey(val contactId: Int): NavKey
 fun NavigationRoot(
     modifier: Modifier
 ) {
-    val context = LocalContext.current
     var contacts by remember { mutableStateOf<List<Contact>?>(null) }
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
             contacts = getAndroidSystemContacts(context = context)
