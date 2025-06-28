@@ -7,10 +7,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import de.benkralex.contacts.Pages.ContactsListPage
+import de.benkralex.contacts.Pages.ContactListPage
+import de.benkralex.contacts.navigation.NavigationRoot
 import de.benkralex.contacts.ui.theme.ContactsTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,7 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ContactsTheme {
-                ContactsListPage()
+                NavigationRoot(Modifier)
             }
         }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
@@ -38,6 +40,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ContactsListPagePreview() {
     ContactsTheme {
-        ContactsListPage()
+        NavigationRoot(Modifier)
     }
 }

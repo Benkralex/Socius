@@ -4,12 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.outlined.Build
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -19,19 +13,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import de.benkralex.contacts.contactListPageWidgets.ContactsList
-import de.benkralex.contacts.CustomNavigationBar
-import de.benkralex.contacts.R
 import de.benkralex.contacts.backend.Contact
 import de.benkralex.contacts.backend.getAndroidSystemContacts
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun ContactsListPage() {
+fun ContactListPage(
+    menuBar: @Composable () -> Unit
+) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
@@ -41,35 +35,20 @@ fun ContactsListPage() {
             }
         },
         bottomBar = {
-            CustomNavigationBar (
-                items = listOf(
-                    stringResource(R.string.menu_bar_contacts),
-                    stringResource(R.string.menu_bar_highlights),
-                    stringResource(R.string.menu_bar_manage)
-                ),
-                selectedIcons = listOf(
-                    Icons.Filled.Person,
-                    Icons.Filled.Favorite,
-                    Icons.Filled.Build
-                ),
-                unselectedIcons = listOf(
-                    Icons.Outlined.Person,
-                    Icons.Outlined.FavoriteBorder,
-                    Icons.Outlined.Build
-                ),
-            )
+            menuBar()
         }
     ) { paddingValues ->
         val context = LocalContext.current
-        var contacts by remember { mutableStateOf<List<Contact>>(listOf()) }
-        val scope = rememberCoroutineScope()
+        var contacts by remember { mutableStateOf<List<Contact>?>(null) }
 
         LaunchedEffect(Unit) {
-            contacts = getAndroidSystemContacts(context = context)
+            withContext(Dispatchers.IO) {
+                contacts = getAndroidSystemContacts(context = context)
+            }
         }
 
         ContactsList(
-            contacts = contacts,
+            contacts = contacts ?: emptyList(),
             paddingValues = paddingValues
         )
     }

@@ -8,11 +8,14 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import de.benkralex.contacts.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HighlightsPage() {
+fun HighlightsPage(
+    menuBar: @Composable () -> Unit
+) {
     Scaffold (
         topBar = {
             TopAppBar(
@@ -21,10 +24,15 @@ fun HighlightsPage() {
                 }
             )
         },
+        bottomBar = {
+            menuBar()
+        }
     ) { paddingValues ->
         Text(
-            text = "Highlights content goes here",
-            modifier = Modifier.padding(paddingValues)
+            text = "PLACEHOLDER: Highlights Page",
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(8.dp)
         )
     }
 }

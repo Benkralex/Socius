@@ -16,8 +16,10 @@ fun CustomNavigationBar(
     items: List<String>,
     selectedIcons: List<ImageVector>,
     unselectedIcons: List<ImageVector>,
+    selectedIndex: Int = 0,
+    onClick: (Int) -> Unit = { }
 ) {
-    var selectedItem by remember { mutableIntStateOf(0) }
+    var selectedItem by remember { mutableIntStateOf(selectedIndex) }
     NavigationBar {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
@@ -29,7 +31,10 @@ fun CustomNavigationBar(
                 },
                 label = { Text(item) },
                 selected = selectedItem == index,
-                onClick = { selectedItem = index },
+                onClick = {
+                    selectedItem = index
+                    onClick(index)
+                },
             )
         }
     }
