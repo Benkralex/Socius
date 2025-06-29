@@ -70,7 +70,7 @@ fun getFormattedDate(day: Int, month: Int, year: Int): String {
     formattedDate = formattedDate.replace("%dayNoLeadingZero%", day.toString())
     formattedDate = formattedDate.replace("%monthLeadingZero%", month.toString().padStart(2, '0'))
     formattedDate = formattedDate.replace("%monthNoLeadingZero%", month.toString())
-    formattedDate = formattedDate.replace("%monthName%", months[month])
+    formattedDate = formattedDate.replace("%monthName%", months[month - 1])
     if (year != 0) {
         formattedDate = formattedDate.replace("%yearLong%", year.toString())
         formattedDate = formattedDate.replace("%yearShort%", (year % 100).toString().padStart(2, '0'))
