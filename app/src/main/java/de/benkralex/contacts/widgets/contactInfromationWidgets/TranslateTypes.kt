@@ -1,5 +1,6 @@
 package de.benkralex.contacts.widgets.contactInfromationWidgets
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import de.benkralex.contacts.R
@@ -38,7 +39,19 @@ fun translateType(type: String?, label: String?): String {
         "partner" -> stringResource(R.string.type_partner)
         "birthday" -> stringResource(R.string.type_birthday)
         "anniversary" -> stringResource(R.string.type_anniversary)
-        "custom" -> label ?: ""
-        else -> type
+        "custom" -> label ?: stringResource(R.string.type_custom)
+        "car" -> stringResource(R.string.type_car)
+        "callback" -> stringResource(R.string.type_callback)
+        "company_main" -> stringResource(R.string.type_company_main)
+        "isdn" -> stringResource(R.string.type_isdn)
+        "main" -> stringResource(R.string.type_main)
+        "mms" -> stringResource(R.string.type_mms)
+        "fax_other" -> stringResource(R.string.type_fax_other)
+        "radio" -> stringResource(R.string.type_radio)
+        "telex" -> stringResource(R.string.type_telex)
+        "tty_tdd" -> stringResource(R.string.type_tty_tdd)
+        "work_mobile" -> stringResource(R.string.type_work_mobile)
+        "work_pager" -> stringResource(R.string.type_work_pager)
+        else -> stringResource(R.string.type_unknown)
     }
 }

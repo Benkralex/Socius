@@ -152,7 +152,7 @@ fun loadContactPhotos(context: Context, contact: Contact) {
     // Foto laden
     contact.photoUri?.let { uriStr ->
         try {
-            val photoUri = Uri.parse(uriStr)
+            val photoUri = uriStr.toUri()
             contentResolver.openInputStream(photoUri)?.use { inputStream ->
                 contact.photoBitmap = BitmapFactory.decodeStream(inputStream)
             }
@@ -164,7 +164,7 @@ fun loadContactPhotos(context: Context, contact: Contact) {
     // Thumbnail laden
     contact.thumbnailUri?.let { uriStr ->
         try {
-            val thumbnailUri = Uri.parse(uriStr)
+            val thumbnailUri = uriStr.toUri()
             contentResolver.openInputStream(thumbnailUri)?.use { inputStream ->
                 contact.thumbnailBitmap = BitmapFactory.decodeStream(inputStream)
             }
@@ -285,6 +285,19 @@ private fun loadPhoneNumbersBatch(contentResolver: ContentResolver, contactIds: 
                 ContactsContract.CommonDataKinds.Phone.TYPE_PAGER -> "pager"
                 ContactsContract.CommonDataKinds.Phone.TYPE_OTHER -> "other"
                 ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM -> "custom"
+                ContactsContract.CommonDataKinds.Phone.TYPE_ASSISTANT -> "assistant"
+                ContactsContract.CommonDataKinds.Phone.TYPE_CALLBACK -> "callback"
+                ContactsContract.CommonDataKinds.Phone.TYPE_CAR -> "car"
+                ContactsContract.CommonDataKinds.Phone.TYPE_COMPANY_MAIN -> "company_main"
+                ContactsContract.CommonDataKinds.Phone.TYPE_ISDN -> "isdn"
+                ContactsContract.CommonDataKinds.Phone.TYPE_MAIN -> "main"
+                ContactsContract.CommonDataKinds.Phone.TYPE_MMS -> "mms"
+                ContactsContract.CommonDataKinds.Phone.TYPE_OTHER_FAX -> "fax_other"
+                ContactsContract.CommonDataKinds.Phone.TYPE_RADIO -> "radio"
+                ContactsContract.CommonDataKinds.Phone.TYPE_TELEX -> "telex"
+                ContactsContract.CommonDataKinds.Phone.TYPE_TTY_TDD -> "tty_tdd"
+                ContactsContract.CommonDataKinds.Phone.TYPE_WORK_MOBILE -> "work_mobile"
+                ContactsContract.CommonDataKinds.Phone.TYPE_WORK_PAGER -> "work_pager"
                 else -> "unknown"
             }
 
@@ -468,20 +481,26 @@ private fun loadWebsitesBatch(contentResolver: ContentResolver, contactIds: List
         val contactIdIndex = it.getColumnIndex(ContactsContract.Data.CONTACT_ID)
         val urlIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Website.URL)
         val typeIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Website.TYPE)
+        val labelIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Website.LABEL)
         while (it.moveToNext()) {
             val contactId = it.getString(contactIdIndex)
-            val url = if (urlIndex != -1) it.getString(urlIndex) else null
+            var url = if (urlIndex != -1) it.getString(urlIndex) else null
+            if (!(url?.startsWith("http://") == true || url?.startsWith("https://") == true) && url != null) {
+                url = "http://$url"
+            }
+            val label = if (labelIndex != -1) it.getString(labelIndex) else null
             val type = if (typeIndex != -1) it.getInt(typeIndex) else 0
             val typeStr = when (type) {
-                ContactsContract.CommonDataKinds.Website.TYPE_HOME -> "home"
+                ContactsContract.CommonDataKinds.Website.TYPE_HOME -> "homepage"
                 ContactsContract.CommonDataKinds.Website.TYPE_WORK -> "work"
                 ContactsContract.CommonDataKinds.Website.TYPE_BLOG -> "blog"
                 ContactsContract.CommonDataKinds.Website.TYPE_PROFILE -> "profile"
                 ContactsContract.CommonDataKinds.Website.TYPE_FTP -> "ftp"
-                else -> "other"
+                ContactsContract.CommonDataKinds.Website.TYPE_CUSTOM -> "custom"
+                else -> "homepage"
             }
             if (url != null) {
-                val website = Website(url, typeStr)
+                val website = Website(url, typeStr, label)
                 if (result[contactId] == null) result[contactId] = mutableListOf()
                 result[contactId]?.add(website)
             }
@@ -506,16 +525,21 @@ private fun loadEventsBatch(contentResolver: ContentResolver, contactIds: List<S
         val contactIdIndex = it.getColumnIndex(ContactsContract.Data.CONTACT_ID)
         val startDateIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE)
         val typeIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Event.TYPE)
+        val labelIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Event.LABEL)
         while (it.moveToNext()) {
             val contactId = it.getString(contactIdIndex)
             val startDate = if (startDateIndex != -1) it.getString(startDateIndex) else null
+            val label = if (labelIndex != -1) it.getString(labelIndex) else null
             val type = if (typeIndex != -1) it.getInt(typeIndex) else 0
             val typeStr = when (type) {
                 ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY -> "birthday"
+                ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY -> "anniversary"
+                ContactsContract.CommonDataKinds.Event.TYPE_OTHER -> "other"
+                ContactsContract.CommonDataKinds.Event.TYPE_CUSTOM -> "custom"
                 else -> "other"
             }
             if (startDate != null) {
-                val event = ContactEvent(startDate, typeStr)
+                val event = ContactEvent(startDate, typeStr, label)
                 if (result[contactId] == null) result[contactId] = mutableListOf()
                 result[contactId]?.add(event)
             }
@@ -558,6 +582,7 @@ private fun loadIMsBatch(contentResolver: ContentResolver, contactIds: List<Stri
                 ContactsContract.CommonDataKinds.Im.PROTOCOL_GOOGLE_TALK -> "gtalk"
                 ContactsContract.CommonDataKinds.Im.PROTOCOL_ICQ -> "icq"
                 ContactsContract.CommonDataKinds.Im.PROTOCOL_JABBER -> "jabber"
+                ContactsContract.CommonDataKinds.Im.PROTOCOL_NETMEETING -> "netmeeting"
                 else -> "other"
             }
             val typeStr = when (type) {
@@ -598,26 +623,32 @@ private fun loadRelationsBatch(contentResolver: ContentResolver, contactIds: Lis
         val contactIdIndex = it.getColumnIndex(ContactsContract.Data.CONTACT_ID)
         val nameIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Relation.NAME)
         val typeIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Relation.TYPE)
+        val labelIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Relation.LABEL)
         while (it.moveToNext()) {
             val contactId = it.getString(contactIdIndex)
             val name = if (nameIndex != -1) it.getString(nameIndex) else null
+            val label = if (labelIndex != -1) it.getString(labelIndex) else null
             val type = if (typeIndex != -1) it.getInt(typeIndex) else 0
             val typeStr = when (type) {
+                ContactsContract.CommonDataKinds.Relation.TYPE_CUSTOM -> "custom"
                 ContactsContract.CommonDataKinds.Relation.TYPE_ASSISTANT -> "assistant"
                 ContactsContract.CommonDataKinds.Relation.TYPE_BROTHER -> "brother"
                 ContactsContract.CommonDataKinds.Relation.TYPE_CHILD -> "child"
+                ContactsContract.CommonDataKinds.Relation.TYPE_DOMESTIC_PARTNER -> "domestic_partner"
                 ContactsContract.CommonDataKinds.Relation.TYPE_FATHER -> "father"
                 ContactsContract.CommonDataKinds.Relation.TYPE_FRIEND -> "friend"
                 ContactsContract.CommonDataKinds.Relation.TYPE_MANAGER -> "manager"
                 ContactsContract.CommonDataKinds.Relation.TYPE_MOTHER -> "mother"
                 ContactsContract.CommonDataKinds.Relation.TYPE_PARENT -> "parent"
                 ContactsContract.CommonDataKinds.Relation.TYPE_PARTNER -> "partner"
+                ContactsContract.CommonDataKinds.Relation.TYPE_REFERRED_BY -> "referred_by"
+                ContactsContract.CommonDataKinds.Relation.TYPE_RELATIVE -> "relative"
                 ContactsContract.CommonDataKinds.Relation.TYPE_SISTER -> "sister"
                 ContactsContract.CommonDataKinds.Relation.TYPE_SPOUSE -> "spouse"
                 else -> "other"
             }
             if (name != null) {
-                val relation = Relation(name, typeStr)
+                val relation = Relation(name, typeStr, label)
                 if (result[contactId] == null) result[contactId] = mutableListOf()
                 result[contactId]?.add(relation)
             }

@@ -33,4 +33,29 @@
     <string name="type_referred_by">Referred by</string>
     <string name="type_partner">Partner</string>
     <string name="searchbar_placeholder">Search...</string>
+    <string name="type_custom">Custom</string>
+    <string name="type_callback">Callback</string>
+    <string name="type_car">Car</string>
+    <string name="type_company_main">Company Main</string>
+    <string name="type_isdn" translatable="false">ISDN</string>
+    <string name="type_main">Main</string>
+    <string name="type_mms" translatable="false">MMS</string>
+    <string name="type_fax_other">Fax Other</string>
+    <string name="type_radio">Radio</string>
+    <string name="type_telex" translatable="false">Telex</string>
+    <string name="type_tty_tdd" translatable="false">TTY / TTD</string>
+    <string name="type_work_mobile">Work Mobile</string>
+    <string name="type_work_pager">Work Pager</string>
+    <string name="month_january">January</string>
+    <string name="month_february">February</string>
+    <string name="month_march">March</string>
+    <string name="month_april">April</string>
+    <string name="month_may">May</string>
+    <string name="month_june">June</string>
+    <string name="month_july">July</string>
+    <string name="month_august">August</string>
+    <string name="month_september">September</string>
+    <string name="month_october">October</string>
+    <string name="month_november">November</string>
+    <string name="month_december">December</string>
 </resources>

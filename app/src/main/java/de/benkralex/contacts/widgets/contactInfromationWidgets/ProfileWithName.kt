@@ -1,19 +1,13 @@
 package de.benkralex.contacts.widgets.contactInfromationWidgets
 
-import android.graphics.drawable.shapes.ArcShape
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import de.benkralex.contacts.R
 import de.benkralex.contacts.backend.Contact
+import de.benkralex.contacts.backend.getFormattedName
 
 @Composable
 fun ProfileWithName(
@@ -56,15 +51,13 @@ fun ProfileWithName(
                     .align(Alignment.CenterVertically)
             )
         }
-        contact.displayName?.let {
-            Text(
-                text = it,
-                modifier = Modifier
-                    .padding(start = 10.dp)
-                    .align(Alignment.CenterVertically)
-                    .fillMaxWidth(),
-                style = MaterialTheme.typography.headlineSmall
-            )
-        }
+        Text(
+            text = getFormattedName(contact),
+            modifier = Modifier
+                .padding(start = 10.dp)
+                .align(Alignment.CenterVertically)
+                .fillMaxWidth(),
+            style = MaterialTheme.typography.headlineSmall
+        )
     }
 }

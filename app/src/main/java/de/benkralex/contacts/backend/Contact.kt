@@ -37,6 +37,7 @@ data class Contact(
     var events: List<ContactEvent> = emptyList(),
     var sipAddresses: List<SipAddress> = emptyList(),
     var groups: List<String> = emptyList(),
+    var labels: List<String> = emptyList(),
 
     var customFields: Map<String, String> = emptyMap()
 )

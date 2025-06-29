@@ -14,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SearchBar
@@ -33,6 +32,7 @@ import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.dp
 import de.benkralex.contacts.R
 import de.benkralex.contacts.backend.Contact
+import de.benkralex.contacts.backend.getFormattedName
 import kotlin.comparisons.compareBy
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -55,7 +55,7 @@ fun ContactsList(
 
     val grouped = remember(filteredContacts) {
         filteredContacts.groupBy {
-            it.displayName?.firstOrNull()?.uppercase() ?: "?"
+            getFormattedName(it).firstOrNull()?.uppercase() ?: "?"
         }.toSortedMap(compareBy { it })
     }
 
@@ -127,7 +127,7 @@ fun ContactsList(
                 }
                 items(contactsForInitial) { c ->
                     ContactCard(
-                        name = c.displayName ?: stringResource(R.string.contact_no_name),
+                        name = getFormattedName(c),
                         profilePicture = c.photoBitmap,
                         modifier = Modifier.clickable(
                             onClick = { onContactSelected(contacts.indexOf(c)) }

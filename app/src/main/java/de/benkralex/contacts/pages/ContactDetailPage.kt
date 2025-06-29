@@ -18,11 +18,13 @@ import androidx.compose.ui.unit.dp
 import de.benkralex.contacts.backend.Contact
 import de.benkralex.contacts.widgets.contactInfromationWidgets.EmailsWidget
 import de.benkralex.contacts.widgets.contactInfromationWidgets.EventsWidget
+import de.benkralex.contacts.widgets.contactInfromationWidgets.GroupsWidget
 import de.benkralex.contacts.widgets.contactInfromationWidgets.PhoneNumbersWidget
 import de.benkralex.contacts.widgets.contactInfromationWidgets.PostalAddressesWidget
 import de.benkralex.contacts.widgets.contactInfromationWidgets.ProfileWithName
 import de.benkralex.contacts.widgets.contactInfromationWidgets.RelationsWidget
 import de.benkralex.contacts.widgets.contactInfromationWidgets.WebsitesWidget
+import de.benkralex.contacts.widgets.contactInfromationWidgets.WorkWidget
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,6 +61,12 @@ fun ContactDetailPage(
                 .padding(paddingValues)
                 .fillMaxWidth()
         ) {
+            WorkWidget(
+                organization = contact.organization,
+                jobTitle = contact.jobTitle,
+                department = contact.department,
+            )
+            GroupsWidget(groups = contact.groups)
             EmailsWidget(contact.emails)
             PhoneNumbersWidget(contact.phoneNumbers)
             PostalAddressesWidget(contact.addresses)
