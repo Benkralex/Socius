@@ -1,5 +1,18 @@
 package de.benkralex.contacts.navigation
 
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Favorite
@@ -14,8 +27,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
@@ -69,6 +86,47 @@ fun NavigationRoot(
             rememberViewModelStoreNavEntryDecorator(),
             rememberSceneSetupNavEntryDecorator()
         ),
+        popTransitionSpec = {
+            fadeIn(
+                animationSpec = tween(
+                    500,
+                    easing = FastOutSlowInEasing
+                ),
+                initialAlpha = 1.0f,
+            ) togetherWith fadeOut(
+                animationSpec = tween(
+                    500,
+                    easing = FastOutSlowInEasing
+                ),
+                targetAlpha = 1.0f,
+            )
+        },
+        transitionSpec = {
+            fadeIn(
+                animationSpec = tween(
+                    500,
+                    easing = FastOutSlowInEasing
+                ),
+                initialAlpha = 1.0f,
+            ) togetherWith fadeOut(
+                animationSpec = tween(
+                    500,
+                    easing = FastOutSlowInEasing
+                ),
+                targetAlpha = 1.0f,
+            )
+        },
+        predictivePopTransitionSpec = {
+            ContentTransform(
+                targetContentEnter = fadeIn(
+                    animationSpec = spring(
+                        dampingRatio = 1.0f,
+                        stiffness = 16000.0f,
+                    )
+                ),
+                initialContentExit = scaleOut(targetScale = 0.7f),
+            )
+        },
         entryProvider = { key ->
             when(key) {
                 is ContactListPageNavKey -> {
@@ -76,6 +134,8 @@ fun NavigationRoot(
                         key = key
                     ) {
                         ContactListPage(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(24.dp)),
                             contacts = contacts,
                             menuBar = {
                                 CustomNavigationBar(
@@ -96,9 +156,16 @@ fun NavigationRoot(
                                     ),
                                     onClick = { index ->
                                         when (index) {
-                                            0 -> backStack.add(ContactListPageNavKey)
-                                            1 -> backStack.add(HighlightsPageNavKey)
-                                            2 -> backStack.add(ManagePageNavKey)
+                                            1 -> {
+                                                backStack.clear()
+                                                backStack.add(ContactListPageNavKey)
+                                                backStack.add(HighlightsPageNavKey)
+                                            }
+                                            2 -> {
+                                                backStack.clear()
+                                                backStack.add(ContactListPageNavKey)
+                                                backStack.add(ManagePageNavKey)
+                                            }
                                         }
                                     },
                                     selectedIndex = 0
@@ -117,7 +184,9 @@ fun NavigationRoot(
                         key = key
                     ) {
                         HighlightsPage(
-                            {
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(24.dp)),
+                            menuBar = {
                                 CustomNavigationBar(
                                     items = listOf(
                                         stringResource(R.string.menu_bar_contacts),
@@ -136,9 +205,15 @@ fun NavigationRoot(
                                     ),
                                     onClick = { index ->
                                         when (index) {
-                                            0 -> backStack.add(ContactListPageNavKey)
-                                            1 -> backStack.add(HighlightsPageNavKey)
-                                            2 -> backStack.add(ManagePageNavKey)
+                                            0 -> {
+                                                backStack.clear()
+                                                backStack.add(ContactListPageNavKey)
+                                            }
+                                            2 -> {
+                                                backStack.clear()
+                                                backStack.add(ContactListPageNavKey)
+                                                backStack.add(ManagePageNavKey)
+                                            }
                                         }
                                     },
                                     selectedIndex = 1
@@ -152,7 +227,9 @@ fun NavigationRoot(
                         key = key
                     ) {
                         ManagePage(
-                            {
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(24.dp)),
+                            menuBar = {
                                 CustomNavigationBar(
                                     items = listOf(
                                         stringResource(R.string.menu_bar_contacts),
@@ -171,9 +248,15 @@ fun NavigationRoot(
                                     ),
                                     onClick = { index ->
                                         when (index) {
-                                            0 -> backStack.add(ContactListPageNavKey)
-                                            1 -> backStack.add(HighlightsPageNavKey)
-                                            2 -> backStack.add(ManagePageNavKey)
+                                            0 -> {
+                                                backStack.clear()
+                                                backStack.add(ContactListPageNavKey)
+                                            }
+                                            1 -> {
+                                                backStack.clear()
+                                                backStack.add(ContactListPageNavKey)
+                                                backStack.add(HighlightsPageNavKey)
+                                            }
                                         }
                                     },
                                     selectedIndex = 2
@@ -199,6 +282,8 @@ fun NavigationRoot(
                             )
                         } else {
                             ContactDetailPage(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(24.dp)),
                                 contact = contacts?.get(key.contactId)!!,
                                 onBackClick = {
                                     backStack.removeAt(backStack.size - 1)

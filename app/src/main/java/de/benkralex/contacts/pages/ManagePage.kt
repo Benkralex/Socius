@@ -14,6 +14,7 @@ import de.benkralex.contacts.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManagePage(
+    modifier: Modifier = Modifier,
     menuBar: @Composable () -> Unit
 ) {
     Scaffold (

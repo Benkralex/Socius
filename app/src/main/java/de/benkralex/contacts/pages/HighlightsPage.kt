@@ -14,9 +14,11 @@ import de.benkralex.contacts.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HighlightsPage(
+    modifier: Modifier = Modifier,
     menuBar: @Composable () -> Unit
 ) {
     Scaffold (
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = {

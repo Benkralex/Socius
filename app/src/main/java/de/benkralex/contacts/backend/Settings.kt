@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import de.benkralex.contacts.R
 
-var nameFormat: String = "%familyName%, %givenName%"
+var nameFormat: String = "%givenName% %familyName%"
 var nameFormatWithoutFamilyName: String = "%givenName%"
-var dateFormat: String = "%dayLeadingZero%. %monthName% %yearLong%"
+var dateFormat: String = "%dayNoLeadingZero%.%monthNoLeadingZero%.%yearShort%"
 
 
 fun getFormattedName(contact: Contact): String {

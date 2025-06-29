@@ -20,6 +20,8 @@ data class Contact(
     var jobTitle: String? = null,
 
     var note: String? = null,
+    var isStarred: Boolean = false,
+
     var birthday: String? = null, // Format: YYYY-MM-DD
     var anniversary: String? = null, // Format: YYYY-MM-DD
 
@@ -36,7 +38,7 @@ data class Contact(
     var relations: List<Relation> = emptyList(),
     var events: List<ContactEvent> = emptyList(),
     var sipAddresses: List<SipAddress> = emptyList(),
-    var groups: List<String> = emptyList(),
+    var groups: List<Group> = emptyList(),
     var labels: List<String> = emptyList(),
 
     var customFields: Map<String, String> = emptyMap()
@@ -85,6 +87,9 @@ data class Relation(
 
 data class ContactEvent(
     var date: String, // Format: YYYY-MM-DD
+    var day: Int? = null,
+    var month: Int? = null,
+    var year: Int? = null,
     var type: String, // birthday, anniversary, etc.
     var label: String? = null
 )
@@ -93,4 +98,9 @@ data class SipAddress(
     var address: String,
     var type: String,
     var label: String? = null
+)
+
+data class Group(
+    var id: Long,
+    var name: String?,
 )

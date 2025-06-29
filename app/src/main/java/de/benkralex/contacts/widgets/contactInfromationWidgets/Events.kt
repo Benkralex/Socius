@@ -62,11 +62,11 @@ fun EventsWidget(
                             .align(Alignment.CenterVertically)
                             .padding(8.dp),
                     ) {
-                        //Log.w("EventsWidget", "ContactEvent: ${contactEvent.date} - ${contactEvent.type} - ${contactEvent.label}")
+                        Log.w("EventsWidget", "ContactEvent: ${contactEvent.date} - ${contactEvent.type} - ${contactEvent.label}")
                         if (contactEvent.date.startsWith("--")) {
                             contactEvent.date = contactEvent.date.substring(1)
                         }
-                        //Log.w("EventsWidget", "ContactEvent: ${contactEvent.date} - ${contactEvent.type} - ${contactEvent.label}")
+                        Log.w("EventsWidget", "ContactEvent: ${contactEvent.date} - ${contactEvent.type} - ${contactEvent.label}")
                         val date = contactEvent.date.split("-").toMutableList()
                         if (date[0] == "") {
                             date[0] = "0"

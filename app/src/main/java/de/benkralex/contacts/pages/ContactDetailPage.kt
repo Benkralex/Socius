@@ -8,6 +8,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -30,10 +32,12 @@ import de.benkralex.contacts.widgets.contactInfromationWidgets.WorkWidget
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactDetailPage(
+    modifier: Modifier = Modifier,
     contact: Contact,
     onBackClick: () -> Unit = {}
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = {
@@ -52,6 +56,23 @@ fun ContactDetailPage(
                             )
                     )
                 },
+                actions = {
+                    if (contact.isStarred) {
+                        Icon(
+                            Icons.Outlined.Star,
+                            "is starred",
+                            modifier = Modifier
+                                .padding(8.dp)
+                        )
+                    } else {
+                        Icon(
+                            Icons.Outlined.StarOutline,
+                            "is mot starred",
+                            modifier = Modifier
+                                .padding(8.dp)
+                        )
+                    }
+                }
             )
         },
     ) { paddingValues ->

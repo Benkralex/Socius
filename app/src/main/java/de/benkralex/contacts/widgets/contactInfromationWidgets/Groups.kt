@@ -12,10 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import de.benkralex.contacts.backend.Group
 
 @Composable
 fun GroupsWidget(
-    groups: List<String>
+    groups: List<Group>
 ) {
     if (groups.isEmpty()) {
         return
@@ -30,7 +31,7 @@ fun GroupsWidget(
             if (text.isNotEmpty()) {
                 text += " • "
             }
-            text += group
+            text += group.name
         }
         Row {
             Icon(

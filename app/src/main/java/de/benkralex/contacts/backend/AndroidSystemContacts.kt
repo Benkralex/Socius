@@ -3,7 +3,6 @@ package de.benkralex.contacts.backend
 import android.content.ContentResolver
 import android.content.Context
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.provider.ContactsContract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -88,6 +87,7 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                 val events = loadEventsBatch(contentResolver, contactIds)
                 val ims = loadIMsBatch(contentResolver, contactIds)
                 val relations = loadRelationsBatch(contentResolver, contactIds)
+                val groups = loadGroupsBatch(contentResolver, contactIds)
 
                 // Daten zu den entsprechenden Kontakten zuordnen
                 contacts.forEach { contact ->
@@ -134,6 +134,13 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
 
                         // Beziehungen
                         contact.relations = relations[id] ?: emptyList()
+
+                        // Gruppen
+                        contact.groups = groups[id] ?: emptyList()
+
+                        // Is Starred
+                        contact.isStarred = (groups[id] ?: emptyList())
+                            .any { it.name?.contains("Starred", ignoreCase = true) ?: false }
                     }
                 }
             }
@@ -539,7 +546,7 @@ private fun loadEventsBatch(contentResolver: ContentResolver, contactIds: List<S
                 else -> "other"
             }
             if (startDate != null) {
-                val event = ContactEvent(startDate, typeStr, label)
+                val event = ContactEvent(date = startDate, type = typeStr, label = label)
                 if (result[contactId] == null) result[contactId] = mutableListOf()
                 result[contactId]?.add(event)
             }
@@ -651,6 +658,52 @@ private fun loadRelationsBatch(contentResolver: ContentResolver, contactIds: Lis
                 val relation = Relation(name, typeStr, label)
                 if (result[contactId] == null) result[contactId] = mutableListOf()
                 result[contactId]?.add(relation)
+            }
+        }
+    }
+    return result
+}
+
+private fun loadGroupsBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, List<Group>> {
+    val result = mutableMapOf<String, MutableList<Group>>()
+    if (contactIds.isEmpty()) return result
+    val selection = "${ContactsContract.Data.CONTACT_ID} IN (${contactIds.joinToString(",")}) AND ${ContactsContract.Data.MIMETYPE} = ?"
+    val selectionArgs = arrayOf(ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE)
+    val cursor = contentResolver.query(
+        ContactsContract.Data.CONTENT_URI,
+        null,
+        selection,
+        selectionArgs,
+        null
+    )
+    cursor?.use {
+        val contactIdIndex = it.getColumnIndex(ContactsContract.Data.CONTACT_ID)
+        val groupIdIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID)
+        val groupNameCache = mutableMapOf<Long, String>()
+        while (it.moveToNext()) {
+            val contactId = it.getString(contactIdIndex)
+            val groupId = it.getLong(groupIdIndex)
+            if (groupId != 0L) {
+                if (result[contactId] == null) result[contactId] = mutableListOf()
+                result[contactId]?.add(
+                    Group(
+                        id = groupId,
+                        name = groupNameCache.getOrPut(groupId) {
+                            contentResolver.query(
+                                ContactsContract.Groups.CONTENT_URI,
+                                arrayOf(ContactsContract.Groups.TITLE),
+                                "${ContactsContract.Groups._ID} = ?",
+                                arrayOf(groupId.toString()),
+                                null
+                            )?.use { groupCursor ->
+                                if (groupCursor.moveToFirst()) {
+                                    val titleIndex = groupCursor.getColumnIndex(ContactsContract.Groups.TITLE)
+                                    if (titleIndex != -1) groupCursor.getString(titleIndex) else null
+                                } else null
+                            } ?: "Unknown Group"
+                        }
+                    )
+                )
             }
         }
     }
