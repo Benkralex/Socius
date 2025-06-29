@@ -1,12 +1,15 @@
 package de.benkralex.contacts.widgets.contactInfromationWidgets
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -17,14 +20,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import de.benkralex.contacts.backend.PhoneNumber
+import de.benkralex.contacts.backend.Email
 import androidx.core.net.toUri
+import de.benkralex.contacts.backend.Relation
 
 @Composable
-fun PhoneNumbersWidget(
-    phoneNumbers: List<PhoneNumber>
+fun RelationsWidget(
+    relations: List<Relation>
 ) {
-    if (phoneNumbers.isEmpty()) {
+    if (relations.isEmpty()) {
         return
     }
     val context = LocalContext.current
@@ -34,24 +38,15 @@ fun PhoneNumbersWidget(
             .fillMaxWidth(),
     ) {
         Column {
-            phoneNumbers.forEach { phoneNumber ->
+            relations.forEach { relation ->
                 Row {
                     Icon(
-                        imageVector = Icons.Outlined.Phone,
-                        contentDescription = "Phone",
+                        imageVector = Icons.Outlined.AccountCircle,
+                        contentDescription = "Relation",
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
                             .padding(8.dp)
                             .padding(start = 16.dp)
-                            .clickable(
-                                onClick = {
-                                    val intent = android.content.Intent(android.content.Intent.ACTION_DIAL)
-                                        .apply {
-                                        data = "tel:${phoneNumber.number}".toUri()
-                                    }
-                                    context.startActivity(intent)
-                                }
-                            )
                     )
                     Column (
                         modifier = Modifier
@@ -59,15 +54,15 @@ fun PhoneNumbersWidget(
                             .padding(8.dp),
                     ) {
                         Text(
-                            text = phoneNumber.number,
+                            text = relation.name,
                         )
                         Text(
-                            text = translateType(phoneNumber.type, phoneNumber.label),
+                            text = translateType(relation.type, relation.label),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }
                 }
-                if (phoneNumbers.indexOf(phoneNumber) != (phoneNumbers.size - 1)) HorizontalDivider(
+                if (relations.indexOf(relation) != (relations.size - 1)) HorizontalDivider(
                     thickness = 2.dp,
                 )
             }

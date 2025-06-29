@@ -72,17 +72,20 @@ data class IM(
 
 data class Website(
     var url: String,
-    var type: String
+    var type: String,
+    var label: String? = null
 )
 
 data class Relation(
     var name: String,
-    var type: String // spouse, child, parent, etc.
+    var type: String, // spouse, child, parent, etc.
+    var label: String? = null
 )
 
 data class ContactEvent(
     var date: String, // Format: YYYY-MM-DD
-    var type: String // birthday, anniversary, etc.
+    var type: String, // birthday, anniversary, etc.
+    var label: String? = null
 )
 
 data class SipAddress(

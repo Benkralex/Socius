@@ -82,7 +82,7 @@ fun ContactsList(
                     },
                     expanded = expanded,
                     onExpandedChange = { expanded = false },
-                    placeholder = { Text("Search contacts...") },
+                    placeholder = { Text(stringResource(R.string.searchbar_placeholder)) },
                     leadingIcon = {
                         Icon(
                             Icons.Filled.Search,

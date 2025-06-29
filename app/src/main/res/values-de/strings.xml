@@ -10,4 +10,27 @@
     <string name="type_work">Arbeit</string>
     <string name="type_other">Sonstiges</string>
     <string name="type_unknown">Unbekannt</string>
+    <string name="type_homepage">Webseite</string>
+    <string name="type_blog">Blog</string>
+    <string name="type_profile">Profil</string>
+    <string name="type_fax_home">Fax Privat</string>
+    <string name="type_fax_work">Fax Arbeit</string>
+    <string name="type_pager">Pager</string>
+    <string name="type_birthday">Geburtstag</string>
+    <string name="type_anniversary">Jahrestag</string>
+    <string name="type_spouse">Ehepartner</string>
+    <string name="type_child">Kind</string>
+    <string name="type_mother">Mutter</string>
+    <string name="type_father">Vater</string>
+    <string name="type_parent">Elternteil</string>
+    <string name="type_brother">Bruder</string>
+    <string name="type_sister">Schwester</string>
+    <string name="type_friend">Freund</string>
+    <string name="type_relative">Verwandter</string>
+    <string name="type_domestic_partner">Lebenspartner</string>
+    <string name="type_manager">Manager</string>
+    <string name="type_assistant">Assistent</string>
+    <string name="type_referred_by">Verwiesen von</string>
+    <string name="type_partner">Partner</string>
+    <string name="searchbar_placeholder">Suchen...</string>
 </resources>

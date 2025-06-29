@@ -358,6 +358,9 @@ private fun loadWebsites(contentResolver: android.content.ContentResolver, conta
             val typeIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Website.TYPE)
             val type = if (typeIndex != -1) it.getInt(typeIndex) else 0
 
+            val labelIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Website.LABEL)
+            val label = if (labelIndex != -1) it.getString(labelIndex) else null
+
             val typeStr = when (type) {
                 ContactsContract.CommonDataKinds.Website.TYPE_HOMEPAGE -> "homepage"
                 ContactsContract.CommonDataKinds.Website.TYPE_BLOG -> "blog"
@@ -370,7 +373,7 @@ private fun loadWebsites(contentResolver: android.content.ContentResolver, conta
                 else -> "unknown"
             }
 
-            websites.add(Website(url ?: "", typeStr))
+            websites.add(Website(url ?: "", typeStr, label))
         }
     }
 
@@ -396,6 +399,9 @@ private fun loadEvents(contentResolver: android.content.ContentResolver, contact
             val typeIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Event.TYPE)
             val type = if (typeIndex != -1) it.getInt(typeIndex) else 0
 
+            val labelIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Event.LABEL)
+            val label = if (labelIndex != -1) it.getString(labelIndex) else null
+
             val typeStr = when (type) {
                 ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY -> "birthday"
                 ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY -> "anniversary"
@@ -404,7 +410,7 @@ private fun loadEvents(contentResolver: android.content.ContentResolver, contact
                 else -> "unknown"
             }
 
-            events.add(ContactEvent(date ?: "", typeStr))
+            events.add(ContactEvent(date ?: "", typeStr, label))
         }
     }
 
@@ -483,6 +489,9 @@ private fun loadRelations(contentResolver: android.content.ContentResolver, cont
             val typeIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Relation.TYPE)
             val type = if (typeIndex != -1) it.getInt(typeIndex) else 0
 
+            val labelIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Relation.LABEL)
+            val label = if (labelIndex != -1) it.getString(labelIndex) else null
+
             val typeStr = when (type) {
                 ContactsContract.CommonDataKinds.Relation.TYPE_SPOUSE -> "spouse"
                 ContactsContract.CommonDataKinds.Relation.TYPE_CHILD -> "child"
@@ -502,7 +511,7 @@ private fun loadRelations(contentResolver: android.content.ContentResolver, cont
                 else -> "unknown"
             }
 
-            relations.add(Relation(name ?: "", typeStr))
+            relations.add(Relation(name ?: "", typeStr, label))
         }
     }
 
