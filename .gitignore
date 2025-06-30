@@ -15,3 +15,12 @@
 local.properties
 ./idea
 ./idea/*
+/.idea/deploymentTargetSelector.xml
+/.idea/gradle.xml
+/.idea/compiler.xml
+/.idea/AndroidProjectSystem.xml
+/.idea/migrations.xml
+/.idea/misc.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/runConfigurations.xml
+/.idea/vcs.xml

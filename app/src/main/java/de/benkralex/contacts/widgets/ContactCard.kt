@@ -11,8 +11,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,6 +28,8 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import de.benkralex.contacts.R
+import kotlin.random.Random
+import kotlin.uuid.Uuid.Companion.random
 
 @Composable
 fun ContactCard(
@@ -50,13 +57,17 @@ fun ContactCard(
                         .clip(CircleShape)
                 )
             } else {
-                Image(
-                    painter = painterResource(id = R.drawable.profile_picture),
-                    contentDescription = null,
+                Icon(
+                    imageVector = Icons.Outlined.Person,
+                    contentDescription = "Profile Icon",
                     modifier = Modifier
-                        .size(40.dp)
                         .clip(CircleShape)
-                        .background(Color.DarkGray)
+                        .size(40.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        .padding(5.dp),
+                    tint = MaterialTheme.colorScheme.background
                 )
             }
             Spacer(modifier = Modifier.width(12.dp))

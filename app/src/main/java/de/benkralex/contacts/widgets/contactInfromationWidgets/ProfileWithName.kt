@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.Icon
@@ -47,14 +49,17 @@ fun ProfileWithName(
                     .align(Alignment.CenterVertically)
             )
         } else {
-            Image(
-                painter = painterResource(id = R.drawable.profile_picture),
-                contentDescription = null,
+            Icon(
+                imageVector = Icons.Outlined.Person,
+                contentDescription = "Profile Icon",
                 modifier = Modifier
-                    .size(30.dp)
                     .clip(CircleShape)
-                    .background(Color.DarkGray)
-                    .align(Alignment.CenterVertically)
+                    .size(30.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    .padding(5.dp),
+                tint = MaterialTheme.colorScheme.background
             )
         }
         Text(

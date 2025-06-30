@@ -1,6 +1,7 @@
 package de.benkralex.contacts.widgets.contactInfromationWidgets
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -33,7 +34,13 @@ fun GroupsWidget(
             }
             text += group.name
         }
-        Row {
+        Row (
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(vertical = 8.dp)
+                .align(Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Icon(
                 imageVector = Icons.Outlined.Groups,
                 contentDescription = "Groups",

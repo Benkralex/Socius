@@ -1,6 +1,8 @@
 package de.benkralex.contacts.widgets.contactInfromationWidgets
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -32,7 +34,8 @@ fun WorkWidget(
     Card (
         modifier = Modifier
             .padding(bottom = 0.dp, top = 12.dp, end = 16.dp, start = 16.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 55.dp),
     ) {
         var text = ""
         work.forEach { s ->
@@ -41,14 +44,20 @@ fun WorkWidget(
             }
             text += s
         }
-        Row {
+        Row (
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(vertical = 8.dp)
+                .align(Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Icon(
                 imageVector = Icons.Outlined.WorkOutline,
                 contentDescription = "Work",
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .padding(8.dp)
-                    .padding(start = 16.dp)
+                    .padding(start = 16.dp),
             )
             Text(
                 text = text,
