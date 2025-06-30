@@ -40,7 +40,8 @@ import kotlin.comparisons.compareBy
 fun ContactsList(
     contacts: List<Contact>,
     paddingValues: PaddingValues,
-    onContactSelected: (Int) -> Unit = {}
+    onContactSelected: (Int) -> Unit = {},
+    onSettingsSelected: () -> Unit = {},
 ) {
     val textFieldState = rememberTextFieldState()
     var searchQuery by rememberSaveable { mutableStateOf("") }
@@ -108,7 +109,7 @@ fun ContactsList(
                                 modifier = Modifier
                                     .padding(8.dp)
                                     .clickable {
-                                        Log.d("ContactsList", "Settings clicked")
+                                        onSettingsSelected()
                                     }
                             )
                         }

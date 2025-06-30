@@ -1,11 +1,11 @@
 package de.benkralex.contacts.backend
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import de.benkralex.contacts.R
 
 var nameFormat: String = "%givenName% %familyName%"
-var nameFormatWithoutFamilyName: String = "%givenName%"
 var dateFormat: String = "%dayNoLeadingZero%.%monthNoLeadingZero%.%yearShort%"
 
 
@@ -24,9 +24,6 @@ fun getFormattedName(contact: Contact): String {
     contact.suffix: "%suffix%"
     */
     var formattedName = nameFormat
-    if (contact.familyName == null) {
-        formattedName = nameFormatWithoutFamilyName
-    }
     formattedName = formattedName.replace("%displayName%", contact.displayName ?: "")
     formattedName = formattedName.replace("%familyName%", contact.familyName ?: "")
     formattedName = formattedName.replace("%middleName%", contact.middleName ?: "")
@@ -37,7 +34,7 @@ fun getFormattedName(contact: Contact): String {
     formattedName = formattedName.replace("%phoneticGivenName%", contact.phoneticGivenName ?: "")
     formattedName = formattedName.replace("%prefix%", contact.prefix ?: "")
     formattedName = formattedName.replace("%suffix%", contact.suffix ?: "")
-    formattedName = formattedName.trim()
+    formattedName = formattedName.trim(*", ".toCharArray())
     return formattedName
 }
 
@@ -80,4 +77,19 @@ fun getFormattedDate(day: Int, month: Int, year: Int): String {
     }
     formattedDate = formattedDate.trim()
     return formattedDate
+}
+
+fun saveSettings(context: Context) {
+    val sharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+    with(sharedPreferences.edit()) {
+        putString("nameFormat", nameFormat)
+        putString("dateFormat", dateFormat)
+        apply()
+    }
+}
+
+fun loadSettings(context: Context) {
+    val sharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+    nameFormat = sharedPreferences.getString("nameFormat", "%givenName% %familyName%") ?: "%givenName% %familyName%"
+    dateFormat = sharedPreferences.getString("dateFormat", "%dayNoLeadingZero%.%monthNoLeadingZero%.%yearShort%") ?: "%dayNoLeadingZero%.%monthNoLeadingZero%.%yearShort%"
 }

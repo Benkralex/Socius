@@ -54,4 +54,8 @@
     <string name="month_december">Dezember</string>
     <string name="month_january">Januar</string>
     <string name="month_february">Februar</string>
+    <string name="settings_date_formatting">Datumsformat</string>
+    <string name="settings_name_formatting">Namensformat</string>
+    <string name="settings_date_format_first_last">Vorname Nachname</string>
+    <string name="settings_date_format_last_first">Nachname, Vorname</string>
 </resources>

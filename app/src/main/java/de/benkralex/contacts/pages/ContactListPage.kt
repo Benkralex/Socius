@@ -19,7 +19,8 @@ fun ContactListPage(
     modifier: Modifier = Modifier,
     contacts: List<Contact>? = null,
     menuBar: @Composable () -> Unit,
-    onContactSelected: (Int) -> Unit = {}
+    onContactSelected: (Int) -> Unit = {},
+    onSettingsSelected: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
@@ -37,7 +38,8 @@ fun ContactListPage(
         ContactsList(
             contacts = contacts ?: emptyList(),
             paddingValues = paddingValues,
-            onContactSelected = onContactSelected
+            onContactSelected = onContactSelected,
+            onSettingsSelected = onSettingsSelected
         )
     }
 }

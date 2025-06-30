@@ -58,4 +58,8 @@
     <string name="month_october">October</string>
     <string name="month_november">November</string>
     <string name="month_december">December</string>
+    <string name="settings_date_formatting">Date formatting</string>
+    <string name="settings_name_formatting">Name formatting</string>
+    <string name="settings_date_format_first_last">Firstname Lastname</string>
+    <string name="settings_date_format_last_first">Lastname, Firstname</string>
 </resources>

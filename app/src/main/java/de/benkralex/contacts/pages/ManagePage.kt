@@ -18,6 +18,7 @@ fun ManagePage(
     menuBar: @Composable () -> Unit
 ) {
     Scaffold (
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = {
