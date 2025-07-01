@@ -86,7 +86,6 @@ data class Relation(
 )
 
 data class ContactEvent(
-    var date: String, // Format: YYYY-MM-DD
     var day: Int? = null,
     var month: Int? = null,
     var year: Int? = null,

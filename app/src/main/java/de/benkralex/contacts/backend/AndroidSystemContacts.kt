@@ -545,8 +545,31 @@ private fun loadEventsBatch(contentResolver: ContentResolver, contactIds: List<S
                 ContactsContract.CommonDataKinds.Event.TYPE_CUSTOM -> "custom"
                 else -> "other"
             }
+            // YYYY-MM-DD oder YYYYMMDD oder --MM-DD oder MMDD
+            var year: Int? = null
+            var month: Int? = null
+            var day: Int? = null
             if (startDate != null) {
-                val event = ContactEvent(date = startDate, type = typeStr, label = label)
+                val date = startDate.replace("-", "")
+                if (date.length == 8) {
+                    year = date.substring(0, 4).toIntOrNull()
+                    month = date.substring(4, 6).toIntOrNull()
+                    day = date.substring(6, 8).toIntOrNull()
+                } else if (date.length == 4) {
+                    month = date.substring(0, 2).toIntOrNull()
+                    day = date.substring(2, 4).toIntOrNull()
+                } else {
+                    throw IllegalArgumentException("Invalid date format: $startDate")
+                }
+            }
+            if (startDate != null) {
+                val event = ContactEvent(
+                    day = day,
+                    month = month,
+                    year = year,
+                    type = typeStr,
+                    label = label,
+                )
                 if (result[contactId] == null) result[contactId] = mutableListOf()
                 result[contactId]?.add(event)
             }

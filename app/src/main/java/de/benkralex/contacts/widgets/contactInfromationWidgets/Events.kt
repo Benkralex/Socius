@@ -62,16 +62,7 @@ fun EventsWidget(
                             .align(Alignment.CenterVertically)
                             .padding(8.dp),
                     ) {
-                        Log.w("EventsWidget", "ContactEvent: ${contactEvent.date} - ${contactEvent.type} - ${contactEvent.label}")
-                        if (contactEvent.date.startsWith("--")) {
-                            contactEvent.date = contactEvent.date.substring(1)
-                        }
-                        Log.w("EventsWidget", "ContactEvent: ${contactEvent.date} - ${contactEvent.type} - ${contactEvent.label}")
-                        val date = contactEvent.date.split("-").toMutableList()
-                        if (date[0] == "") {
-                            date[0] = "0"
-                        }
-                        val formattedDate = getFormattedDate(date[2].toInt(), date[1].toInt(), date[0].toInt())
+                        val formattedDate = getFormattedDate(contactEvent.day ?: 0, contactEvent.month ?: 0, contactEvent.year ?: 0)
                         Text(
                             text = formattedDate,
                         )
