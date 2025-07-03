@@ -1,6 +1,5 @@
 package de.benkralex.contacts.widgets.contactInfromationWidgets
 
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cake
 import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material.icons.outlined.Today
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -20,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import de.benkralex.contacts.backend.ContactEvent
-import de.benkralex.contacts.backend.getFormattedDate
+import de.benkralex.contacts.backend.settings.getFormattedDate
 
 @Composable
 fun EventsWidget(

@@ -1,6 +1,5 @@
 package de.benkralex.contacts.widgets
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -32,7 +31,7 @@ import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.dp
 import de.benkralex.contacts.R
 import de.benkralex.contacts.backend.Contact
-import de.benkralex.contacts.backend.getFormattedName
+import de.benkralex.contacts.backend.settings.getFormattedName
 import kotlin.comparisons.compareBy
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)

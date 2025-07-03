@@ -60,6 +60,10 @@
     <string name="month_december">December</string>
     <string name="settings_date_formatting">Date formatting</string>
     <string name="settings_name_formatting">Name formatting</string>
-    <string name="settings_date_format_first_last">Firstname Lastname</string>
-    <string name="settings_date_format_last_first">Lastname, Firstname</string>
+    <string name="settings_name_format_first_last">Firstname Lastname</string>
+    <string name="settings_name_format_last_first">Lastname, Firstname</string>
+    <string name="settings_date_format_d_m_yyyy_dot">D.M.YYYY</string>
+    <string name="settings_date_format_m_d_yyyy_slash">M/D/YYYY</string>
+    <string name="settings_date_format_yyyy_mm_dd_hyphen">YYYY-MM-DD</string>
+    <string name="settings_date_format_dd_mm_yyyy_dot">DD.MM.YYYY</string>
 </resources>

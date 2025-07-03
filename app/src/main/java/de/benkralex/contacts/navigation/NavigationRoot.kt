@@ -6,12 +6,8 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
@@ -28,9 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -48,7 +42,7 @@ import de.benkralex.contacts.pages.SettingsPage
 import de.benkralex.contacts.R
 import de.benkralex.contacts.backend.Contact
 import de.benkralex.contacts.backend.getAndroidSystemContacts
-import de.benkralex.contacts.backend.loadSettings
+import de.benkralex.contacts.backend.settings.loadSettings
 import de.benkralex.contacts.pages.ContactDetailPage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -307,41 +301,7 @@ fun NavigationRoot(
                     NavEntry(
                         key = key
                     ) {
-                        ContactListPage(
-                            contacts = contacts,
-                            menuBar = {
-                                CustomNavigationBar(
-                                    items = listOf(
-                                        stringResource(R.string.menu_bar_contacts),
-                                        stringResource(R.string.menu_bar_highlights),
-                                        stringResource(R.string.menu_bar_manage)
-                                    ),
-                                    selectedIcons = listOf(
-                                        Icons.Filled.Person,
-                                        Icons.Filled.Favorite,
-                                        Icons.Filled.Build
-                                    ),
-                                    unselectedIcons = listOf(
-                                        Icons.Outlined.Person,
-                                        Icons.Outlined.FavoriteBorder,
-                                        Icons.Outlined.Build
-                                    ),
-                                    onClick = { index ->
-                                        when (index) {
-                                            0 -> backStack.add(ContactListPageNavKey)
-                                            1 -> backStack.add(HighlightsPageNavKey)
-                                            2 -> backStack.add(ManagePageNavKey)
-                                        }
-                                    },
-                                    selectedIndex = 0
-                                )
-                            },
-                            onContactSelected = { contactIdx ->
-                                backStack.add(
-                                    ContactDetailPageNavKey(contactIdx)
-                                )
-                            }
-                        )
+                        throw IllegalStateException("Unhandled navigation key: $key")
                     }
                 }
             }

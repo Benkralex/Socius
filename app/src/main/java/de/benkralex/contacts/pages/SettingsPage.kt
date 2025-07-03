@@ -13,6 +13,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import de.benkralex.contacts.widgets.settingsWidgets.DateFormattingWidget
 import de.benkralex.contacts.widgets.settingsWidgets.NameFormattingWidget
 
 @Composable
@@ -48,6 +49,7 @@ fun SettingsPage(
                 .padding(16.dp)
         ) {
             NameFormattingWidget()
+            DateFormattingWidget()
         }
     }
 }

@@ -56,6 +56,10 @@
     <string name="month_february">Februar</string>
     <string name="settings_date_formatting">Datumsformat</string>
     <string name="settings_name_formatting">Namensformat</string>
-    <string name="settings_date_format_first_last">Vorname Nachname</string>
-    <string name="settings_date_format_last_first">Nachname, Vorname</string>
+    <string name="settings_name_format_first_last">Vorname Nachname</string>
+    <string name="settings_name_format_last_first">Nachname, Vorname</string>
+    <string name="settings_date_format_d_m_yyyy_dot">T.M.JJJJ</string>
+    <string name="settings_date_format_m_d_yyyy_slash">M/D/JJJJ</string>
+    <string name="settings_date_format_yyyy_mm_dd_hyphen">JJJJ-MM-TT</string>
+    <string name="settings_date_format_dd_mm_yyyy_dot">TT.MM.JJJJ</string>
 </resources>
