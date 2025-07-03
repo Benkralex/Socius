@@ -36,9 +36,7 @@ data class Contact(
     var websites: List<Website> = emptyList(),
     var relations: List<Relation> = emptyList(),
     var events: List<ContactEvent> = emptyList(),
-    var sipAddresses: List<SipAddress> = emptyList(),
     var groups: List<Group> = emptyList(),
-    var labels: List<String> = emptyList(),
 
     var customFields: Map<String, String> = emptyMap()
 )
@@ -65,13 +63,6 @@ data class PostalAddress(
     var label: String? = null
 )
 
-data class IM(
-    var protocol: String,
-    var handle: String,
-    var type: String,
-    var label: String? = null
-)
-
 data class Website(
     var url: String,
     var type: String,
@@ -89,12 +80,6 @@ data class ContactEvent(
     var month: Int? = null,
     var year: Int? = null,
     var type: String, // birthday, anniversary, etc.
-    var label: String? = null
-)
-
-data class SipAddress(
-    var address: String,
-    var type: String,
     var label: String? = null
 )
 
