@@ -21,6 +21,7 @@ import de.benkralex.contacts.backend.Contact
 import de.benkralex.contacts.widgets.contactInfromationWidgets.EmailsWidget
 import de.benkralex.contacts.widgets.contactInfromationWidgets.EventsWidget
 import de.benkralex.contacts.widgets.contactInfromationWidgets.GroupsWidget
+import de.benkralex.contacts.widgets.contactInfromationWidgets.NoteWidget
 import de.benkralex.contacts.widgets.contactInfromationWidgets.PhoneNumbersWidget
 import de.benkralex.contacts.widgets.contactInfromationWidgets.PostalAddressesWidget
 import de.benkralex.contacts.widgets.contactInfromationWidgets.ProfileWithName
@@ -82,6 +83,7 @@ fun ContactDetailPage(
                 .padding(paddingValues)
                 .fillMaxWidth()
         ) {
+            NoteWidget(contact.note)
             WorkWidget(
                 organization = contact.organization,
                 jobTitle = contact.jobTitle,
