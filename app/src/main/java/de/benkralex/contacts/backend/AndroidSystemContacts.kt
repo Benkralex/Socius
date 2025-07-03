@@ -625,23 +625,24 @@ private fun loadGroupsBatch(contentResolver: ContentResolver, contactIds: List<S
             val groupId = it.getLong(groupIdIndex)
             if (groupId != 0L) {
                 if (result[contactId] == null) result[contactId] = mutableListOf()
+                val groupName = groupNameCache.getOrPut(groupId) {
+                    contentResolver.query(
+                        ContactsContract.Groups.CONTENT_URI,
+                        arrayOf(ContactsContract.Groups.TITLE),
+                        "${ContactsContract.Groups._ID} = ?",
+                        arrayOf(groupId.toString()),
+                        null
+                    )?.use { groupCursor ->
+                        if (groupCursor.moveToFirst()) {
+                            val titleIndex = groupCursor.getColumnIndex(ContactsContract.Groups.TITLE)
+                            if (titleIndex != -1) groupCursor.getString(titleIndex) else null
+                        } else null
+                    } ?: "Unknown Group"
+                }
                 result[contactId]?.add(
                     Group(
                         id = groupId,
-                        name = groupNameCache.getOrPut(groupId) {
-                            contentResolver.query(
-                                ContactsContract.Groups.CONTENT_URI,
-                                arrayOf(ContactsContract.Groups.TITLE),
-                                "${ContactsContract.Groups._ID} = ?",
-                                arrayOf(groupId.toString()),
-                                null
-                            )?.use { groupCursor ->
-                                if (groupCursor.moveToFirst()) {
-                                    val titleIndex = groupCursor.getColumnIndex(ContactsContract.Groups.TITLE)
-                                    if (titleIndex != -1) groupCursor.getString(titleIndex) else null
-                                } else null
-                            } ?: "Unknown Group"
-                        }
+                        name = groupName,
                     )
                 )
             }

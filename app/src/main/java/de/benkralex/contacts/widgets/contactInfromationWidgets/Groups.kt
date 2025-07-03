@@ -22,18 +22,25 @@ fun GroupsWidget(
     if (groups.isEmpty()) {
         return
     }
+    var text = ""
+    groups.forEach { group ->
+        if (group.name != "My Contacts") {
+            if (group.name != "Starred in Android") {
+                if (text.isNotEmpty()) {
+                    text += " • "
+                }
+                text += group.name
+            }
+        }
+    }
+    if (text.isEmpty()) {
+        return
+    }
     Card (
         modifier = Modifier
             .padding(bottom = 0.dp, top = 12.dp, end = 16.dp, start = 16.dp)
             .fillMaxWidth(),
     ) {
-        var text = ""
-        groups.forEach { group ->
-            if (text.isNotEmpty()) {
-                text += " • "
-            }
-            text += group.name
-        }
         Row (
             modifier = Modifier
                 .fillMaxSize()
