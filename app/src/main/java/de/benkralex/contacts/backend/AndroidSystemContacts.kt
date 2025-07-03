@@ -4,7 +4,6 @@ import android.content.ContentResolver
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.provider.ContactsContract
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import androidx.core.net.toUri
