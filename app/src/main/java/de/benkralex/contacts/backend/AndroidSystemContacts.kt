@@ -13,7 +13,7 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
         val contacts = mutableListOf<Contact>()
         val contentResolver = context.contentResolver
 
-        // Nur benötigte Spalten abfragen (Projektion)
+        // Only query required columns (projection)
         val projection = arrayOf(
             ContactsContract.Contacts._ID,
             ContactsContract.Contacts.DISPLAY_NAME_PRIMARY,
@@ -29,29 +29,29 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
             "${ContactsContract.Contacts.DISPLAY_NAME_PRIMARY} ASC"
         )
 
-        cursor?.use {
-            val idIndex = it.getColumnIndex(ContactsContract.Contacts._ID)
-            val displayNameIndex = it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)
-            val photoUriIndex = it.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)
-            val thumbnailUriIndex = it.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI)
+        cursor?.use { item ->
+            val idIndex = item.getColumnIndex(ContactsContract.Contacts._ID)
+            val displayNameIndex = item.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME_PRIMARY)
+            val photoUriIndex = item.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)
+            val thumbnailUriIndex = item.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI)
 
-            // Kontakt-IDs sammeln für Batch-Abfragen
+            // Collect contact IDs for batch queries
             val contactIds = mutableListOf<String>()
 
-            while (it.moveToNext()) {
-                val contactId = it.getString(idIndex)
+            while (item.moveToNext()) {
+                val contactId = item.getString(idIndex)
                 contactIds.add(contactId)
 
-                val displayName = it.getString(displayNameIndex)
-                val photoUri = if (photoUriIndex != -1) it.getString(photoUriIndex) else null
-                val thumbnailUri = if (thumbnailUriIndex != -1) it.getString(thumbnailUriIndex) else null
+                val displayName = item.getString(displayNameIndex)
+                val photoUri = if (photoUriIndex != -1) item.getString(photoUriIndex) else null
+                val thumbnailUri = if (thumbnailUriIndex != -1) item.getString(thumbnailUriIndex) else null
 
                 val photoBitmap = if (photoUri != null) {
                     try {
                         contentResolver.openInputStream(photoUri.toUri())?.use { inputStream ->
                             BitmapFactory.decodeStream(inputStream)
                         }
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                         null
                     }
                 } else null
@@ -60,7 +60,7 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                         contentResolver.openInputStream(thumbnailUri.toUri())?.use { inputStream ->
                         BitmapFactory.decodeStream(inputStream)
                         }
-                    } catch (e: Exception) {
+                    } catch (_: Exception) {
                         null
                     }
                 } else null
@@ -75,7 +75,7 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                 ))
             }
 
-            // Batch-Abfragen für alle Kontakte durchführen
+            // Perform batch queries for all contacts
             if (contactIds.isNotEmpty()) {
                 val structuredNames = loadStructuredNamesBatch(contentResolver, contactIds)
                 val phoneNumbers = loadPhoneNumbersBatch(contentResolver, contactIds)
@@ -89,10 +89,10 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                 val relations = loadRelationsBatch(contentResolver, contactIds)
                 val groups = loadGroupsBatch(contentResolver, contactIds)
 
-                // Daten zu den entsprechenden Kontakten zuordnen
+                // Assign data to the corresponding contacts
                 contacts.forEach { contact ->
                     contact.id?.let { id ->
-                        // Strukturierte Namen
+                        // Structured Names
                         structuredNames[id]?.let { structuredName ->
                             contact.prefix = structuredName.prefix
                             contact.givenName = structuredName.givenName
@@ -104,23 +104,23 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                             contact.phoneticFamilyName = structuredName.phoneticFamilyName
                         }
 
-                        // Telefonnummern
+                        // Phone numbers
                         contact.phoneNumbers = phoneNumbers[id] ?: emptyList()
 
                         // E-Mails
                         contact.emails = emails[id] ?: emptyList()
 
-                        // Adressen
+                        // Addresses
                         contact.addresses = addresses[id] ?: emptyList()
 
-                        // Organisation
+                        // Organisations
                         organizations[id]?.let { org ->
                             contact.organization = org.organization
                             contact.department = org.department
                             contact.jobTitle = org.jobTitle
                         }
 
-                        // Notizen
+                        // Notes
                         contact.note = notes[id]
 
                         // Websites
@@ -132,10 +132,10 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                         // IMs
                         contact.ims = ims[id] ?: emptyList()
 
-                        // Beziehungen
+                        // Relations
                         contact.relations = relations[id] ?: emptyList()
 
-                        // Gruppen
+                        // Groups
                         contact.groups = groups[id] ?: emptyList()
 
                         // Is Starred
@@ -146,40 +146,11 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
             }
         }
 
-        // Filter leere Kontakte heraus
+        // Filter out empty contacts
         contacts.filter { contact ->
             !contact.displayName.isNullOrBlank() || hasRelevantData(contact)
         }
     }
-
-// Lazy Loading für Bilder
-fun loadContactPhotos(context: Context, contact: Contact) {
-    val contentResolver = context.contentResolver
-
-    // Foto laden
-    contact.photoUri?.let { uriStr ->
-        try {
-            val photoUri = uriStr.toUri()
-            contentResolver.openInputStream(photoUri)?.use { inputStream ->
-                contact.photoBitmap = BitmapFactory.decodeStream(inputStream)
-            }
-        } catch (e: Exception) {
-            // Fehler beim Laden des Fotos ignorieren
-        }
-    }
-
-    // Thumbnail laden
-    contact.thumbnailUri?.let { uriStr ->
-        try {
-            val thumbnailUri = uriStr.toUri()
-            contentResolver.openInputStream(thumbnailUri)?.use { inputStream ->
-                contact.thumbnailBitmap = BitmapFactory.decodeStream(inputStream)
-            }
-        } catch (e: Exception) {
-            // Fehler beim Laden des Thumbnails ignorieren
-        }
-    }
-}
 
 private fun hasRelevantData(contact: Contact): Boolean {
     return contact.phoneNumbers.isNotEmpty() ||
@@ -189,7 +160,7 @@ private fun hasRelevantData(contact: Contact): Boolean {
             contact.note != null
 }
 
-// Hilfsklasse für strukturierte Namen
+// Helper class for structured names
 private data class StructuredNameData(
     val prefix: String? = null,
     val givenName: String? = null,
@@ -201,14 +172,14 @@ private data class StructuredNameData(
     val phoneticFamilyName: String? = null
 )
 
-// Hilfsklasse für Organisationsdaten
+// Helper class for organization data
 private data class OrganizationData(
     val organization: String? = null,
     val department: String? = null,
     val jobTitle: String? = null
 )
 
-// Batch-Abfrage für strukturierte Namen
+// Batch query for structured names
 private fun loadStructuredNamesBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, StructuredNameData> {
     val result = mutableMapOf<String, StructuredNameData>()
 
@@ -255,7 +226,7 @@ private fun loadStructuredNamesBatch(contentResolver: ContentResolver, contactId
     return result
 }
 
-// Batch-Abfrage für Telefonnummern
+// Batch query for phone numbers
 private fun loadPhoneNumbersBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, List<PhoneNumber>> {
     val result = mutableMapOf<String, MutableList<PhoneNumber>>()
 
@@ -319,8 +290,8 @@ private fun loadPhoneNumbersBatch(contentResolver: ContentResolver, contactIds: 
     return result
 }
 
-// Weitere Batch-Abfrage-Methoden...
-// (Implementierung der anderen Methoden ähnlich wie oben)
+// More batch query methods...
+// (Implementation of the other methods similar to above)
 
 private fun loadEmailsBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, List<Email>> {
     val result = mutableMapOf<String, MutableList<Email>>()
@@ -545,21 +516,25 @@ private fun loadEventsBatch(contentResolver: ContentResolver, contactIds: List<S
                 ContactsContract.CommonDataKinds.Event.TYPE_CUSTOM -> "custom"
                 else -> "other"
             }
-            // YYYY-MM-DD oder YYYYMMDD oder --MM-DD oder MMDD
+            //formats: YYYY-MM-DD, YYYYMMDD, --MM-DD, or MM DD
             var year: Int? = null
             var month: Int? = null
             var day: Int? = null
             if (startDate != null) {
                 val date = startDate.replace("-", "")
-                if (date.length == 8) {
-                    year = date.substring(0, 4).toIntOrNull()
-                    month = date.substring(4, 6).toIntOrNull()
-                    day = date.substring(6, 8).toIntOrNull()
-                } else if (date.length == 4) {
-                    month = date.substring(0, 2).toIntOrNull()
-                    day = date.substring(2, 4).toIntOrNull()
-                } else {
-                    throw IllegalArgumentException("Invalid date format: $startDate")
+                when (date.length) {
+                    8 -> {
+                        year = date.substring(0, 4).toIntOrNull()
+                        month = date.substring(4, 6).toIntOrNull()
+                        day = date.substring(6, 8).toIntOrNull()
+                    }
+                    4 -> {
+                        month = date.substring(0, 2).toIntOrNull()
+                        day = date.substring(2, 4).toIntOrNull()
+                    }
+                    else -> {
+                        throw IllegalArgumentException("Invalid date format: $startDate")
+                    }
                 }
             }
             if (startDate != null) {

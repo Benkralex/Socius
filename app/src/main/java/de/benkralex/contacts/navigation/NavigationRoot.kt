@@ -136,9 +136,9 @@ fun NavigationRoot(
                             menuBar = {
                                 CustomNavigationBar(
                                     items = listOf(
-                                        stringResource(R.string.menu_bar_contacts),
-                                        stringResource(R.string.menu_bar_highlights),
-                                        stringResource(R.string.menu_bar_manage)
+                                        stringResource(R.string.page_contacts),
+                                        stringResource(R.string.page_highlights),
+                                        stringResource(R.string.page_manage)
                                     ),
                                     selectedIcons = listOf(
                                         Icons.Filled.Person,
@@ -188,9 +188,9 @@ fun NavigationRoot(
                             menuBar = {
                                 CustomNavigationBar(
                                     items = listOf(
-                                        stringResource(R.string.menu_bar_contacts),
-                                        stringResource(R.string.menu_bar_highlights),
-                                        stringResource(R.string.menu_bar_manage)
+                                        stringResource(R.string.page_contacts),
+                                        stringResource(R.string.page_highlights),
+                                        stringResource(R.string.page_manage)
                                     ),
                                     selectedIcons = listOf(
                                         Icons.Filled.Person,
@@ -231,9 +231,9 @@ fun NavigationRoot(
                             menuBar = {
                                 CustomNavigationBar(
                                     items = listOf(
-                                        stringResource(R.string.menu_bar_contacts),
-                                        stringResource(R.string.menu_bar_highlights),
-                                        stringResource(R.string.menu_bar_manage)
+                                        stringResource(R.string.page_contacts),
+                                        stringResource(R.string.page_highlights),
+                                        stringResource(R.string.page_manage)
                                     ),
                                     selectedIcons = listOf(
                                         Icons.Filled.Person,

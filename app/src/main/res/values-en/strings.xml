@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Contacts</string>
     <string name="page_contacts">Contacts</string>
@@ -12,7 +13,6 @@
     <string name="type_homepage">Homepage</string>
     <string name="type_blog">Blog</string>
     <string name="type_profile">Profile</string>
-    <string name="type_ftp" translatable="false">FTP</string>
     <string name="type_fax_home">Fax Home</string>
     <string name="type_fax_work">Fax Work</string>
     <string name="type_pager">Pager</string>
@@ -37,13 +37,9 @@
     <string name="type_callback">Callback</string>
     <string name="type_car">Car</string>
     <string name="type_company_main">Company Main</string>
-    <string name="type_isdn" translatable="false">ISDN</string>
     <string name="type_main">Main</string>
-    <string name="type_mms" translatable="false">MMS</string>
     <string name="type_fax_other">Fax Other</string>
     <string name="type_radio">Radio</string>
-    <string name="type_telex" translatable="false">Telex</string>
-    <string name="type_tty_tdd" translatable="false">TTY / TTD</string>
     <string name="type_work_mobile">Work Mobile</string>
     <string name="type_work_pager">Work Pager</string>
     <string name="month_january">January</string>

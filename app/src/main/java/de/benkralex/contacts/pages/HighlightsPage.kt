@@ -22,7 +22,7 @@ fun HighlightsPage(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(stringResource(R.string.menu_bar_highlights))
+                    Text(stringResource(R.string.page_highlights))
                 }
             )
         },

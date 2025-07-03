@@ -22,7 +22,7 @@ fun ManagePage(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(stringResource(R.string.menu_bar_manage))
+                    Text(stringResource(R.string.page_manage))
                 }
             )
         },
