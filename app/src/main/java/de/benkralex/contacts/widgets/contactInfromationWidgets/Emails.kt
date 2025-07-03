@@ -1,7 +1,6 @@
 package de.benkralex.contacts.widgets.contactInfromationWidgets
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

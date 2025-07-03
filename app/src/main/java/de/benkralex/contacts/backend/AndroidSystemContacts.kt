@@ -85,7 +85,6 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                 val notes = loadNotesBatch(contentResolver, contactIds)
                 val websites = loadWebsitesBatch(contentResolver, contactIds)
                 val events = loadEventsBatch(contentResolver, contactIds)
-                val ims = loadIMsBatch(contentResolver, contactIds)
                 val relations = loadRelationsBatch(contentResolver, contactIds)
                 val groups = loadGroupsBatch(contentResolver, contactIds)
 
@@ -128,9 +127,6 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
 
                         // Events
                         contact.events = events[id] ?: emptyList()
-
-                        // IMs
-                        contact.ims = ims[id] ?: emptyList()
 
                         // Relations
                         contact.relations = relations[id] ?: emptyList()
@@ -547,65 +543,6 @@ private fun loadEventsBatch(contentResolver: ContentResolver, contactIds: List<S
                 )
                 if (result[contactId] == null) result[contactId] = mutableListOf()
                 result[contactId]?.add(event)
-            }
-        }
-    }
-    return result
-}
-
-private fun loadIMsBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, List<IM>> {
-    val result = mutableMapOf<String, MutableList<IM>>()
-    if (contactIds.isEmpty()) return result
-    val selection = "${ContactsContract.Data.CONTACT_ID} IN (${contactIds.joinToString(",")}) AND ${ContactsContract.Data.MIMETYPE} = ?"
-    val selectionArgs = arrayOf(ContactsContract.CommonDataKinds.Im.CONTENT_ITEM_TYPE)
-    val cursor = contentResolver.query(
-        ContactsContract.Data.CONTENT_URI,
-        null,
-        selection,
-        selectionArgs,
-        null
-    )
-    cursor?.use {
-        val contactIdIndex = it.getColumnIndex(ContactsContract.Data.CONTACT_ID)
-        val dataIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Im.DATA)
-        val protocolIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Im.PROTOCOL)
-        val typeIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Im.TYPE)
-        val labelIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Im.LABEL)
-        while (it.moveToNext()) {
-            val contactId = it.getString(contactIdIndex)
-            val data = if (dataIndex != -1) it.getString(dataIndex) else null
-            val protocol = if (protocolIndex != -1) it.getInt(protocolIndex) else 0
-            val type = if (typeIndex != -1) it.getInt(typeIndex) else 0
-            val label = if (labelIndex != -1) it.getString(labelIndex) else null
-            val protocolStr = when (protocol) {
-                ContactsContract.CommonDataKinds.Im.PROTOCOL_CUSTOM -> "custom"
-                ContactsContract.CommonDataKinds.Im.PROTOCOL_AIM -> "aim"
-                ContactsContract.CommonDataKinds.Im.PROTOCOL_MSN -> "msn"
-                ContactsContract.CommonDataKinds.Im.PROTOCOL_YAHOO -> "yahoo"
-                ContactsContract.CommonDataKinds.Im.PROTOCOL_SKYPE -> "skype"
-                ContactsContract.CommonDataKinds.Im.PROTOCOL_QQ -> "qq"
-                ContactsContract.CommonDataKinds.Im.PROTOCOL_GOOGLE_TALK -> "gtalk"
-                ContactsContract.CommonDataKinds.Im.PROTOCOL_ICQ -> "icq"
-                ContactsContract.CommonDataKinds.Im.PROTOCOL_JABBER -> "jabber"
-                ContactsContract.CommonDataKinds.Im.PROTOCOL_NETMEETING -> "netmeeting"
-                else -> "other"
-            }
-            val typeStr = when (type) {
-                ContactsContract.CommonDataKinds.Im.TYPE_HOME -> "home"
-                ContactsContract.CommonDataKinds.Im.TYPE_WORK -> "work"
-                ContactsContract.CommonDataKinds.Im.TYPE_OTHER -> "other"
-                ContactsContract.CommonDataKinds.Im.TYPE_CUSTOM -> "custom"
-                else -> "unknown"
-            }
-            if (data != null) {
-                val im = IM(
-                    protocol = data,
-                    handle = protocolStr,
-                    type = typeStr,
-                    label = label
-                )
-                if (result[contactId] == null) result[contactId] = mutableListOf()
-                result[contactId]?.add(im)
             }
         }
     }

@@ -33,7 +33,6 @@ data class Contact(
     var phoneNumbers: List<PhoneNumber> = emptyList(),
     var emails: List<Email> = emptyList(),
     var addresses: List<PostalAddress> = emptyList(),
-    var ims: List<IM> = emptyList(),
     var websites: List<Website> = emptyList(),
     var relations: List<Relation> = emptyList(),
     var events: List<ContactEvent> = emptyList(),
