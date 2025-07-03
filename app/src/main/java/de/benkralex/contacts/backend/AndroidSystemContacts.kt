@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.provider.ContactsContract
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import androidx.core.net.toUri
@@ -87,6 +88,7 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                 val events = loadEventsBatch(contentResolver, contactIds)
                 val relations = loadRelationsBatch(contentResolver, contactIds)
                 val groups = loadGroupsBatch(contentResolver, contactIds)
+                val customFields = loadCustomFieldsBatch(contentResolver, contactIds)
 
                 // Assign data to the corresponding contacts
                 contacts.forEach { contact ->
@@ -137,6 +139,9 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                         // Is Starred
                         contact.isStarred = (groups[id] ?: emptyList())
                             .any { it.name?.contains("Starred", ignoreCase = true) ?: false }
+
+                        // Custom Fields
+                        contact.customFields = customFields[id] ?: emptyMap()
                     }
                 }
             }
@@ -238,17 +243,17 @@ private fun loadPhoneNumbersBatch(contentResolver: ContentResolver, contactIds: 
         null
     )
 
-    cursor?.use {
-        val contactIdIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
-        val numberIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
-        val typeIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE)
-        val labelIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LABEL)
+    cursor?.use { item ->
+        val contactIdIndex = item.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
+        val numberIndex = item.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+        val typeIndex = item.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE)
+        val labelIndex = item.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LABEL)
 
-        while (it.moveToNext()) {
-            val contactId = it.getString(contactIdIndex)
-            val number = if (numberIndex != -1) it.getString(numberIndex) else null
-            val type = if (typeIndex != -1) it.getInt(typeIndex) else 0
-            val label = if (labelIndex != -1) it.getString(labelIndex) else null
+        while (item.moveToNext()) {
+            val contactId = item.getString(contactIdIndex)
+            val number = if (numberIndex != -1) item.getString(numberIndex) else null
+            val type = if (typeIndex != -1) item.getInt(typeIndex) else 0
+            val label = if (labelIndex != -1) item.getString(labelIndex) else null
 
             val typeStr = when (type) {
                 ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE -> "mobile"
@@ -275,11 +280,12 @@ private fun loadPhoneNumbersBatch(contentResolver: ContentResolver, contactIds: 
                 else -> "unknown"
             }
 
-            if (!result.containsKey(contactId)) {
-                result[contactId] = mutableListOf()
-            }
+            val phoneNumbersForContact = result.getOrPut(contactId) { mutableListOf() }
+            val isDuplicate = phoneNumbersForContact.any { it.number.replace(" ", "") == number?.replace(" ", "") }
 
-            result[contactId]?.add(PhoneNumber(number ?: "", typeStr, label))
+            if (!isDuplicate && number != null) {
+                phoneNumbersForContact.add(PhoneNumber(number, typeStr, label))
+            }
         }
     }
 
@@ -639,6 +645,35 @@ private fun loadGroupsBatch(contentResolver: ContentResolver, contactIds: List<S
                         }
                     )
                 )
+            }
+        }
+    }
+    return result
+}
+
+private fun loadCustomFieldsBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, Map<String, String>> {
+    val result = mutableMapOf<String, MutableMap<String, String>>()
+    if (contactIds.isEmpty()) return result
+    val selection = "${ContactsContract.Data.CONTACT_ID} IN (${contactIds.joinToString(",")}) AND ${ContactsContract.Data.MIMETYPE} = ?"
+    val selectionArgs = arrayOf(ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE)
+    val cursor = contentResolver.query(
+        ContactsContract.Data.CONTENT_URI,
+        null,
+        selection,
+        selectionArgs,
+        null
+    )
+    cursor?.use {
+        val contactIdIndex = it.getColumnIndex(ContactsContract.Data.CONTACT_ID)
+        val keyIndex = it.getColumnIndex(ContactsContract.Data.DATA1)
+        val valueIndex = it.getColumnIndex(ContactsContract.Data.DATA2)
+        while (it.moveToNext()) {
+            val contactId = it.getString(contactIdIndex)
+            val key = if (keyIndex != -1) it.getString(keyIndex) else null
+            val value = if (valueIndex != -1) it.getString(valueIndex) else null
+            if (key != null && value != null) {
+                if (result[contactId] == null) result[contactId] = mutableMapOf()
+                result[contactId]?.put(key, value)
             }
         }
     }

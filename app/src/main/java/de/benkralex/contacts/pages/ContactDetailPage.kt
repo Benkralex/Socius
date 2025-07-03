@@ -1,5 +1,6 @@
 package de.benkralex.contacts.pages
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.benkralex.contacts.backend.Contact
+import de.benkralex.contacts.widgets.contactInfromationWidgets.CustomFieldsWidget
 import de.benkralex.contacts.widgets.contactInfromationWidgets.EmailsWidget
 import de.benkralex.contacts.widgets.contactInfromationWidgets.EventsWidget
 import de.benkralex.contacts.widgets.contactInfromationWidgets.GroupsWidget
@@ -96,6 +98,7 @@ fun ContactDetailPage(
             EventsWidget(contact.events)
             RelationsWidget(contact.relations)
             WebsitesWidget(contact.websites)
+            CustomFieldsWidget(contact.customFields)
         }
     }
 }
