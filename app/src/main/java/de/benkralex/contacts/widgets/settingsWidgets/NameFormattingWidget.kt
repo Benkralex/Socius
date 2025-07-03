@@ -25,48 +25,57 @@ import de.benkralex.contacts.backend.settings.nameFormats
 import de.benkralex.contacts.backend.settings.saveSettings
 
 @Composable
-fun NameFormattingWidget() {
+fun NameFormattingWidget(
+    modifier: Modifier = Modifier,
+) {
     val context = LocalContext.current
     var selectedFormat by remember { mutableIntStateOf(nameFormat) }
 
-    Text(
-        text = stringResource(R.string.settings_name_formatting),
-        style = MaterialTheme.typography.titleLarge
-    )
-    Column {
-        for (f in nameFormats) {
-            Row(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth()
-                    .clickable(
+    Column (
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = stringResource(R.string.settings_name_formatting),
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 10.dp)
+        )
+        Column {
+            for (f in nameFormats) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(
+                            onClick = {
+                                selectedFormat = f.id
+                                changeSetting(
+                                    format = f.id,
+                                    context = context,
+                                )
+                            }
+                        )
+                ) {
+                    RadioButton(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(horizontal = 4.dp),
+                        selected = (selectedFormat == f.id),
                         onClick = {
                             selectedFormat = f.id
                             changeSetting(
                                 format = f.id,
                                 context = context,
                             )
-                        }
+                        },
                     )
-            ) {
-                RadioButton(
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(horizontal = 8.dp),
-                    selected = (selectedFormat == f.id),
-                    onClick = {
-                        selectedFormat = f.id
-                        changeSetting(
-                            format = f.id,
-                            context = context,
-                        )
-                    },
-                )
-                Text(
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically),
-                    text = stringResource(f.displayNameResource),
-                )
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically),
+                        text = stringResource(f.displayNameResource),
+                    )
+                }
             }
         }
     }
