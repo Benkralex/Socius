@@ -10,3 +10,6 @@ I wanted a modern looking, open-source M3 contacts app. I didn't find a good one
 - See full contacts
 # Inspiration
 - Google Contacts
+# Download
+[<img src="readme_content/github-badge.png" alt="Get it on GitHub" height="80">](https://github.com/Benkralex/M3-Contacts-App/releases)
+[<img src="readme_content/obtainium-badge.png" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Benkralex/M3-Contacts-App/)
