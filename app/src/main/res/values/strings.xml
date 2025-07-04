@@ -67,4 +67,8 @@
     <string name="settings_date_format_yyyy_mm_dd_hyphen">YYYY-MM-DD</string>
     <string name="settings_date_format_dd_mm_yyyy_dot">DD.MM.YYYY</string>
     <string name="page_settings">Settings</string>
+    <string name="settings_name_format_first_middle_last">Firstname Middlename Lastname</string>
+    <string name="settings_name_format_last_first_middle">Lastname, Firstname Middlename</string>
+    <string name="settings_name_format_full_last_first">Prefix Lastname, Firstname Middlename Suffix</string>
+    <string name="settings_name_format_full_first_last">Prefix Firstname Middlename Lastname Suffix</string>
 </resources>

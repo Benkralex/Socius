@@ -6,6 +6,10 @@ import de.benkralex.contacts.backend.Contact
 val nameFormats = listOf(
     Format(format = "%givenName% %familyName%", displayNameResource = R.string.settings_name_format_first_last, id = 0),
     Format(format = "%familyName%, %givenName%", displayNameResource = R.string.settings_name_format_last_first, id = 1),
+    Format(format = "%givenName% %middleName% %familyName%", displayNameResource = R.string.settings_name_format_first_middle_last, id = 2),
+    Format(format = "%familyName%, %givenName% %middleName%", displayNameResource = R.string.settings_name_format_last_first_middle, id = 3),
+    Format(format = "%prefix% %givenName% %middleName% %familyName% %suffix%", displayNameResource = R.string.settings_name_format_full_first_last, id = 4),
+    Format(format = "%prefix% %familyName%, %givenName% %middleName% %suffix%", displayNameResource = R.string.settings_name_format_full_last_first, id = 5),
 )
 
 fun getFormattedName(contact: Contact): String {
@@ -14,7 +18,6 @@ fun getFormattedName(contact: Contact): String {
     contact.familyName: "%familyName%"
     contact.middleName: "%middleName%"
     contact.givenName: "%givenName%"
-    contact.displayName: "%displayName%"
     contact.nickname: "%nickname%"
     contact.phoneticFamilyName: "%phoneticFamilyName%"
     contact.phoneticMiddleName: "%phoneticMiddleName%"
@@ -34,5 +37,6 @@ fun getFormattedName(contact: Contact): String {
     formattedName = formattedName.replace("%prefix%", contact.prefix ?: "")
     formattedName = formattedName.replace("%suffix%", contact.suffix ?: "")
     formattedName = formattedName.trim(*charsToTrim)
+    formattedName = formattedName.replace("  ", " ") // Replace double spaces with single space
     return formattedName
 }

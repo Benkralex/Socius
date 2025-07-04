@@ -28,7 +28,7 @@ import de.benkralex.contacts.widgets.contactInfromationWidgets.PostalAddressesWi
 import de.benkralex.contacts.widgets.contactInfromationWidgets.ProfileWithName
 import de.benkralex.contacts.widgets.contactInfromationWidgets.RelationsWidget
 import de.benkralex.contacts.widgets.contactInfromationWidgets.WebsitesWidget
-import de.benkralex.contacts.widgets.contactInfromationWidgets.WorkWidget
+import de.benkralex.contacts.widgets.contactInfromationWidgets.SmallInformationWidget
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -85,11 +85,7 @@ fun ContactDetailPage(
                 .fillMaxWidth()
         ) {
             NoteWidget(contact.note)
-            WorkWidget(
-                organization = contact.organization,
-                jobTitle = contact.jobTitle,
-                department = contact.department,
-            )
+            SmallInformationWidget(contact)
             GroupsWidget(groups = contact.groups)
             EmailsWidget(contact.emails)
             PhoneNumbersWidget(contact.phoneNumbers)

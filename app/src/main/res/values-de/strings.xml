@@ -63,4 +63,8 @@
     <string name="settings_date_format_yyyy_mm_dd_hyphen">JJJJ-MM-TT</string>
     <string name="settings_date_format_dd_mm_yyyy_dot">TT.MM.JJJJ</string>
     <string name="page_settings">Einstellungen</string>
+    <string name="settings_name_format_first_middle_last">Vorname Zweitname Nachname</string>
+    <string name="settings_name_format_last_first_middle">Nachname, Vorname Zweitname</string>
+    <string name="settings_name_format_full_last_first">Prefix Nachname, Vorname Zweitname Suffix</string>
+    <string name="settings_name_format_full_first_last">Prefix Vorname Zweitname Nachname Suffix</string>
 </resources>

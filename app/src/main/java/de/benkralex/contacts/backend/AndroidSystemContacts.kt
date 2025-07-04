@@ -78,6 +78,7 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
             // Perform batch queries for all contacts
             if (contactIds.isNotEmpty()) {
                 val structuredNames = loadStructuredNamesBatch(contentResolver, contactIds)
+                val nicknames = getNicknamesBatch(contentResolver, contactIds)
                 val phoneNumbers = loadPhoneNumbersBatch(contentResolver, contactIds)
                 val emails = loadEmailsBatch(contentResolver, contactIds)
                 val addresses = loadAddressesBatch(contentResolver, contactIds)
@@ -103,6 +104,9 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                             contact.phoneticMiddleName = structuredName.phoneticMiddleName
                             contact.phoneticFamilyName = structuredName.phoneticFamilyName
                         }
+
+                        // Nickname
+                        contact.nickname = nicknames[id]
 
                         // Phone numbers
                         contact.phoneNumbers = phoneNumbers[id] ?: emptyList()
@@ -220,6 +224,36 @@ private fun loadStructuredNamesBatch(contentResolver: ContentResolver, contactId
                 phoneticMiddleName = if (phoneticMiddleNameIndex != -1) it.getString(phoneticMiddleNameIndex) else null,
                 phoneticFamilyName = if (phoneticFamilyNameIndex != -1) it.getString(phoneticFamilyNameIndex) else null
             )
+        }
+    }
+
+    return result
+}
+
+private fun getNicknamesBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, String?> {
+    val result = mutableMapOf<String, String?>()
+
+    if (contactIds.isEmpty()) return result
+
+    val selection = "${ContactsContract.Data.CONTACT_ID} IN (${contactIds.joinToString(",")}) AND ${ContactsContract.Data.MIMETYPE} = ?"
+    val selectionArgs = arrayOf(ContactsContract.CommonDataKinds.Nickname.CONTENT_ITEM_TYPE)
+
+    val cursor = contentResolver.query(
+        ContactsContract.Data.CONTENT_URI,
+        null,
+        selection,
+        selectionArgs,
+        null
+    )
+
+    cursor?.use {
+        val contactIdIndex = it.getColumnIndex(ContactsContract.Data.CONTACT_ID)
+        val nicknameIndex = it.getColumnIndex(ContactsContract.CommonDataKinds.Nickname.NAME)
+
+        while (it.moveToNext()) {
+            val contactId = it.getString(contactIdIndex)
+            val nickname = if (nicknameIndex != -1) it.getString(nicknameIndex) else null
+            result[contactId] = nickname
         }
     }
 

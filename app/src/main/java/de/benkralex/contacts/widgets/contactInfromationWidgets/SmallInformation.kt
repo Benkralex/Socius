@@ -6,8 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Groups
-import androidx.compose.material.icons.outlined.Work
+import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.WorkOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -16,19 +15,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import de.benkralex.contacts.backend.Contact
 
 @Composable
-fun WorkWidget(
-    organization: String? = null,
-    department: String? = null,
-    jobTitle: String? = null,
+fun SmallInformationWidget(
+    contact: Contact
 ) {
-    val work = listOfNotNull(
-        jobTitle,
-        department,
-        organization,
+    val phoneticName = listOfNotNull(
+        contact.phoneticGivenName,
+        contact.phoneticMiddleName,
+        contact.phoneticFamilyName,
     )
-    if (work.isEmpty()) {
+    val smallInfos = listOfNotNull(
+        contact.nickname,
+        if (!phoneticName.isEmpty()) {
+            "\"" + phoneticName.joinToString(" ") + "\""
+        } else {
+            null
+        },
+        contact.jobTitle,
+        contact.department,
+        contact.organization,
+    )
+    if (smallInfos.isEmpty()) {
         return
     }
     Card (
@@ -38,7 +47,7 @@ fun WorkWidget(
             .defaultMinSize(minHeight = 55.dp),
     ) {
         var text = ""
-        work.forEach { s ->
+        smallInfos.forEach { s ->
             if (text.isNotEmpty()) {
                 text += " • "
             }
@@ -52,8 +61,8 @@ fun WorkWidget(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                imageVector = Icons.Outlined.WorkOutline,
-                contentDescription = "Work",
+                imageVector = Icons.Outlined.Info,
+                contentDescription = "Information",
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .padding(8.dp)
