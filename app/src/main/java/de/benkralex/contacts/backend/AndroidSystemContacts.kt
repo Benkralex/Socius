@@ -580,8 +580,10 @@ private fun loadEventsBatch(contentResolver: ContentResolver, contactIds: List<S
                     type = typeStr,
                     label = label,
                 )
-                if (result[contactId] == null) result[contactId] = mutableListOf()
-                result[contactId]?.add(event)
+                val eventsForContact = result.getOrPut(contactId) { mutableListOf() }
+                if (!eventsForContact.contains(event)) {
+                    eventsForContact.add(event)
+                }
             }
         }
     }
