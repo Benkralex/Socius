@@ -1,4 +1,4 @@
-# SecretumSocius
+# Socius
 I wanted a modern looking, open-source M3 contacts app. I didn't find a good one, so I am making my own.
 # Features (finished)
 - Read local contacts
