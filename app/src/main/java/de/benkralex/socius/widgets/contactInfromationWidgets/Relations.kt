@@ -25,7 +25,6 @@ fun RelationsWidget(
     if (relations.isEmpty()) {
         return
     }
-    val context = LocalContext.current
     Card (
         modifier = Modifier
             .padding(bottom = 0.dp, top = 12.dp, end = 16.dp, start = 16.dp)

@@ -17,7 +17,7 @@ import de.benkralex.socius.backend.Contact
 @Composable
 fun ContactListPage(
     modifier: Modifier = Modifier,
-    contacts: List<Contact>? = null,
+    contacts: List<Contact>,
     menuBar: @Composable () -> Unit,
     onContactSelected: (Int) -> Unit = {},
     onSettingsSelected: () -> Unit = {},
@@ -36,7 +36,7 @@ fun ContactListPage(
         }
     ) { paddingValues ->
         ContactsList(
-            contacts = contacts ?: emptyList(),
+            contacts = contacts,
             paddingValues = paddingValues,
             onContactSelected = onContactSelected,
             onSettingsSelected = onSettingsSelected

@@ -1,6 +1,7 @@
 package de.benkralex.socius.backend.settings
 
 import android.content.Context
+import androidx.core.content.edit
 
 data class Format(
     val displayNameResource: Int,
@@ -15,10 +16,9 @@ val charsToTrim: CharArray = charArrayOf(',', ' ', '/', '\\', '.', '-', '_', ' 
 
 fun saveSettings(context: Context) {
     val sharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-    with(sharedPreferences.edit()) {
+    sharedPreferences.edit {
         putString("nameFormat", nameFormat.toString())
         putString("dateFormat", dateFormat.toString())
-        apply()
     }
 }
 
@@ -26,12 +26,12 @@ fun loadSettings(context: Context) {
     val sharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
     nameFormat = try {
         sharedPreferences.getString("nameFormat", "0")?.toInt() ?: 0
-    } catch (e: NumberFormatException) {
+    } catch (_: NumberFormatException) {
         0 // Default to first format if parsing fails
     }
     dateFormat = try {
         sharedPreferences.getString("dateFormat", "0")?.toInt() ?: 0
-    } catch (e: NumberFormatException) {
+    } catch (_: NumberFormatException) {
         0 // Default to first format if parsing fails
     }
 }
