@@ -10,6 +10,9 @@ import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+val contacts: List<Contact>
+    get() = systemContacts
+
 var systemContacts = mutableListOf<Contact>()
 
 @Composable

@@ -67,4 +67,6 @@
     <string name="settings_name_format_last_first_middle">Nachname, Vorname Zweitname</string>
     <string name="settings_name_format_full_last_first">Prefix Nachname, Vorname Zweitname Suffix</string>
     <string name="settings_name_format_full_first_last">Prefix Vorname Zweitname Nachname Suffix</string>
+    <string name="highlights_no_events_today">Keine Ereignisse heute</string>
+    <string name="highlights_events_today">Heutige Ereignisse</string>
 </resources>

@@ -71,4 +71,6 @@
     <string name="settings_name_format_last_first_middle">Lastname, Firstname Middlename</string>
     <string name="settings_name_format_full_last_first">Prefix Lastname, Firstname Middlename Suffix</string>
     <string name="settings_name_format_full_first_last">Prefix Firstname Middlename Lastname Suffix</string>
+    <string name="highlights_no_events_today">No events today</string>
+    <string name="highlights_events_today">Events today</string>
 </resources>

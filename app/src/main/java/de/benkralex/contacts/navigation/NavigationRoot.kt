@@ -41,8 +41,11 @@ import de.benkralex.contacts.pages.ManagePage
 import de.benkralex.contacts.pages.SettingsPage
 import de.benkralex.contacts.R
 import de.benkralex.contacts.backend.Contact
+import de.benkralex.contacts.backend.LoadSystemContacts
+import de.benkralex.contacts.backend.contacts
 import de.benkralex.contacts.backend.getAndroidSystemContacts
 import de.benkralex.contacts.backend.settings.loadSettings
+import de.benkralex.contacts.backend.systemContacts
 import de.benkralex.contacts.pages.ContactDetailPage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -64,15 +67,9 @@ data class ContactDetailPageNavKey(val contactId: Int): NavKey
 fun NavigationRoot(
     modifier: Modifier
 ) {
-    var contacts by remember { mutableStateOf<List<Contact>?>(null) }
     val context = LocalContext.current
     loadSettings(context)
-    LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            contacts = getAndroidSystemContacts(context = context)
-        }
-    }
-
+    LoadSystemContacts()
     val backStack = rememberNavBackStack(ContactListPageNavKey)
     NavDisplay(
         backStack = backStack,
