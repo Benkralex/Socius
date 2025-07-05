@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Contacts</string>
+    <string name="app_name" translatable="false">Socius</string>
     <string name="page_contacts">Contacts</string>
     <string name="page_highlights">Highlights</string>
     <string name="page_manage">Manage</string>

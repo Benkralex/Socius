@@ -8,15 +8,15 @@ plugins {
 }
 
 android {
-    namespace = "de.benkralex.contacts"
+    namespace = "de.benkralex.socius"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "de.benkralex.contacts"
+        applicationId = "de.benkralex.socius"
         minSdk = 28
         targetSdk = 36
         versionCode = 1
-        versionName = "V2.2.1-beta"
+        versionName = "V3.0.0-beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
