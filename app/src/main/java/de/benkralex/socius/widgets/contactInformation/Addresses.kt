@@ -1,4 +1,4 @@
-package de.benkralex.socius.widgets.contactInfromationWidgets
+package de.benkralex.socius.widgets.contactInformation
 
 import android.content.Intent
 import androidx.compose.foundation.clickable
@@ -18,8 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.backend.PostalAddress
+import de.benkralex.socius.data.PostalAddress
 import androidx.core.net.toUri
+import de.benkralex.socius.widgets.contactInformation.helpers.translateType
 
 @Composable
 fun PostalAddressesWidget(

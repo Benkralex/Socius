@@ -1,4 +1,4 @@
-package de.benkralex.socius.widgets.contactInfromationWidgets
+package de.benkralex.socius.widgets.contactInformation
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -14,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.backend.Contact
+import de.benkralex.socius.data.Contact
 
 @Composable
 fun SmallInformationWidget(

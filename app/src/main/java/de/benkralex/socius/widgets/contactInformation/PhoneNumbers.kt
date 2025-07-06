@@ -1,13 +1,12 @@
-package de.benkralex.socius.widgets.contactInfromationWidgets
+package de.benkralex.socius.widgets.contactInformation
 
-import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -18,14 +17,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.backend.Email
+import de.benkralex.socius.data.PhoneNumber
 import androidx.core.net.toUri
+import de.benkralex.socius.widgets.contactInformation.helpers.translateType
 
 @Composable
-fun EmailsWidget(
-    emails: List<Email>
+fun PhoneNumbersWidget(
+    phoneNumbers: List<PhoneNumber>
 ) {
-    if (emails.isEmpty()) {
+    if (phoneNumbers.isEmpty()) {
         return
     }
     val context = LocalContext.current
@@ -35,19 +35,20 @@ fun EmailsWidget(
             .fillMaxWidth(),
     ) {
         Column {
-            emails.forEach { email ->
+            phoneNumbers.forEach { phoneNumber ->
                 Row {
                     Icon(
-                        imageVector = Icons.Outlined.Email,
-                        contentDescription = "Email",
+                        imageVector = Icons.Outlined.Phone,
+                        contentDescription = "Phone",
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
                             .padding(8.dp)
                             .padding(start = 16.dp)
                             .clickable(
                                 onClick = {
-                                    val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                        data = "mailto:${email.address}".toUri()
+                                    val intent = android.content.Intent(android.content.Intent.ACTION_DIAL)
+                                        .apply {
+                                        data = "tel:${phoneNumber.number}".toUri()
                                     }
                                     context.startActivity(intent)
                                 }
@@ -59,15 +60,15 @@ fun EmailsWidget(
                             .padding(8.dp),
                     ) {
                         Text(
-                            text = email.address,
+                            text = phoneNumber.number,
                         )
                         Text(
-                            text = translateType(email.type, email.label),
+                            text = translateType(phoneNumber.type, phoneNumber.label),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }
                 }
-                if (emails.indexOf(email) != (emails.size - 1)) HorizontalDivider(
+                if (phoneNumbers.indexOf(phoneNumber) != (phoneNumbers.size - 1)) HorizontalDivider(
                     thickness = 2.dp,
                 )
             }

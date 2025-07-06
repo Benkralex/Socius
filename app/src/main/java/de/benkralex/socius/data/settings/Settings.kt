@@ -1,4 +1,4 @@
-package de.benkralex.socius.backend.settings
+package de.benkralex.socius.data.settings
 
 import android.content.Context
 import androidx.core.content.edit

@@ -1,4 +1,4 @@
-package de.benkralex.socius.widgets.contactInfromationWidgets
+package de.benkralex.socius.widgets.contactInformation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,8 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.backend.ContactEvent
-import de.benkralex.socius.backend.settings.getFormattedDate
+import de.benkralex.socius.data.ContactEvent
+import de.benkralex.socius.data.settings.getFormattedDate
+import de.benkralex.socius.widgets.contactInformation.helpers.translateType
 
 @Composable
 fun EventsWidget(

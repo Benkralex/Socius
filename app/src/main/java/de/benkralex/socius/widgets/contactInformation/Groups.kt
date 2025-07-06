@@ -1,11 +1,11 @@
-package de.benkralex.socius.widgets.contactInfromationWidgets
+package de.benkralex.socius.widgets.contactInformation
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.Notes
+import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -13,15 +13,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import de.benkralex.socius.data.Group
 
 @Composable
-fun NoteWidget(
-    note: String?
+fun GroupsWidget(
+    groups: List<Group>
 ) {
-    if (note == null) {
+    if (groups.isEmpty()) {
         return
     }
-    if (note.isEmpty()) {
+    var text = ""
+    groups.forEach { group ->
+        if (group.name != "My Contacts") {
+            if (group.name != "Starred in Android") {
+                if (text.isNotEmpty()) {
+                    text += " • "
+                }
+                text += group.name
+            }
+        }
+    }
+    if (text.isEmpty()) {
         return
     }
     Card (
@@ -37,15 +49,15 @@ fun NoteWidget(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                imageVector = Icons.AutoMirrored.Outlined.Notes,
-                contentDescription = "Note",
+                imageVector = Icons.Outlined.Groups,
+                contentDescription = "Groups",
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .padding(8.dp)
                     .padding(start = 16.dp)
             )
             Text(
-                text = note,
+                text = text,
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .padding(8.dp),

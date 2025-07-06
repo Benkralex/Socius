@@ -1,4 +1,4 @@
-package de.benkralex.socius.widgets.contactInfromationWidgets
+package de.benkralex.socius.widgets.contactInformation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.backend.Contact
-import de.benkralex.socius.backend.settings.getFormattedName
+import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.settings.getFormattedName
 
 @Composable
 fun ProfileWithName(

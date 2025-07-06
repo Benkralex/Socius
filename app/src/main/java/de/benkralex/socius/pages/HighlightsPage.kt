@@ -15,11 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
-import de.benkralex.socius.backend.Contact
-import de.benkralex.socius.backend.settings.getFormattedDate
-import de.benkralex.socius.backend.settings.getFormattedName
-import de.benkralex.socius.backend.systemContacts
-import de.benkralex.socius.widgets.contactInfromationWidgets.translateType
+import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.contacts.contacts
+import de.benkralex.socius.data.settings.getFormattedDate
+import de.benkralex.socius.data.settings.getFormattedName
+import de.benkralex.socius.widgets.contactInformation.helpers.translateType
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,7 +69,7 @@ fun HighlightsPage(
 
 fun getEventWidgets(): ArrayList<@Composable () -> Unit> {
     val events: ArrayList<@Composable () -> Unit> = ArrayList<@Composable () -> Unit>()
-    for (c: Contact in systemContacts) {
+    for (c: Contact in contacts) {
         for (e in c.events) {
             if (e.day == null) continue
             if (e.month == null) continue

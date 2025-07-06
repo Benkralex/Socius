@@ -1,4 +1,4 @@
-package de.benkralex.socius.backend.settings
+package de.benkralex.socius.data.settings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource

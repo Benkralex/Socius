@@ -30,14 +30,14 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import de.benkralex.socius.R
+import de.benkralex.socius.data.contacts.LoadContacts
 import de.benkralex.socius.widgets.CustomNavigationBar
 import de.benkralex.socius.pages.ContactListPage
 import de.benkralex.socius.pages.HighlightsPage
 import de.benkralex.socius.pages.ManagePage
 import de.benkralex.socius.pages.SettingsPage
-import de.benkralex.socius.backend.LoadSystemContacts
-import de.benkralex.socius.backend.contacts
-import de.benkralex.socius.backend.settings.loadSettings
+import de.benkralex.socius.data.contacts.contacts
+import de.benkralex.socius.data.settings.loadSettings
 import de.benkralex.socius.pages.ContactDetailPage
 import kotlinx.serialization.Serializable
 
@@ -59,7 +59,7 @@ fun NavigationRoot(
 ) {
     val context = LocalContext.current
     loadSettings(context)
-    LoadSystemContacts()
+    LoadContacts()
     val backStack = rememberNavBackStack(ContactListPageNavKey)
     NavDisplay(
         backStack = backStack,

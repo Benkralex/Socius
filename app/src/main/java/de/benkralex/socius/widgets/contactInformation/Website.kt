@@ -1,12 +1,13 @@
-package de.benkralex.socius.widgets.contactInfromationWidgets
+package de.benkralex.socius.widgets.contactInformation
 
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -16,15 +17,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.backend.PhoneNumber
 import androidx.core.net.toUri
+import de.benkralex.socius.R
+import de.benkralex.socius.data.Website
+import de.benkralex.socius.widgets.contactInformation.helpers.translateType
 
 @Composable
-fun PhoneNumbersWidget(
-    phoneNumbers: List<PhoneNumber>
+fun WebsitesWidget(
+    websites: List<Website>
 ) {
-    if (phoneNumbers.isEmpty()) {
+    if (websites.isEmpty()) {
         return
     }
     val context = LocalContext.current
@@ -34,20 +38,19 @@ fun PhoneNumbersWidget(
             .fillMaxWidth(),
     ) {
         Column {
-            phoneNumbers.forEach { phoneNumber ->
+            websites.forEach { website ->
                 Row {
                     Icon(
-                        imageVector = Icons.Outlined.Phone,
-                        contentDescription = "Phone",
+                        imageVector = Icons.Outlined.Language,
+                        contentDescription = "Website",
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
                             .padding(8.dp)
                             .padding(start = 16.dp)
                             .clickable(
                                 onClick = {
-                                    val intent = android.content.Intent(android.content.Intent.ACTION_DIAL)
-                                        .apply {
-                                        data = "tel:${phoneNumber.number}".toUri()
+                                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                                       data = website.url.toUri()
                                     }
                                     context.startActivity(intent)
                                 }
@@ -59,15 +62,18 @@ fun PhoneNumbersWidget(
                             .padding(8.dp),
                     ) {
                         Text(
-                            text = phoneNumber.number,
+                            text = website.url,
                         )
                         Text(
-                            text = translateType(phoneNumber.type, phoneNumber.label),
+                            text = translateType(
+                                website.type,
+                                website.label ?: stringResource(R.string.type_homepage)
+                            ),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }
                 }
-                if (phoneNumbers.indexOf(phoneNumber) != (phoneNumbers.size - 1)) HorizontalDivider(
+                if (websites.indexOf(website) != (websites.size - 1)) HorizontalDivider(
                     thickness = 2.dp,
                 )
             }

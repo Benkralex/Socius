@@ -1,7 +1,7 @@
-package de.benkralex.socius.backend.settings
+package de.benkralex.socius.data.settings
 
 import de.benkralex.socius.R
-import de.benkralex.socius.backend.Contact
+import de.benkralex.socius.data.Contact
 
 val nameFormats = listOf(
     Format(format = "%givenName% %familyName%", displayNameResource = R.string.settings_name_format_first_last, id = 0),

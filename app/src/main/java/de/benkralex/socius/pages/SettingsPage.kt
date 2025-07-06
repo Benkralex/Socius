@@ -31,8 +31,8 @@ import de.benkralex.socius.R
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.vector.ImageVector
-import de.benkralex.socius.widgets.settingsWidgets.DateFormattingWidget
-import de.benkralex.socius.widgets.settingsWidgets.NameFormattingWidget
+import de.benkralex.socius.widgets.settings.DateFormattingWidget
+import de.benkralex.socius.widgets.settings.NameFormattingWidget
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,4 +1,4 @@
-package de.benkralex.socius.widgets.contactInfromationWidgets
+package de.benkralex.socius.widgets.contactInformation.helpers
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource

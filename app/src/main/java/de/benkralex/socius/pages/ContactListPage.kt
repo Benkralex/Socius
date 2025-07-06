@@ -11,13 +11,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import de.benkralex.socius.widgets.ContactsList
-import de.benkralex.socius.backend.Contact
+import de.benkralex.socius.data.Contact
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ContactListPage(
     modifier: Modifier = Modifier,
-    contacts: List<Contact>,
+    contacts: MutableList<Contact>,
     menuBar: @Composable () -> Unit,
     onContactSelected: (Int) -> Unit = {},
     onSettingsSelected: () -> Unit = {},

@@ -1,4 +1,4 @@
-package de.benkralex.socius.backend
+package de.benkralex.socius.data
 
 import android.content.ContentResolver
 import android.content.Context

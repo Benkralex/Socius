@@ -30,14 +30,14 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
-import de.benkralex.socius.backend.Contact
-import de.benkralex.socius.backend.settings.getFormattedName
+import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.settings.getFormattedName
 import kotlin.comparisons.compareBy
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ContactsList(
-    contacts: List<Contact>,
+    contacts: MutableList<Contact>,
     paddingValues: PaddingValues,
     onContactSelected: (Int) -> Unit = {},
     onSettingsSelected: () -> Unit = {},

@@ -17,18 +17,18 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.backend.Contact
-import de.benkralex.socius.widgets.contactInfromationWidgets.CustomFieldsWidget
-import de.benkralex.socius.widgets.contactInfromationWidgets.EmailsWidget
-import de.benkralex.socius.widgets.contactInfromationWidgets.EventsWidget
-import de.benkralex.socius.widgets.contactInfromationWidgets.GroupsWidget
-import de.benkralex.socius.widgets.contactInfromationWidgets.NoteWidget
-import de.benkralex.socius.widgets.contactInfromationWidgets.PhoneNumbersWidget
-import de.benkralex.socius.widgets.contactInfromationWidgets.PostalAddressesWidget
-import de.benkralex.socius.widgets.contactInfromationWidgets.ProfileWithName
-import de.benkralex.socius.widgets.contactInfromationWidgets.RelationsWidget
-import de.benkralex.socius.widgets.contactInfromationWidgets.WebsitesWidget
-import de.benkralex.socius.widgets.contactInfromationWidgets.SmallInformationWidget
+import de.benkralex.socius.data.Contact
+import de.benkralex.socius.widgets.contactInformation.CustomFieldsWidget
+import de.benkralex.socius.widgets.contactInformation.EmailsWidget
+import de.benkralex.socius.widgets.contactInformation.EventsWidget
+import de.benkralex.socius.widgets.contactInformation.GroupsWidget
+import de.benkralex.socius.widgets.contactInformation.NoteWidget
+import de.benkralex.socius.widgets.contactInformation.PhoneNumbersWidget
+import de.benkralex.socius.widgets.contactInformation.PostalAddressesWidget
+import de.benkralex.socius.widgets.contactInformation.ProfileWithName
+import de.benkralex.socius.widgets.contactInformation.RelationsWidget
+import de.benkralex.socius.widgets.contactInformation.WebsitesWidget
+import de.benkralex.socius.widgets.contactInformation.SmallInformationWidget
 
 
 @OptIn(ExperimentalMaterial3Api::class)

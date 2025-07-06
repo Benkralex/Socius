@@ -1,4 +1,4 @@
-package de.benkralex.socius.widgets.contactInfromationWidgets
+package de.benkralex.socius.widgets.contactInformation
 
 import android.content.Intent
 import androidx.compose.foundation.clickable
@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Language
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -17,17 +17,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import de.benkralex.socius.data.Email
 import androidx.core.net.toUri
-import de.benkralex.socius.R
-import de.benkralex.socius.backend.Website
+import de.benkralex.socius.widgets.contactInformation.helpers.translateType
 
 @Composable
-fun WebsitesWidget(
-    websites: List<Website>
+fun EmailsWidget(
+    emails: List<Email>
 ) {
-    if (websites.isEmpty()) {
+    if (emails.isEmpty()) {
         return
     }
     val context = LocalContext.current
@@ -37,19 +36,19 @@ fun WebsitesWidget(
             .fillMaxWidth(),
     ) {
         Column {
-            websites.forEach { website ->
+            emails.forEach { email ->
                 Row {
                     Icon(
-                        imageVector = Icons.Outlined.Language,
-                        contentDescription = "Website",
+                        imageVector = Icons.Outlined.Email,
+                        contentDescription = "Email",
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
                             .padding(8.dp)
                             .padding(start = 16.dp)
                             .clickable(
                                 onClick = {
-                                    val intent = Intent(Intent.ACTION_VIEW).apply {
-                                       data = website.url.toUri()
+                                    val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                        data = "mailto:${email.address}".toUri()
                                     }
                                     context.startActivity(intent)
                                 }
@@ -61,15 +60,15 @@ fun WebsitesWidget(
                             .padding(8.dp),
                     ) {
                         Text(
-                            text = website.url,
+                            text = email.address,
                         )
                         Text(
-                            text = translateType(website.type, website.label ?: stringResource(R.string.type_homepage)),
+                            text = translateType(email.type, email.label),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }
                 }
-                if (websites.indexOf(website) != (websites.size - 1)) HorizontalDivider(
+                if (emails.indexOf(email) != (emails.size - 1)) HorizontalDivider(
                     thickness = 2.dp,
                 )
             }
