@@ -1,4 +1,4 @@
-package de.benkralex.socius.data
+package de.benkralex.socius.data.contacts.system
 
 import android.content.ContentResolver
 import android.content.Context
@@ -7,6 +7,14 @@ import android.provider.ContactsContract
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import androidx.core.net.toUri
+import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.ContactEvent
+import de.benkralex.socius.data.Email
+import de.benkralex.socius.data.Group
+import de.benkralex.socius.data.PhoneNumber
+import de.benkralex.socius.data.PostalAddress
+import de.benkralex.socius.data.Relation
+import de.benkralex.socius.data.Website
 
 suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
     withContext(Dispatchers.IO) {
@@ -65,14 +73,16 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                     }
                 } else null
 
-                contacts.add(Contact(
-                    id = contactId,
-                    displayName = displayName,
-                    photoUri = photoUri,
-                    photoBitmap = photoBitmap,
-                    thumbnailUri = thumbnailUri,
-                    thumbnailBitmap = thumbnailBitmap
-                ))
+                contacts.add(
+                    Contact(
+                        id = contactId,
+                        displayName = displayName,
+                        photoUri = photoUri,
+                        photoBitmap = photoBitmap,
+                        thumbnailUri = thumbnailUri,
+                        thumbnailBitmap = thumbnailBitmap
+                    )
+                )
             }
 
             // Perform batch queries for all contacts
@@ -89,6 +99,7 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                 val relations = loadRelationsBatch(contentResolver, contactIds)
                 val groups = loadGroupsBatch(contentResolver, contactIds)
                 val customFields = loadCustomFieldsBatch(contentResolver, contactIds)
+                val isStarred = loadStarredBatch(contentResolver, contactIds)
 
                 // Assign data to the corresponding contacts
                 contacts.forEach { contact ->
@@ -140,8 +151,9 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                         contact.groups = groups[id] ?: emptyList()
 
                         // Is Starred
-                        contact.isStarred = (groups[id] ?: emptyList())
-                            .any { it.name?.contains("Starred", ignoreCase = true) ?: false }
+                        contact.isStarred = ((groups[id] ?: emptyList())
+                            .any { it.name?.contains("Starred", ignoreCase = true) ?: false })
+                                    || isStarred[id] == true
 
                         // Custom Fields
                         contact.customFields = customFields[id] ?: emptyMap()
@@ -182,6 +194,34 @@ private data class OrganizationData(
     val department: String? = null,
     val jobTitle: String? = null
 )
+
+private fun loadStarredBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, Boolean> {
+    val result = mutableMapOf<String, Boolean>()
+
+    if (contactIds.isEmpty()) return result
+
+    val selection = "${ContactsContract.RawContacts._ID} IN (${contactIds.joinToString(",")})"
+    val cursor = contentResolver.query(
+        ContactsContract.RawContacts.CONTENT_URI,
+        arrayOf(ContactsContract.RawContacts._ID, ContactsContract.RawContacts.STARRED),
+        selection,
+        null,
+        null
+    )
+
+    cursor?.use {
+        val idIndex = it.getColumnIndex(ContactsContract.RawContacts._ID)
+        val starredIndex = it.getColumnIndex(ContactsContract.RawContacts.STARRED)
+
+        while (it.moveToNext()) {
+            val contactId = it.getString(idIndex)
+            val isStarred = it.getInt(starredIndex) == 1
+            result[contactId] = isStarred
+        }
+    }
+
+    return result
+}
 
 // Batch query for structured names
 private fun loadStructuredNamesBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, StructuredNameData> {

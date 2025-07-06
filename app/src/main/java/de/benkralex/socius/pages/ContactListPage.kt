@@ -1,6 +1,5 @@
 package de.benkralex.socius.pages
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -21,12 +20,13 @@ fun ContactListPage(
     menuBar: @Composable () -> Unit,
     onContactSelected: (Int) -> Unit = {},
     onSettingsSelected: () -> Unit = {},
+    onNewContactCreate: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                Log.d("ContactsListPage", "Add new Contact clicked")
+                onNewContactCreate()
             }) {
                 Icon(Icons.Filled.Add, "Add")
             }

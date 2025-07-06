@@ -23,12 +23,15 @@ class MainActivity : ComponentActivity() {
                 NavigationRoot(Modifier)
             }
         }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
-            != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(Manifest.permission.READ_CONTACTS),
+                arrayOf(
+                    Manifest.permission.READ_CONTACTS,
+                    Manifest.permission.WRITE_CONTACTS
+                ),
                 1
             )
         }

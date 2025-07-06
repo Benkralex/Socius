@@ -39,6 +39,7 @@ import de.benkralex.socius.pages.SettingsPage
 import de.benkralex.socius.data.contacts.contacts
 import de.benkralex.socius.data.settings.loadSettings
 import de.benkralex.socius.pages.ContactDetailPage
+import de.benkralex.socius.pages.EditContactPage
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -51,6 +52,8 @@ data object ManagePageNavKey: NavKey
 data object SettingsPageNavKey: NavKey
 @Serializable
 data class ContactDetailPageNavKey(val contactId: Int): NavKey
+@Serializable
+data class ContactEditPageNavKey(val contactId: Int? = null): NavKey
 
 
 @Composable
@@ -154,14 +157,17 @@ fun NavigationRoot(
                                     selectedIndex = 0
                                 )
                             },
-                            onContactSelected = { contactIdx ->
+                            onContactSelected = { contactId ->
                                 backStack.add(
-                                    ContactDetailPageNavKey(contactIdx)
+                                    ContactDetailPageNavKey(contactId)
                                 )
                             },
                             onSettingsSelected = {
                                 backStack.add(SettingsPageNavKey)
-                            }
+                            },
+                            onNewContactCreate = {
+                                backStack.add(ContactEditPageNavKey(null))
+                            },
                         )
                     }
                 }
@@ -272,6 +278,25 @@ fun NavigationRoot(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(24.dp)),
                             contact = contacts[key.contactId],
+                            onBackClick = {
+                                backStack.removeAt(backStack.size - 1)
+                            },
+                            onEditClick = {
+                                backStack.add(
+                                    ContactEditPageNavKey(key.contactId)
+                                )
+                            }
+                        )
+                    }
+                }
+                is ContactEditPageNavKey -> {
+                    NavEntry(
+                        key = key
+                    ) {
+                        EditContactPage(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(24.dp)),
+                            contactId = key.contactId,
                             onBackClick = {
                                 backStack.removeAt(backStack.size - 1)
                             }

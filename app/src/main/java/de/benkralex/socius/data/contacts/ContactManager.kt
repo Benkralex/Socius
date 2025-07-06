@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import de.benkralex.socius.data.Contact
-import de.benkralex.socius.data.getAndroidSystemContacts
+import de.benkralex.socius.data.contacts.system.getAndroidSystemContacts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
