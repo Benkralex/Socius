@@ -1,6 +1,7 @@
 package de.benkralex.socius.widgets
 
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -29,7 +30,9 @@ fun CustomNavigationBar(
                         contentDescription = item,
                     )
                 },
-                label = { Text(item) },
+                label = { Text(
+                    text = item,
+                ) },
                 selected = selectedItem == index,
                 onClick = {
                     selectedItem = index

@@ -1,34 +1,46 @@
 package de.benkralex.socius.ui.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import de.benkralex.socius.R
 
 // Set of Material typography styles to start with
+val baloo2Family = FontFamily(
+    Font(R.font.baloo_2_regular, FontWeight.Normal),
+    Font(R.font.baloo_2_bold, FontWeight.Bold),
+    Font(R.font.baloo_2_semi_bold, FontWeight.SemiBold),
+    Font(R.font.baloo_2_medium, FontWeight.Medium),
+    Font(R.font.baloo_2_extra_bold, FontWeight.ExtraBold),
+)
+
+val balooBhaijaan2Family = FontFamily(
+    Font(R.font.baloo_bhaijaan_2_regular, FontWeight.Normal),
+    Font(R.font.baloo_bhaijaan_2_bold, FontWeight.Bold),
+    Font(R.font.baloo_bhaijaan_2_semi_bold, FontWeight.SemiBold),
+    Font(R.font.baloo_bhaijaan_2_medium, FontWeight.Medium),
+    Font(R.font.baloo_bhaijaan_2_extra_bold, FontWeight.ExtraBold),
+)
+
 val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
+    displayLarge = Typography().displayLarge.copy(fontFamily = baloo2Family),
+    displayMedium = Typography().displayMedium.copy(fontFamily = baloo2Family),
+    displaySmall = Typography().displaySmall.copy(fontFamily = baloo2Family),
+
+    headlineLarge = Typography().headlineLarge.copy(fontFamily = baloo2Family),
+    headlineMedium = Typography().headlineMedium.copy(fontFamily = baloo2Family),
+    headlineSmall = Typography().headlineSmall.copy(fontFamily = baloo2Family),
+
+    titleLarge = Typography().titleLarge.copy(fontFamily = baloo2Family),
+    titleMedium = Typography().titleMedium.copy(fontFamily = baloo2Family),
+    titleSmall = Typography().titleSmall.copy(fontFamily = baloo2Family),
+
+    bodyLarge = Typography().bodyLarge.copy(fontFamily = balooBhaijaan2Family),
+    bodyMedium = Typography().bodyMedium.copy(fontFamily = balooBhaijaan2Family),
+    bodySmall = Typography().bodySmall.copy(fontFamily = balooBhaijaan2Family),
+
+    labelLarge = Typography().labelLarge.copy(fontFamily = balooBhaijaan2Family),
+    labelMedium = Typography().labelMedium.copy(fontFamily = balooBhaijaan2Family),
+    labelSmall = Typography().labelSmall.copy(fontFamily = balooBhaijaan2Family)
 )
