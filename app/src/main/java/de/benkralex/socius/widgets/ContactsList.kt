@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SearchBar
@@ -55,8 +56,15 @@ fun ContactsList(
 
     val grouped = remember(filteredContacts) {
         filteredContacts.groupBy {
-            getFormattedName(it).firstOrNull()?.uppercase() ?: "?"
-        }.toSortedMap(compareBy { it })
+            if (it.isStarred) "starred"
+            else getFormattedName(it).firstOrNull()?.uppercase() ?: "?"
+        }.toSortedMap(compareBy {
+            when (it) {
+                "starred" -> "AA"
+                "?" -> "A"
+                else -> it + "B"
+            }
+        })
     }
 
     Column(
@@ -123,7 +131,16 @@ fun ContactsList(
         ) {
             grouped.forEach { (initial, contactsForInitial) ->
                 stickyHeader {
-                    ContactsListHeading(text = initial)
+                    if (initial == "starred") {
+                        ContactsListHeading(
+                            imageVector = Icons.Filled.Star,
+                            contentDescription = "Starred"
+                        )
+                    } else {
+                        ContactsListHeading(
+                            text = initial
+                        )
+                    }
                 }
                 items(contactsForInitial) { c ->
                     ContactCard(
