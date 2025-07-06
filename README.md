@@ -5,10 +5,10 @@ I wanted a modern looking, open-source M3 contacts app. I didn't find a good one
 - Show display name and profile picture
 - See full contacts
 - M3 Design
+- See full contacts
 # Features (not finished)
 - Sync with CalDAV-Server
 - Edit contacts
-- See full contacts
 # Inspiration
 - Google Contacts
 # Download
