@@ -12,5 +12,5 @@ I wanted a modern looking, open-source M3 contacts app. I didn't find a good one
 # Inspiration
 - Google Contacts
 # Download
-[<img src="readme_content/github-badge.png" alt="Get it on GitHub" height="80">](https://github.com/Benkralex/Socius/releases)
-[<img src="readme_content/obtainium-badge.png" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Benkralex/Socius)
+[<img src="readme_content/github-badge.png" alt="Get it on GitHub" width="190">](https://github.com/Benkralex/Socius/releases)
+[<img src="readme_content/obtainium-badge.png" alt="Get it on Obtainium" width="190">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Benkralex/Socius)
