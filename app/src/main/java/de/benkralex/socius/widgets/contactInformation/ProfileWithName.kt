@@ -9,9 +9,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import de.benkralex.socius.data.Contact
 import de.benkralex.socius.data.settings.getFormattedName
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ProfileWithName(
     contact: Contact,
@@ -36,8 +40,8 @@ fun ProfileWithName(
                 bitmap = contact.photoBitmap!!.asImageBitmap(),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(30.dp)
-                    .clip(CircleShape)
+                    .size(40.dp)
+                    .clip(MaterialShapes.Cookie6Sided.toShape())
                     .align(Alignment.CenterVertically)
             )
         } else {
@@ -45,8 +49,8 @@ fun ProfileWithName(
                 imageVector = Icons.Outlined.Person,
                 contentDescription = "Profile Icon",
                 modifier = Modifier
-                    .clip(CircleShape)
-                    .size(30.dp)
+                    .size(40.dp)
+                    .clip(MaterialShapes.Cookie6Sided.toShape())
                     .background(
                         color = MaterialTheme.colorScheme.primary
                     )

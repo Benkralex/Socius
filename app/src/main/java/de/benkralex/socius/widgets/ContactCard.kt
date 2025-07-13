@@ -15,9 +15,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ContactCard(
     modifier: Modifier = Modifier,
@@ -49,15 +53,15 @@ fun ContactCard(
                     contentDescription = null,
                     modifier = Modifier
                         .size(40.dp)
-                        .clip(CircleShape)
+                        .clip(MaterialShapes.Cookie6Sided.toShape())
                 )
             } else {
                 Icon(
                     imageVector = Icons.Outlined.Person,
                     contentDescription = "Profile Icon",
                     modifier = Modifier
-                        .clip(CircleShape)
                         .size(40.dp)
+                        .clip(MaterialShapes.Cookie6Sided.toShape())
                         .background(
                             color = MaterialTheme.colorScheme.primary
                         )

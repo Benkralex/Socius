@@ -25,12 +25,12 @@ fun GroupsWidget(
     var text = ""
     groups.forEach { group ->
         if (group.name != "My Contacts") {
-            if (group.name != "Starred in Android") {
+            //if (group.name != "Starred in Android") {
                 if (text.isNotEmpty()) {
                     text += " • "
                 }
                 text += group.name
-            }
+            //}
         }
     }
     if (text.isEmpty()) {

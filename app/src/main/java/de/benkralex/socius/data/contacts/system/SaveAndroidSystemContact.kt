@@ -3,10 +3,15 @@ package de.benkralex.socius.data.contacts.system
 import android.content.ContentProviderOperation
 import android.content.Context
 import android.provider.ContactsContract
+import android.util.Log
 
 
 fun updateStarred(contactId: String?, value: Boolean, context: Context) {
-    if (contactId == null) return
+    Log.d("updateStarred", "Start: contactId=$contactId, value=$value")
+    if (contactId == null) {
+        Log.d("updateStarred", "Abbruch: contactId ist null")
+        return
+    }
     val operations = ArrayList<ContentProviderOperation>()
     operations.add(
         ContentProviderOperation.newUpdate(ContactsContract.RawContacts.CONTENT_URI)
@@ -39,6 +44,12 @@ fun updateStarred(contactId: String?, value: Boolean, context: Context) {
                 .build()
         )
     }
+    Log.d("updateStarred", "Update-Operation hinzugefügt für contactId=$contactId, STARRED=${if (value) 1 else 0}")
     val contentResolver = context.contentResolver
-    contentResolver.applyBatch(ContactsContract.AUTHORITY, operations)
+    try {
+        contentResolver.applyBatch(ContactsContract.AUTHORITY, operations)
+        Log.d("updateStarred", "applyBatch erfolgreich ausgeführt")
+    } catch (e: Exception) {
+        Log.e("updateStarred", "Fehler bei applyBatch: ${e.message}", e)
+    }
 }
