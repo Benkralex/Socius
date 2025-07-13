@@ -38,6 +38,7 @@ import de.benkralex.socius.pages.ManagePage
 import de.benkralex.socius.pages.SettingsPage
 import de.benkralex.socius.data.contacts.contacts
 import de.benkralex.socius.data.settings.loadSettings
+import de.benkralex.socius.pages.AllowPermissionsPage
 import de.benkralex.socius.pages.ContactDetailPage
 import de.benkralex.socius.pages.EditContactPage
 import kotlinx.serialization.Serializable
@@ -51,6 +52,8 @@ data object ManagePageNavKey: NavKey
 @Serializable
 data object SettingsPageNavKey: NavKey
 @Serializable
+data object AllowPermissionsPageNavKey: NavKey
+@Serializable
 data class ContactDetailPageNavKey(val contactId: Int): NavKey
 @Serializable
 data class ContactEditPageNavKey(val contactId: Int? = null): NavKey
@@ -61,9 +64,7 @@ fun NavigationRoot(
     modifier: Modifier
 ) {
     val context = LocalContext.current
-    loadSettings(context)
-    LoadContacts()
-    val backStack = rememberNavBackStack(ContactListPageNavKey)
+    val backStack = rememberNavBackStack(AllowPermissionsPageNavKey)
     NavDisplay(
         backStack = backStack,
         modifier = modifier,
@@ -115,6 +116,22 @@ fun NavigationRoot(
         },
         entryProvider = { key ->
             when(key) {
+                is AllowPermissionsPageNavKey -> {
+                    NavEntry(
+                        key = key
+                    ) {
+                        AllowPermissionsPage(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(24.dp)),
+                            onAllPermissionsAllowed = {
+                                loadSettings(context)
+                                LoadContacts()
+                                backStack.clear()
+                                backStack.add(ContactListPageNavKey)
+                            }
+                        )
+                    }
+                }
                 is ContactListPageNavKey -> {
                     NavEntry(
                         key = key

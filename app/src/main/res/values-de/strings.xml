@@ -68,4 +68,8 @@
     <string name="settings_name_format_full_first_last">Prefix Vorname Zweitname Nachname Suffix</string>
     <string name="highlights_no_events_today">Keine Ereignisse heute</string>
     <string name="highlights_events_today">Heutige Ereignisse</string>
+    <string name="permission_error_contacts_read">Damit die App funktioniert braucht diese Zugriff auf das lesen der Kontakte. Öffne die Einstellungen > Berechtigungen > Kontakte > Erlauben</string>
+    <string name="permission_open_settings">Einstellungen öffnen</string>
+    <string name="permission_test">Berechtigungen prüfen</string>
+    <string name="permission_give">Berechtigung geben</string>
 </resources>

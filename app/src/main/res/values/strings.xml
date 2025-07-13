@@ -73,4 +73,8 @@
     <string name="settings_name_format_full_first_last">Prefix Firstname Middlename Lastname Suffix</string>
     <string name="highlights_no_events_today">No events today</string>
     <string name="highlights_events_today">Events today</string>
+    <string name="permission_error_contacts_read">For the app to work, it needs the permission to read the contacts. Open the settings > Permissions > Contacts > Allow</string>
+    <string name="permission_open_settings">Open settings</string>
+    <string name="permission_test">Test permissions</string>
+    <string name="permission_give">Give permission</string>
 </resources>
