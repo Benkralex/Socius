@@ -41,7 +41,6 @@ fun ContactsList(
     contacts: MutableList<Contact>,
     paddingValues: PaddingValues,
     onContactSelected: (Int) -> Unit = {},
-    onSettingsSelected: () -> Unit = {},
 ) {
     val textFieldState = rememberTextFieldState()
     var searchQuery by rememberSaveable { mutableStateOf("") }
@@ -107,16 +106,6 @@ fun ContactsList(
                                     .clickable {
                                         textFieldState.edit { replace(0, length, "") }
                                         searchQuery = ""
-                                    }
-                            )
-                        } else {
-                            Icon(
-                                Icons.Filled.Settings,
-                                "Settings",
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .clickable {
-                                        onSettingsSelected()
                                     }
                             )
                         }

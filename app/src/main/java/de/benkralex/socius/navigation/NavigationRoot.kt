@@ -162,9 +162,6 @@ fun NavigationRoot(
                                     ContactDetailPageNavKey(contactId)
                                 )
                             },
-                            onSettingsSelected = {
-                                backStack.add(SettingsPageNavKey)
-                            },
                             onNewContactCreate = {
                                 backStack.add(ContactEditPageNavKey(null))
                             },
@@ -253,7 +250,10 @@ fun NavigationRoot(
                                     },
                                     selectedIndex = 2
                                 )
-                            }
+                            },
+                            navigateSettings = {
+                                backStack.add(SettingsPageNavKey)
+                            },
                         )
                     }
                 }
