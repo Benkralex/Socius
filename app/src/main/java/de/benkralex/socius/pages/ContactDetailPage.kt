@@ -68,44 +68,24 @@ fun ContactDetailPage(
                 },
                 actions = {
                     val context = LocalContext.current
-                    var isStarred by remember { mutableStateOf(contact.isStarred) }
-                    if (isStarred) {
-                        Icon(
-                            Icons.Outlined.Star,
-                            "is starred",
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .clickable(
-                                    onClick = {
-                                        contact.isStarred = false
-                                        isStarred = false
-                                        updateStarred(
-                                            contactId = contact.id,
-                                            value = false,
-                                            context = context,
-                                        )
-                                    }
+                    //var isStarred by remember { mutableStateOf(contact.isStarred) }
+                    val starIcon = if (contact.isStarred) Icons.Outlined.Star else Icons.Outlined.StarOutline
+                    val starDescription = if (contact.isStarred) "is starred" else "is not starred"
+                    Icon(
+                        starIcon,
+                        starDescription,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .clickable {
+                                contact.isStarred = !contact.isStarred
+                                //isStarred = !isStarred
+                                updateStarred(
+                                    contactId = contact.id,
+                                    value = contact.isStarred,
+                                    context = context,
                                 )
-                        )
-                    } else {
-                        Icon(
-                            Icons.Outlined.StarOutline,
-                            "is not starred",
-                            modifier = Modifier
-                                .padding(8.dp)
-                                .clickable(
-                                    onClick = {
-                                        contact.isStarred = true
-                                        isStarred = true
-                                        updateStarred(
-                                            contactId = contact.id,
-                                            value = true,
-                                            context = context,
-                                        )
-                                    }
-                                )
-                        )
-                    }
+                            }
+                    )
                     Icon(
                         imageVector = Icons.Outlined.Edit,
                         contentDescription = "Edit",

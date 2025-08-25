@@ -1,7 +1,6 @@
 package de.benkralex.socius.data.contacts
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
