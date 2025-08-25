@@ -1,56 +1,67 @@
 package de.benkralex.socius.data.contacts
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import android.content.Context
+import android.util.Log
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
+import de.benkralex.socius.MainActivity
 import de.benkralex.socius.data.Contact
 import de.benkralex.socius.data.contacts.system.getAndroidSystemContacts
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
-var contacts by mutableStateOf<MutableList<Contact>>(mutableListOf())
-    private set
-
-private var systemContacts: List<Contact> = mutableListOf()
-private var localContacts: List<Contact>  = mutableListOf()
-private var remoteContacts: Map<String, List<Contact>>  = mutableMapOf()
-
-private fun updateContacts() {
-    contacts = (systemContacts + localContacts + remoteContacts.values.flatten()).toMutableList()
+val contacts by derivedStateOf {
+    (systemContacts + localContacts + remoteContacts.values.flatten()).toMutableList()
 }
 
-@Composable
-fun LoadContacts() {
-    LoadSystemContacts()
-    LoadLocalContacts()
-    LoadRemoteContacts()
-}
+private var systemContacts by mutableStateOf<List<Contact>>(emptyList())
+private var localContacts by mutableStateOf<List<Contact>>(emptyList())
+private var remoteContacts by mutableStateOf<Map<String, List<Contact>>>(emptyMap())
 
-@Composable
-private fun LoadSystemContacts() {
-    val context = LocalContext.current
-    LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            val loadedContacts = getAndroidSystemContacts(context = context)
-            withContext(Dispatchers.Main) {
-                systemContacts = loadedContacts
-                updateContacts()
+fun loadContacts() {
+    val ctx = MainActivity.instance
+    Thread {
+        runBlocking {
+            launch {
+                loadSystemContacts(ctx)
             }
+        }
+    }.start()
+    Thread {
+        runBlocking {
+            launch {
+                loadLocalContacts(ctx)
+            }
+        }
+    }.start()
+    Thread {
+        runBlocking {
+            launch {
+                loadRemoteContacts(ctx)
+            }
+        }
+    }.start()
+}
+
+private suspend fun loadSystemContacts(ctx: Context) {
+    withContext(Dispatchers.IO) {
+        val loadedContacts = getAndroidSystemContacts(context = ctx)
+        withContext(Dispatchers.Main) {
+            systemContacts = loadedContacts
         }
     }
 }
 
-@Composable
-private fun LoadLocalContacts() {
+private suspend fun loadLocalContacts(ctx: Context) {
     // This function is a placeholder for loading local contacts.
     localContacts = emptyList()
 }
 
-@Composable
-private fun LoadRemoteContacts() {
+private suspend fun loadRemoteContacts(ctx: Context) {
     // This function is a placeholder for loading remote contacts.
     remoteContacts = emptyMap()
 }

@@ -1,122 +1,96 @@
 package de.benkralex.socius.widgets
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SearchBarDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.traversalIndex
+import androidx.compose.ui.geometry.RoundRect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.R
-import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.contacts.contacts
 import de.benkralex.socius.data.settings.getFormattedName
-import kotlin.comparisons.compareBy
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ContactsList(
-    contacts: MutableList<Contact>,
-    paddingValues: PaddingValues,
+    modifier: Modifier = Modifier,
     onContactSelected: (Int) -> Unit = {},
 ) {
-    val textFieldState = rememberTextFieldState()
-    var searchQuery by rememberSaveable { mutableStateOf("") }
-    var expanded by rememberSaveable { mutableStateOf(false) }
+    var searchQuery by remember { mutableStateOf("") }
 
-    val filteredContacts = remember(searchQuery, contacts) {
-        if (searchQuery.isBlank()) contacts
-        else contacts.filter {
-            it.displayName?.contains(searchQuery, ignoreCase = true) == true
+    val filteredContacts by remember {
+        derivedStateOf {
+            if (searchQuery.isNotBlank()) {
+                contacts.filter {
+                    getFormattedName(it).contains(searchQuery, ignoreCase = true)
+                }
+            } else {
+                contacts
+            }
         }
     }
 
-    val grouped = remember(filteredContacts) {
-        filteredContacts.groupBy {
-            if (it.isStarred) "starred"
-            else getFormattedName(it).firstOrNull()?.uppercase() ?: "?"
-        }.toSortedMap(compareBy {
-            when (it) {
-                "starred" -> "AA"
-                "?" -> "A"
-                else -> it + "B"
-            }
-        })
+    val grouped by remember {
+        derivedStateOf {
+            filteredContacts.groupBy {
+                if (it.isStarred) "starred"
+                else getFormattedName(it).firstOrNull()?.uppercase() ?: "?"
+            }.toSortedMap(compareBy {
+                when (it) {
+                    "starred" -> "AA"
+                    "?" -> "A"
+                    else -> it + "B"
+                }
+            })
+        }
     }
 
-    Column(
-        //modifier = Modifier.fillMaxSize()
+    Column (
+        modifier = modifier
     ) {
-        SearchBar(
+        OutlinedTextField(
+            value = searchQuery,
+            onValueChange = { searchQuery = it },
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .semantics { traversalIndex = 0f },
-            inputField = {
-                SearchBarDefaults.InputField(
-                    query = textFieldState.text.toString(),
-                    onQueryChange = {
-                        textFieldState.edit {
-                            replace(0, length, it)
-                        }
-                        searchQuery = it
-                    },
-                    onSearch = {
-                        searchQuery = textFieldState.text.toString()
-                        expanded = false
-                    },
-                    expanded = expanded,
-                    onExpandedChange = { expanded = false },
-                    placeholder = { Text(stringResource(R.string.searchbar_placeholder)) },
-                    leadingIcon = {
-                        Icon(
-                            Icons.Filled.Search,
-                            "Search"
-                        )
-                    },
-                    trailingIcon = {
-                        if (searchQuery.isNotBlank()) {
-                            Icon(
-                                Icons.Filled.Clear,
-                                "Clear search",
-                                modifier = Modifier
-                                    .padding(8.dp)
-                                    .clickable {
-                                        textFieldState.edit { replace(0, length, "") }
-                                        searchQuery = ""
-                                    }
-                            )
-                        }
-                    }
+                .padding(8.dp)
+                .padding(horizontal = 12.dp)
+                .fillMaxWidth(),
+            placeholder = { Text("Search") },
+            singleLine = true,
+            leadingIcon = {
+                Icon(
+                    modifier = Modifier
+                        .padding(start = 8.dp),
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "Search Icon",
                 )
             },
-            expanded = expanded,
-            onExpandedChange = { expanded = false }
-        ) {}
-        LazyColumn(
-            contentPadding = paddingValues,
-        ) {
+            shape = RoundedCornerShape(32.dp),
+        )
+        LazyColumn {
             grouped.forEach { (initial, contactsForInitial) ->
                 stickyHeader {
                     if (initial == "starred") {
@@ -131,6 +105,7 @@ fun ContactsList(
                     }
                 }
                 items(contactsForInitial) { c ->
+                    Log.d("ContactsList", "Displaying contact: ${getFormattedName(c)}")
                     ContactCard(
                         name = getFormattedName(c),
                         profilePicture = c.photoBitmap,

@@ -15,9 +15,16 @@ import de.benkralex.socius.navigation.NavigationRoot
 import de.benkralex.socius.ui.theme.ContactsTheme
 
 class MainActivity : ComponentActivity() {
+    companion object {
+        lateinit var instance: MainActivity
+            private set
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        instance = this
+
         setContent {
             ContactsTheme {
                 NavigationRoot(Modifier)

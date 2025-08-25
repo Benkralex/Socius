@@ -30,7 +30,7 @@ import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import de.benkralex.socius.R
-import de.benkralex.socius.data.contacts.LoadContacts
+import de.benkralex.socius.data.contacts.loadContacts
 import de.benkralex.socius.widgets.CustomNavigationBar
 import de.benkralex.socius.pages.ContactListPage
 import de.benkralex.socius.pages.HighlightsPage
@@ -64,6 +64,7 @@ fun NavigationRoot(
     modifier: Modifier
 ) {
     val context = LocalContext.current
+    loadSettings(context)
     val backStack = rememberNavBackStack(AllowPermissionsPageNavKey)
     NavDisplay(
         backStack = backStack,
@@ -124,8 +125,7 @@ fun NavigationRoot(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(24.dp)),
                             onAllPermissionsAllowed = {
-                                loadSettings(context)
-                                LoadContacts()
+                                loadContacts()
                                 backStack.clear()
                                 backStack.add(ContactListPageNavKey)
                             }
@@ -139,7 +139,6 @@ fun NavigationRoot(
                         ContactListPage(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(24.dp)),
-                            contacts = contacts,
                             menuBar = {
                                 CustomNavigationBar(
                                     items = listOf(
