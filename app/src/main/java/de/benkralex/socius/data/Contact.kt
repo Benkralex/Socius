@@ -3,7 +3,7 @@ package de.benkralex.socius.data
 import android.graphics.Bitmap
 
 data class Contact(
-    var id: String? = null,
+    var id: String,
     var displayName: String? = null,
     var prefix: String? = null,
     var givenName: String? = null,

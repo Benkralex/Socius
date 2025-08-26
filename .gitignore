@@ -27,3 +27,4 @@ local.properties
 /.idea/deviceManager.xml
 /.idea/dictionaries/project.xml
 /keystore.properties
+/.idea/studiobot.xml

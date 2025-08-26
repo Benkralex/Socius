@@ -1,6 +1,7 @@
 package de.benkralex.socius.widgets.contactInformation
 
 import android.content.Intent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,23 +39,20 @@ fun EmailsWidget(
         Column {
             emails.forEach { email ->
                 Row {
-                    IconButton(
-                        onClick = {
-                            val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                data = "mailto:${email.address}".toUri()
-                            }
-                            context.startActivity(intent)
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Email,
-                            contentDescription = "Email",
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                                .padding(8.dp)
-                                .padding(start = 16.dp)
-                        )
-                    }
+                    Icon(
+                        imageVector = Icons.Outlined.Email,
+                        contentDescription = "Email",
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(8.dp)
+                            .padding(start = 16.dp)
+                            .clickable {
+                                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                    data = "mailto:${email.address}".toUri()
+                                }
+                                context.startActivity(intent)
+                            },
+                    )
                     Column (
                         modifier = Modifier
                             .align(Alignment.CenterVertically)

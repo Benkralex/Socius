@@ -1,5 +1,6 @@
 package de.benkralex.socius.navigation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.spring
@@ -8,6 +9,11 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
@@ -16,13 +22,19 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Build
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.LoadingIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -37,6 +49,7 @@ import de.benkralex.socius.pages.HighlightsPage
 import de.benkralex.socius.pages.ManagePage
 import de.benkralex.socius.pages.SettingsPage
 import de.benkralex.socius.data.contacts.contacts
+import de.benkralex.socius.data.contacts.uriLoadedContacts
 import de.benkralex.socius.data.settings.loadSettings
 import de.benkralex.socius.pages.AllowPermissionsPage
 import de.benkralex.socius.pages.ContactDetailPage
@@ -54,18 +67,22 @@ data object SettingsPageNavKey: NavKey
 @Serializable
 data object AllowPermissionsPageNavKey: NavKey
 @Serializable
+data class ContactDetailIntentNavKey(val contactId: String): NavKey
+@Serializable
 data class ContactDetailPageNavKey(val contactId: Int): NavKey
 @Serializable
 data class ContactEditPageNavKey(val contactId: Int? = null): NavKey
 
+lateinit var backStack: NavBackStack
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun NavigationRoot(
     modifier: Modifier
 ) {
     val context = LocalContext.current
     loadSettings(context)
-    val backStack = rememberNavBackStack(AllowPermissionsPageNavKey)
+    backStack = rememberNavBackStack(AllowPermissionsPageNavKey)
     NavDisplay(
         backStack = backStack,
         modifier = modifier,
@@ -303,6 +320,34 @@ fun NavigationRoot(
                                 )
                             }
                         )
+                    }
+                }
+                is ContactDetailIntentNavKey -> {
+                    NavEntry(
+                        key = key
+                    ) {
+                        key (contacts) {
+                            val index = contacts.indexOf(contacts.firstOrNull { it.id == key.contactId })
+                            if (index == -1) {
+                                Column (
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .background(MaterialTheme.colorScheme.background),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center,
+                                ) {
+                                    LoadingIndicator()
+                                }
+                            } else {
+                                backStack.clear()
+                                backStack.add(
+                                    ContactListPageNavKey
+                                )
+                                backStack.add(
+                                    ContactDetailPageNavKey(index)
+                                )
+                            }
+                        }
                     }
                 }
                 is ContactEditPageNavKey -> {
