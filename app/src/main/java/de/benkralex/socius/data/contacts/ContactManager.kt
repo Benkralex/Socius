@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import de.benkralex.socius.MainActivity
 import de.benkralex.socius.data.Contact
-import de.benkralex.socius.data.contacts.system.getAndroidSystemContacts
+import de.benkralex.socius.data.contacts.system.load.getAndroidSystemContacts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -15,6 +15,10 @@ import kotlinx.coroutines.withContext
 
 val contacts by derivedStateOf {
     (systemContacts + localContacts + remoteContacts.values.flatten()).toMutableList()
+}
+
+val groups by derivedStateOf {
+    contacts.map { it.groups }.flatten().toSet().toList()
 }
 
 private var systemContacts by mutableStateOf<List<Contact>>(emptyList())

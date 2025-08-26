@@ -1,4 +1,4 @@
-package de.benkralex.socius.data.contacts.system
+package de.benkralex.socius.data.contacts.system.edit
 
 import android.content.ContentProviderOperation
 import android.content.Context

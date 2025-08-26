@@ -1,5 +1,6 @@
 package de.benkralex.socius.widgets.contactInformation
 
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,23 +39,24 @@ fun PhoneNumbersWidget(
         Column {
             phoneNumbers.forEach { phoneNumber ->
                 Row {
-                    Icon(
-                        imageVector = Icons.Outlined.Phone,
-                        contentDescription = "Phone",
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(8.dp)
-                            .padding(start = 16.dp)
-                            .clickable(
-                                onClick = {
-                                    val intent = android.content.Intent(android.content.Intent.ACTION_DIAL)
-                                        .apply {
-                                        data = "tel:${phoneNumber.number}".toUri()
-                                    }
-                                    context.startActivity(intent)
-                                }
-                            )
-                    )
+                    IconButton(
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_DIAL)
+                                .apply {
+                                data = "tel:${phoneNumber.number}".toUri()
+                            }
+                            context.startActivity(intent)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Phone,
+                            contentDescription = "Phone",
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                                .padding(8.dp)
+                                .padding(start = 16.dp)
+                        )
+                    }
                     Column (
                         modifier = Modifier
                             .align(Alignment.CenterVertically)

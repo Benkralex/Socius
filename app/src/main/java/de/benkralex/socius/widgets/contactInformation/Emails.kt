@@ -11,6 +11,7 @@ import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,22 +39,23 @@ fun EmailsWidget(
         Column {
             emails.forEach { email ->
                 Row {
-                    Icon(
-                        imageVector = Icons.Outlined.Email,
-                        contentDescription = "Email",
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(8.dp)
-                            .padding(start = 16.dp)
-                            .clickable(
-                                onClick = {
-                                    val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                        data = "mailto:${email.address}".toUri()
-                                    }
-                                    context.startActivity(intent)
-                                }
-                            )
-                    )
+                    IconButton(
+                        onClick = {
+                            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                data = "mailto:${email.address}".toUri()
+                            }
+                            context.startActivity(intent)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Email,
+                            contentDescription = "Email",
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                                .padding(8.dp)
+                                .padding(start = 16.dp)
+                        )
+                    }
                     Column (
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
