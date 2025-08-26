@@ -1,7 +1,6 @@
 package de.benkralex.socius.widgets.contactInformation
 
 import android.content.Intent
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,8 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.data.PhoneNumber
 import androidx.core.net.toUri
+import de.benkralex.socius.data.PhoneNumber
 import de.benkralex.socius.widgets.contactInformation.helpers.translateType
 
 @Composable
