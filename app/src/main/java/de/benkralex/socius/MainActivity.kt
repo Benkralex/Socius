@@ -16,11 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation3.runtime.NavBackStack
-import de.benkralex.socius.data.contacts.contacts
 import de.benkralex.socius.data.contacts.system.load.loadFromURI
-import de.benkralex.socius.data.contacts.uriLoadedContacts
 import de.benkralex.socius.navigation.ContactDetailIntentNavKey
-import de.benkralex.socius.navigation.ContactDetailPageNavKey
 import de.benkralex.socius.navigation.NavigationRoot
 import de.benkralex.socius.navigation.backStack
 import de.benkralex.socius.ui.theme.ContactsTheme
