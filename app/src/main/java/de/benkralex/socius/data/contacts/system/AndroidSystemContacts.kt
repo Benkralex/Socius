@@ -50,9 +50,11 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                 val contactId = item.getString(idIndex)
                 contactIds.add(contactId)
 
+
                 val displayName = item.getString(displayNameIndex)
                 val photoUri = if (photoUriIndex != -1) item.getString(photoUriIndex) else null
                 val thumbnailUri = if (thumbnailUriIndex != -1) item.getString(thumbnailUriIndex) else null
+
 
                 val photoBitmap = if (photoUri != null) {
                     try {
@@ -63,6 +65,7 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                         null
                     }
                 } else null
+
                 val thumbnailBitmap = if (thumbnailUri != null) {
                     try {
                         contentResolver.openInputStream(thumbnailUri.toUri())?.use { inputStream ->
@@ -115,47 +118,21 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                             contact.phoneticMiddleName = structuredName.phoneticMiddleName
                             contact.phoneticFamilyName = structuredName.phoneticFamilyName
                         }
-
-                        // Nickname
                         contact.nickname = nicknames[id]
-
-                        // Phone numbers
                         contact.phoneNumbers = phoneNumbers[id] ?: emptyList()
-
-                        // E-Mails
                         contact.emails = emails[id] ?: emptyList()
-
-                        // Addresses
                         contact.addresses = addresses[id] ?: emptyList()
-
-                        // Organisations
                         organizations[id]?.let { org ->
                             contact.organization = org.organization
                             contact.department = org.department
                             contact.jobTitle = org.jobTitle
                         }
-
-                        // Notes
                         contact.note = notes[id]
-
-                        // Websites
                         contact.websites = websites[id] ?: emptyList()
-
-                        // Events
                         contact.events = events[id] ?: emptyList()
-
-                        // Relations
                         contact.relations = relations[id] ?: emptyList()
-
-                        // Groups
                         contact.groups = groups[id] ?: emptyList()
-
-                        // Is Starred
-                        contact.isStarred = ((groups[id] ?: emptyList())
-                            .any { it.name?.contains("Starred", ignoreCase = true) ?: false })
-                                    || isStarred[id] == true
-
-                        // Custom Fields
+                        contact.isStarred = isStarred[id] ?: false
                         contact.customFields = customFields[id] ?: emptyMap()
                     }
                 }
@@ -200,18 +177,18 @@ private fun loadStarredBatch(contentResolver: ContentResolver, contactIds: List<
 
     if (contactIds.isEmpty()) return result
 
-    val selection = "${ContactsContract.RawContacts._ID} IN (${contactIds.joinToString(",")})"
+    val selection = "${ContactsContract.Data.CONTACT_ID} IN (${contactIds.joinToString(",")})"
     val cursor = contentResolver.query(
-        ContactsContract.RawContacts.CONTENT_URI,
-        arrayOf(ContactsContract.RawContacts._ID, ContactsContract.RawContacts.STARRED),
+        ContactsContract.Data.CONTENT_URI,
+        arrayOf(ContactsContract.Data.CONTACT_ID, ContactsContract.Data.STARRED),
         selection,
         null,
         null
     )
 
     cursor?.use {
-        val idIndex = it.getColumnIndex(ContactsContract.RawContacts._ID)
-        val starredIndex = it.getColumnIndex(ContactsContract.RawContacts.STARRED)
+        val idIndex = it.getColumnIndex(ContactsContract.Data.CONTACT_ID)
+        val starredIndex = it.getColumnIndex(ContactsContract.Data.STARRED)
 
         while (it.moveToNext()) {
             val contactId = it.getString(idIndex)
