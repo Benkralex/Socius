@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -83,20 +84,22 @@ fun ContactDetailPage(
                 },
                 actions = {
                     val context = LocalContext.current
-                    //var isStarred by remember { mutableStateOf(contact.isStarred) }
-                    val starIcon = if (contact.isStarred) Icons.Outlined.Star else Icons.Outlined.StarOutline
-                    val starDescription = if (contact.isStarred) "is starred" else "is not starred"
+                    var isStarred by remember { mutableStateOf(contact.isStarred) }
+                    val starIcon = if (isStarred) Icons.Outlined.Star else Icons.Outlined.StarOutline
+                    val starDescription = if (isStarred) "is starred" else "is not starred"
+                    LaunchedEffect (contact.isStarred) {
+                        isStarred = contact.isStarred
+                    }
                     Icon(
                         starIcon,
                         starDescription,
                         modifier = Modifier
                             .padding(8.dp)
                             .clickable {
-                                contact.isStarred = !contact.isStarred
-                                //isStarred = !isStarred
+                                isStarred = !isStarred
                                 updateStarred(
                                     contactId = contact.id,
-                                    value = contact.isStarred,
+                                    value = isStarred,
                                     context = context,
                                 )
                             }
