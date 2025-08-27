@@ -2,6 +2,7 @@ package de.benkralex.socius.widgets.contactInformation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -28,20 +29,22 @@ import de.benkralex.socius.data.settings.getFormattedName
 fun ProfileWithName(
     contact: Contact,
     modifier: Modifier = Modifier,
+    onProfileClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
             .padding(16.dp)
     )
     {
-        if (contact.photoBitmap != null) {
+        if (contact.thumbnailBitmap != null) {
             Image(
-                bitmap = contact.photoBitmap!!.asImageBitmap(),
+                bitmap = contact.thumbnailBitmap!!.asImageBitmap(),
                 contentDescription = null,
                 modifier = Modifier
                     .size(40.dp)
                     .clip(MaterialShapes.Cookie6Sided.toShape())
                     .align(Alignment.CenterVertically)
+                    .clickable { onProfileClick() }
             )
         } else {
             Icon(
