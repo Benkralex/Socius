@@ -77,4 +77,11 @@
     <string name="permission_open_settings">Open settings</string>
     <string name="permission_test">Test permissions</string>
     <string name="permission_give">Give permission</string>
+    <string name="content_desc_back">Back</string>
+    <string name="content_desc_toggle_starred">Toggle starred</string>
+    <string name="starred">Starred</string>
+    <string name="not_starred">Not starred</string>
+    <string name="content_desc_edit">Edit</string>
+    <string name="no_results">No results</string>
+    <string name="content_desc_selected">Selected</string>
 </resources>

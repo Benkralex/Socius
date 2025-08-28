@@ -1,25 +1,16 @@
 package de.benkralex.socius.widgets.contactInformation
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.data.Contact
 import de.benkralex.socius.data.settings.getFormattedName
@@ -36,37 +27,22 @@ fun ProfileWithName(
             .padding(16.dp)
     )
     {
-        if (contact.thumbnailBitmap != null) {
-            Image(
-                bitmap = contact.thumbnailBitmap!!.asImageBitmap(),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(MaterialShapes.Cookie6Sided.toShape())
-                    .align(Alignment.CenterVertically)
-                    .clickable { onProfileClick() }
-            )
-        } else {
-            Icon(
-                imageVector = Icons.Outlined.Person,
-                contentDescription = "Profile Icon",
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(MaterialShapes.Cookie6Sided.toShape())
-                    .background(
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                    .padding(5.dp),
-                tint = MaterialTheme.colorScheme.background
-            )
-        }
+        ProfilePicture(
+            contact = contact,
+            size = 40.dp,
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .clickable { onProfileClick() }
+        )
         Text(
             text = getFormattedName(contact),
             modifier = Modifier
                 .padding(start = 10.dp)
                 .align(Alignment.CenterVertically)
                 .fillMaxWidth(),
-            style = MaterialTheme.typography.headlineSmall
+            style = MaterialTheme.typography.headlineSmall,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

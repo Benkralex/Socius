@@ -20,7 +20,9 @@ import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,13 +32,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import de.benkralex.socius.R
 import de.benkralex.socius.data.Contact
 import de.benkralex.socius.data.contacts.system.edit.updateStarred
+import de.benkralex.socius.data.settings.getFormattedName
 import de.benkralex.socius.widgets.contactInformation.CustomFieldsWidget
 import de.benkralex.socius.widgets.contactInformation.EmailsWidget
 import de.benkralex.socius.widgets.contactInformation.EventsWidget
@@ -44,10 +51,12 @@ import de.benkralex.socius.widgets.contactInformation.GroupsWidget
 import de.benkralex.socius.widgets.contactInformation.NoteWidget
 import de.benkralex.socius.widgets.contactInformation.PhoneNumbersWidget
 import de.benkralex.socius.widgets.contactInformation.PostalAddressesWidget
+import de.benkralex.socius.widgets.contactInformation.ProfilePicture
 import de.benkralex.socius.widgets.contactInformation.ProfileWithName
 import de.benkralex.socius.widgets.contactInformation.RelationsWidget
 import de.benkralex.socius.widgets.contactInformation.SmallInformationWidget
 import de.benkralex.socius.widgets.contactInformation.WebsitesWidget
+import kotlin.math.min
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,22 +68,37 @@ fun ContactDetailPage(
     onEditClick: () -> Unit = {},
 ) {
     var showProfileFullscreen by remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
+
     Scaffold(
         modifier = modifier,
         topBar = {
             TopAppBar(
                 title = {
+                    val startFadeScrollValue = 420
+                    val endFadeScrollValue = min(500, scrollState.maxValue)
+                    val alpha = if (scrollState.value > endFadeScrollValue) {
+                        1f
+                    } else if (scrollState.value < startFadeScrollValue) {
+                        0f
+                    } else {
+                        (scrollState.value - startFadeScrollValue) / (endFadeScrollValue - startFadeScrollValue).toFloat()
+                    }
                     ProfileWithName(
+                        modifier = Modifier
+                            .alpha(alpha),
                         contact = contact,
                         onProfileClick = {
-                            showProfileFullscreen = true
+                            if (contact.photoBitmap != null) {
+                                showProfileFullscreen = true
+                            }
                         }
                     )
                 },
                 navigationIcon = {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.content_desc_back),
                         modifier = Modifier
                             .padding(5.dp)
                             .clickable(
@@ -86,13 +110,20 @@ fun ContactDetailPage(
                     val context = LocalContext.current
                     var isStarred by remember { mutableStateOf(contact.isStarred) }
                     val starIcon = if (isStarred) Icons.Outlined.Star else Icons.Outlined.StarOutline
-                    val starDescription = if (isStarred) "is starred" else "is not starred"
+                    val starDescription = "${stringResource(R.string.content_desc_toggle_starred)} (${
+                        if (isStarred) {
+                            stringResource(R.string.starred)
+                        } else {
+                            stringResource(R.string.not_starred)
+                        }
+                    })"
+
                     LaunchedEffect (contact.isStarred) {
                         isStarred = contact.isStarred
                     }
                     Icon(
-                        starIcon,
-                        starDescription,
+                        imageVector = starIcon,
+                        contentDescription = starDescription,
                         modifier = Modifier
                             .padding(8.dp)
                             .clickable {
@@ -106,7 +137,7 @@ fun ContactDetailPage(
                     )
                     Icon(
                         imageVector = Icons.Outlined.Edit,
-                        contentDescription = "Edit",
+                        contentDescription = stringResource(R.string.content_desc_edit),
                         modifier = Modifier
                             .padding(8.dp)
                             .clickable(
@@ -119,10 +150,29 @@ fun ContactDetailPage(
     ) { paddingValues ->
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .padding(paddingValues)
                 .fillMaxWidth()
         ) {
+            ProfilePicture(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 16.dp, bottom = 8.dp)
+                    .clickable {
+                        if (contact.photoBitmap != null) {
+                            showProfileFullscreen = true
+                        }
+                    },
+                contact = contact,
+                size = 150.dp,
+            )
+            Text(
+                text = getFormattedName(contact),
+                style = MaterialTheme.typography.headlineLarge,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
+            )
             NoteWidget(contact.note)
             SmallInformationWidget(contact)
             GroupsWidget(groups = contact.groups)
@@ -143,7 +193,7 @@ fun ContactDetailPage(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0f, 0f, 0f, 0.7f), RectangleShape)
-                .clickable {
+                .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) {
                     showProfileFullscreen = false
                 },
             contentAlignment = Alignment.Center,

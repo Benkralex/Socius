@@ -27,13 +27,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.unit.dp
+import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.settings.getFormattedName
+import de.benkralex.socius.widgets.contactInformation.ProfilePicture
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ContactCard(
     modifier: Modifier = Modifier,
-    name: String,
-    profilePicture: Bitmap? = null
+    contact: Contact,
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -46,31 +48,17 @@ fun ContactCard(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp)
         ) {
-            if (profilePicture != null) {
-                Image(
-                    bitmap = profilePicture.asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(MaterialShapes.Cookie6Sided.toShape())
-                )
-            } else {
-                Icon(
-                    imageVector = Icons.Outlined.Person,
-                    contentDescription = "Profile Icon",
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(MaterialShapes.Cookie6Sided.toShape())
-                        .background(
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        .padding(5.dp),
-                    tint = MaterialTheme.colorScheme.background
-                )
-            }
+            ProfilePicture(
+                contact = contact,
+                size = 40.dp,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically),
+            )
             Spacer(modifier = Modifier.width(12.dp))
             Column {
-                Text(text = name)
+                Text(
+                    text = getFormattedName(contact),
+                )
             }
         }
     }

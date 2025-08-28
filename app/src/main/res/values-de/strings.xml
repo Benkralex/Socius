@@ -72,4 +72,11 @@
     <string name="permission_open_settings">Einstellungen öffnen</string>
     <string name="permission_test">Berechtigungen prüfen</string>
     <string name="permission_give">Berechtigung geben</string>
+    <string name="content_desc_back">Zurück</string>
+    <string name="content_desc_toggle_starred">Favouritenstatus umschalten</string>
+    <string name="starred">Favourisiert</string>
+    <string name="not_starred">Nicht favourisiert</string>
+    <string name="content_desc_edit">Bearbeiten</string>
+    <string name="no_results">Keine Ergebnisse</string>
+    <string name="content_desc_selected">Ausgewählt</string>
 </resources>

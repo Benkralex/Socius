@@ -23,84 +23,45 @@ import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import de.benkralex.socius.R
 import de.benkralex.socius.data.contacts.contacts
-import de.benkralex.socius.data.contacts.groups
 import de.benkralex.socius.data.settings.getFormattedName
+import de.benkralex.socius.pages.ContactsListViewModel
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ContactsList(
     modifier: Modifier = Modifier,
     onContactSelected: (Int) -> Unit = {},
+    viewModel: ContactsListViewModel = viewModel<ContactsListViewModel>(),
 ) {
-    var searchQuery by remember { mutableStateOf("") }
-    var groupsFilter by remember { mutableStateOf(emptyList<String>()) }
-
-    val filteredContacts by remember {
-        derivedStateOf {
-            val searchQueryFiltered = if (searchQuery.isNotBlank()) {
-                contacts.filter {
-                    getFormattedName(it).contains(searchQuery, ignoreCase = true)
-                }
-            } else {
-                contacts
-            }
-
-            val groupsFiltered = if (groupsFilter.isNotEmpty()) {
-                searchQueryFiltered.filter { contact ->
-                    groupsFilter.all { group ->
-                        group in contact.groups.filter { !it.name.isNullOrBlank() }.map { it.name!! }
-                    }
-                }
-            } else {
-                searchQueryFiltered
-            }
-
-            groupsFiltered
-        }
-    }
-
-    val grouped by remember {
-        derivedStateOf {
-            filteredContacts.groupBy {
-                if (it.isStarred) "starred"
-                else getFormattedName(it).firstOrNull()?.uppercase() ?: "?"
-            }.toSortedMap(compareBy {
-                when (it) {
-                    "starred" -> "AA"
-                    "?" -> "A"
-                    else -> it + "B"
-                }
-            })
-        }
-    }
-
     Column (
         modifier = modifier
     ) {
         OutlinedTextField(
-            value = searchQuery,
-            onValueChange = { searchQuery = it },
+            value = viewModel.searchQuery,
+            onValueChange = { viewModel.onSearchQueryChange(it) },
             modifier = Modifier
                 .padding(8.dp)
                 .padding(horizontal = 12.dp)
                 .fillMaxWidth(),
-            placeholder = { Text("Search") },
+            placeholder = {
+                Text(
+                    text = stringResource(R.string.searchbar_placeholder),
+                )
+            },
             singleLine = true,
             leadingIcon = {
                 Icon(
                     modifier = Modifier
                         .padding(start = 8.dp),
                     imageVector = Icons.Filled.Search,
-                    contentDescription = "Search Icon",
+                    contentDescription = null,
                 )
             },
             shape = RoundedCornerShape(32.dp),
@@ -113,12 +74,10 @@ fun ContactsList(
             item {
                 Spacer(Modifier.width(16.dp))
             }
-            items(groupsFilter) {
+            items(viewModel.selectedGroupsFilter.toList()) {
                 FilterChip(
                     selected = true,
-                    onClick = {
-                        groupsFilter = groupsFilter - it
-                    },
+                    onClick = { viewModel.removeGroupFilter(it) },
                     label = { Text(it) },
                     modifier = Modifier
                         .padding(end = 8.dp),
@@ -126,17 +85,15 @@ fun ContactsList(
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Filled.Check,
-                            contentDescription = "Selected",
+                            contentDescription = stringResource(R.string.content_desc_selected),
                         )
                     }
                 )
             }
-            items(groups.map { it.name }.filter { !it.isNullOrBlank() }.map { it!! } - groupsFilter) {
+            items(viewModel.unselectedGroupsFilter.toList()) {
                 FilterChip(
                     selected = false,
-                    onClick = {
-                        groupsFilter = groupsFilter + it
-                    },
+                    onClick = { viewModel.addGroupFilter(it) },
                     label = { Text(it) },
                     modifier = Modifier
                         .padding(end = 8.dp),
@@ -147,12 +104,12 @@ fun ContactsList(
             }
         }
         LazyColumn {
-            grouped.forEach { (initial, contactsForInitial) ->
+            viewModel.grouped.forEach { (initial, contactsForInitial) ->
                 stickyHeader {
                     if (initial == "starred") {
                         ContactsListHeading(
                             imageVector = Icons.Filled.Star,
-                            contentDescription = "Starred"
+                            contentDescription = stringResource(R.string.starred)
                         )
                     } else {
                         ContactsListHeading(
@@ -162,15 +119,14 @@ fun ContactsList(
                 }
                 items(contactsForInitial) { c ->
                     ContactCard(
-                        name = getFormattedName(c),
-                        profilePicture = c.photoBitmap,
+                        contact = c,
                         modifier = Modifier.clickable(
                             onClick = { onContactSelected(contacts.indexOf(c)) }
                         )
                     )
                 }
             }
-            if (grouped.isEmpty()) {
+            if (viewModel.showLoadingIndicator) {
                 item {
                     Column (
                         modifier = Modifier
@@ -179,6 +135,20 @@ fun ContactsList(
                         verticalArrangement = Arrangement.Center,
                     ) {
                         LoadingIndicator()
+                    }
+                }
+            }
+            if (viewModel.showNoResultsMsg) {
+                item {
+                    Column (
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        Text(
+                            text = stringResource(R.string.no_results)
+                        )
                     }
                 }
             }
