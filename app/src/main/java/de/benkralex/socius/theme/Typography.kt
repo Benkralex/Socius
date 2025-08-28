@@ -1,4 +1,4 @@
-package de.benkralex.socius.ui.theme
+package de.benkralex.socius.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.Font

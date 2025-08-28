@@ -79,4 +79,5 @@
     <string name="content_desc_edit">Edit</string>
     <string name="no_results">No results</string>
     <string name="content_desc_selected">Selected</string>
+    <string name="content_desc_clear_search">Clear Search Query</string>
 </resources>

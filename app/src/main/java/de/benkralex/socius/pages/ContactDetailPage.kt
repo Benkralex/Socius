@@ -58,7 +58,6 @@ import de.benkralex.socius.widgets.contactInformation.SmallInformationWidget
 import de.benkralex.socius.widgets.contactInformation.WebsitesWidget
 import kotlin.math.min
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactDetailPage(
