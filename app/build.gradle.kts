@@ -94,5 +94,5 @@ dependencies {
     implementation(libs.androidx.compose.material3.windowsizeclass)
     implementation(libs.androidx.material3.adaptive)
 
-    implementation(libs.material3)
+    implementation("androidx.compose.material3:material3:1.4.0-alpha17")
 }
