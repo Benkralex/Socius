@@ -18,7 +18,7 @@ android {
         minSdk = 28
         targetSdk = 36
         versionCode = 1
-        versionName = "V4.0.0-beta"
+        versionName = "V4.1.0-beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -94,5 +94,5 @@ dependencies {
     implementation(libs.androidx.compose.material3.windowsizeclass)
     implementation(libs.androidx.material3.adaptive)
 
-    implementation("androidx.compose.material3:material3:1.4.0-alpha17")
+    implementation(libs.material3)
 }
