@@ -15,8 +15,6 @@ nav3Lifecycle = "1.0.0-alpha04"
 kotlinSerialization = "2.2.21"
 m3 = "1.5.0-alpha07"
 kotlinxSerializationCore = "1.9.0"
-windowsizeclass = "1.4.0"
-material3Adaptive = "1.2.0"
 kspVersion = "2.2.20-2.0.4"
 roomRuntime = "2.8.3"
 
@@ -42,10 +40,7 @@ nav3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3C
 androidx-lifecycle-viewmodel-nav3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "nav3Lifecycle" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
-kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationCore" }
-androidx-compose-material3-windowsizeclass = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "windowsizeclass" }
-androidx-material3-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "material3Adaptive" }
 
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }

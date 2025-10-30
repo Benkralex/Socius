@@ -42,8 +42,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
 import de.benkralex.socius.data.Contact
-import de.benkralex.socius.data.ContactOrigin
-import de.benkralex.socius.data.contacts.system.edit.updateStarred
 import de.benkralex.socius.data.settings.getFormattedName
 import de.benkralex.socius.widgets.contactInformation.CustomFieldsWidget
 import de.benkralex.socius.widgets.contactInformation.EmailsWidget
@@ -107,7 +105,6 @@ fun ContactDetailPage(
                     )
                 },
                 actions = {
-                    val context = LocalContext.current
                     var isStarred by remember { mutableStateOf(contact.isStarred) }
                     val starIcon = if (isStarred) Icons.Outlined.Star else Icons.Outlined.StarOutline
                     val starDescription = "${stringResource(R.string.content_desc_toggle_starred)} (${

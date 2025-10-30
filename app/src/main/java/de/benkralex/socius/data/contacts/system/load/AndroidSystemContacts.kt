@@ -96,7 +96,7 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                 val isStarred = loadStarredBatch(contentResolver, contactIds)
 
                 contacts.forEach { contact ->
-                    contact.id?.let { id ->
+                    contact.id.let { id ->
                         structuredNames[id]?.let { structuredName ->
                             contact.prefix = structuredName.prefix
                             contact.givenName = structuredName.givenName

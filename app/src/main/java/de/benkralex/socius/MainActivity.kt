@@ -17,17 +17,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
-import de.benkralex.socius.data.ContactEvent
 import de.benkralex.socius.data.contacts.local.database.LocalContactsDao
 import de.benkralex.socius.data.contacts.local.database.LocalContactsDatabase
-import de.benkralex.socius.data.contacts.local.database.LocalContactsEntity
 import de.benkralex.socius.data.contacts.system.load.loadFromURI
 import de.benkralex.socius.navigation.ContactDetailIntentNavKey
 import de.benkralex.socius.navigation.NavigationRoot
 import de.benkralex.socius.navigation.backStack
 import de.benkralex.socius.theme.ContactsTheme
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {
     companion object {
