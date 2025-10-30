@@ -49,37 +49,6 @@ data class LocalContactsEntity (
 
     var customFields: Map<String, String> = emptyMap()
 ) {
-    companion object {
-        fun fromContact(contact: Contact): LocalContactsEntity {
-            return LocalContactsEntity(
-                prefix = contact.prefix,
-                givenName = contact.givenName,
-                middleName = contact.middleName,
-                familyName = contact.familyName,
-                suffix = contact.suffix,
-                nickname = contact.nickname,
-                phoneticGivenName = contact.phoneticGivenName,
-                phoneticMiddleName = contact.phoneticMiddleName,
-                phoneticFamilyName = contact.phoneticFamilyName,
-                organization = contact.organization,
-                department = contact.department,
-                jobTitle = contact.jobTitle,
-                note = contact.note,
-                isStarred = contact.isStarred,
-                photoUri = contact.photoUri,
-                thumbnailUri = contact.thumbnailUri,
-                phoneNumbers = contact.phoneNumbers,
-                emails = contact.emails,
-                addresses = contact.addresses,
-                websites = contact.websites,
-                relations = contact.relations,
-                events = contact.events,
-                groups = contact.groups,
-                customFields = contact.customFields
-            )
-        }
-    }
-
     fun toContact(context: Context): Contact {
         val contentResolver = context.contentResolver
         val photoBitmap = if (photoUri != null) {
