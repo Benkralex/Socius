@@ -23,9 +23,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -40,60 +50,72 @@ fun ContactsList(
     onContactSelected: (Int) -> Unit = {},
     viewModel: ContactsListViewModel = viewModel<ContactsListViewModel>(),
 ) {
+    viewModel.pullToRefreshState = rememberPullToRefreshState()
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     Column (
         modifier = modifier
     ) {
         SearchBar(viewModel)
         GroupFilter(viewModel)
-        LazyColumn {
-            //Contacts
-            viewModel.grouped.forEach { (initial, contactsForInitial) ->
-                stickyHeader {
-                    if (initial == "starred") {
-                        ContactsListHeading(
-                            imageVector = Icons.Filled.Star,
-                            contentDescription = stringResource(R.string.starred)
-                        )
-                    } else {
-                        ContactsListHeading(
-                            text = initial
+        PullToRefreshBox(
+            isRefreshing = viewModel.isRefreshing,
+            onRefresh = { viewModel.refreshContacts() },
+            modifier = Modifier.fillMaxSize(),
+            state = viewModel.pullToRefreshState!!,
+            indicator = {
+                PullToRefreshDefaults.LoadingIndicator(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter),
+                    state = viewModel.pullToRefreshState!!,
+                    isRefreshing = viewModel.isRefreshing,
+                )
+            }
+        ) {
+            LazyColumn {
+                //Contacts
+                viewModel.grouped.forEach { (initial, contactsForInitial) ->
+                    stickyHeader {
+                        if (initial == "starred") {
+                            ContactsListHeading(
+                                imageVector = Icons.Filled.Star,
+                                contentDescription = stringResource(R.string.starred)
+                            )
+                        } else {
+                            ContactsListHeading(
+                                text = initial
+                            )
+                        }
+                    }
+                    items(contactsForInitial) { c ->
+                        ContactCard(
+                            contact = c,
+                            modifier = Modifier.clickable(
+                                onClick = {
+                                    if (viewModel.searchBarFocused.value) {
+                                        focusManager.clearFocus()
+                                        keyboardController?.hide()
+                                        return@clickable
+                                    }
+                                    onContactSelected(contacts.indexOf(c))
+                                }
+                            )
                         )
                     }
                 }
-                items(contactsForInitial) { c ->
-                    ContactCard(
-                        contact = c,
-                        modifier = Modifier.clickable(
-                            onClick = { onContactSelected(contacts.indexOf(c)) }
-                        )
-                    )
-                }
-            }
-            //Loading
-            if (viewModel.showLoadingIndicator) {
-                item {
-                    Column (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        LoadingIndicator()
-                    }
-                }
-            }
-            //No results
-            if (viewModel.showNoResultsMsg) {
-                item {
-                    Column (
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        Text(
-                            text = stringResource(R.string.no_results)
-                        )
+                //No results
+                if (viewModel.showNoResultsMsg) {
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                        ) {
+                            Text(
+                                text = stringResource(R.string.no_results)
+                            )
+                        }
                     }
                 }
             }
@@ -112,7 +134,8 @@ fun SearchBar(
         modifier = modifier
             .padding(8.dp)
             .padding(horizontal = 12.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .onFocusChanged { viewModel.searchBarFocused.value = it.isFocused },
         placeholder = {
             Text(
                 text = stringResource(R.string.searchbar_placeholder),

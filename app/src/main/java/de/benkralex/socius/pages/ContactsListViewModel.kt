@@ -1,5 +1,7 @@
 package de.benkralex.socius.pages
 
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,6 +9,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import de.benkralex.socius.data.contacts.contacts
 import de.benkralex.socius.data.contacts.groups
+import de.benkralex.socius.data.contacts.loadContacts
+import de.benkralex.socius.data.contacts.loadingContacts
 import de.benkralex.socius.data.settings.getFormattedName
 
 class ContactsListViewModel : ViewModel() {
@@ -58,9 +62,13 @@ class ContactsListViewModel : ViewModel() {
         grouped.isEmpty() && contacts.isNotEmpty()
     }
 
-    val showLoadingIndicator by derivedStateOf {
-        contacts.isEmpty()
+    val isRefreshing by derivedStateOf {
+        loadingContacts
     }
+
+    var searchBarFocused = mutableStateOf(false)
+
+    var pullToRefreshState: PullToRefreshState? = null
 
     fun onSearchQueryChange(newQuery: String) {
         searchQuery = newQuery
@@ -72,5 +80,9 @@ class ContactsListViewModel : ViewModel() {
 
     fun removeGroupFilter(group: String) {
         selectedGroupsFilter = selectedGroupsFilter - group
+    }
+
+    fun refreshContacts() {
+        loadContacts()
     }
 }

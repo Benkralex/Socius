@@ -42,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
 import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.ContactOrigin
 import de.benkralex.socius.data.contacts.system.edit.updateStarred
 import de.benkralex.socius.data.settings.getFormattedName
 import de.benkralex.socius.widgets.contactInformation.CustomFieldsWidget
@@ -126,23 +127,22 @@ fun ContactDetailPage(
                         modifier = Modifier
                             .padding(8.dp)
                             .clickable {
+                                if (contact.isReadOnly()) return@clickable
                                 isStarred = !isStarred
-                                updateStarred(
-                                    contactId = contact.id,
-                                    value = isStarred,
-                                    context = context,
-                                )
+                                //TODO: Save the new starred status permanent
                             }
                     )
-                    Icon(
-                        imageVector = Icons.Outlined.Edit,
-                        contentDescription = stringResource(R.string.content_desc_edit),
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .clickable(
-                                onClick = onEditClick
-                            ),
-                    )
+                    if (!contact.isReadOnly()) {
+                        Icon(
+                            imageVector = Icons.Outlined.Edit,
+                            contentDescription = stringResource(R.string.content_desc_edit),
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .clickable(
+                                    onClick = onEditClick
+                                ),
+                        )
+                    }
                 }
             )
         },

@@ -31,14 +31,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
-import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import androidx.navigation3.ui.rememberSceneSetupNavEntryDecorator
 import de.benkralex.socius.R
 import de.benkralex.socius.data.contacts.contacts
 import de.benkralex.socius.data.contacts.loadContacts
@@ -70,7 +67,7 @@ data class ContactDetailPageNavKey(val contactId: Int): NavKey
 @Serializable
 data class ContactEditPageNavKey(val contactId: Int? = null): NavKey
 
-lateinit var backStack: NavBackStack
+lateinit var backStack: NavBackStack<NavKey>
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -83,11 +80,6 @@ fun NavigationRoot(
     NavDisplay(
         backStack = backStack,
         modifier = modifier,
-        entryDecorators = listOf(
-            rememberSavedStateNavEntryDecorator(),
-            rememberViewModelStoreNavEntryDecorator(),
-            rememberSceneSetupNavEntryDecorator()
-        ),
         popTransitionSpec = {
             fadeIn(
                 animationSpec = tween(

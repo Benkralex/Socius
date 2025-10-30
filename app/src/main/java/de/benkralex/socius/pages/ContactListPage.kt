@@ -23,9 +23,11 @@ fun ContactListPage(
     Scaffold(
         modifier = modifier,
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                onNewContactCreate()
-            }) {
+            FloatingActionButton(
+                onClick = {
+                    onNewContactCreate()
+                },
+            ) {
                 Icon(Icons.Filled.Add, "Add")
             }
         },

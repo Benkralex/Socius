@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.provider.ContactsContract
 import androidx.core.net.toUri
 import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.ContactOrigin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -69,6 +70,7 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                 contacts.add(
                     Contact(
                         id = contactId,
+                        origin = ContactOrigin.SYSTEM,
                         displayName = displayName,
                         photoUri = photoUri,
                         photoBitmap = photoBitmap,

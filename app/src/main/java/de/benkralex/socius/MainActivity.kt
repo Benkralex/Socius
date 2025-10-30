@@ -16,15 +16,28 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
+import de.benkralex.socius.data.ContactEvent
+import de.benkralex.socius.data.contacts.local.database.LocalContactsDao
+import de.benkralex.socius.data.contacts.local.database.LocalContactsDatabase
+import de.benkralex.socius.data.contacts.local.database.LocalContactsEntity
 import de.benkralex.socius.data.contacts.system.load.loadFromURI
 import de.benkralex.socius.navigation.ContactDetailIntentNavKey
 import de.benkralex.socius.navigation.NavigationRoot
 import de.benkralex.socius.navigation.backStack
 import de.benkralex.socius.theme.ContactsTheme
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MainActivity : ComponentActivity() {
     companion object {
         lateinit var instance: MainActivity
+            private set
+
+        lateinit var localContactsDatabase: LocalContactsDatabase
+            private set
+
+        lateinit var localContactsDao: LocalContactsDao
             private set
     }
 
@@ -32,6 +45,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         instance = this
+        localContactsDatabase = LocalContactsDatabase.getDatabase(this)
+        localContactsDao = localContactsDatabase.localContactsDao()
 
         setContent {
             ContactsTheme {
@@ -60,13 +75,12 @@ class MainActivity : ComponentActivity() {
         intent.let {}
     }
 
-    private fun handleIntent(intent: Intent, backStack: NavBackStack, ctx: Context) {
+    private fun handleIntent(intent: Intent, backStack: NavBackStack<NavKey>, ctx: Context) {
         if (Intent.ACTION_VIEW == intent.action) {
             val contactUri = intent.data
             contactUri?.let { uri ->
                 Log.d("Open Contact", "Received intent to view contact: $uri")
                 val contact = loadFromURI(ctx, uri)
-                //uriLoadedContacts = listOf(contact)
                 backStack.add(ContactDetailIntentNavKey(contact.id))
             }
         }

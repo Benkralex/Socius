@@ -1,9 +1,12 @@
 package de.benkralex.socius.data
 
 import android.graphics.Bitmap
+import kotlinx.serialization.Serializable
 
 data class Contact(
     var id: String,
+    var origin: ContactOrigin,
+
     var displayName: String? = null,
     var prefix: String? = null,
     var givenName: String? = null,
@@ -39,20 +42,28 @@ data class Contact(
     var groups: List<Group> = emptyList(),
 
     var customFields: Map<String, String> = emptyMap()
-)
+) {
+    fun isReadOnly(): Boolean {
+        return origin == ContactOrigin.SYSTEM
+                || origin == ContactOrigin.URI
+    }
+}
 
+@Serializable
 data class PhoneNumber(
     var number: String,
     var type: String, // mobile, home, work, etc.
     var label: String? = null
 )
 
+@Serializable
 data class Email(
     var address: String,
     var type: String,
     var label: String? = null
 )
 
+@Serializable
 data class PostalAddress(
     var street: String? = null,
     var city: String? = null,
@@ -63,18 +74,21 @@ data class PostalAddress(
     var label: String? = null
 )
 
+@Serializable
 data class Website(
     var url: String,
     var type: String,
     var label: String? = null
 )
 
+@Serializable
 data class Relation(
     var name: String,
     var type: String, // spouse, child, parent, etc.
     var label: String? = null
 )
 
+@Serializable
 data class ContactEvent(
     var day: Int? = null,
     var month: Int? = null,
@@ -83,7 +97,16 @@ data class ContactEvent(
     var label: String? = null
 )
 
+@Serializable
 data class Group(
     var id: Long,
     var name: String?,
 )
+
+@Serializable
+enum class ContactOrigin {
+    SYSTEM,
+    LOCAL,
+    REMOTE,
+    URI,
+}

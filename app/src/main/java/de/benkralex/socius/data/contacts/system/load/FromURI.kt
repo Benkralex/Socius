@@ -6,6 +6,7 @@ import android.net.Uri
 import android.provider.ContactsContract
 import androidx.core.net.toUri
 import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.ContactOrigin
 import de.benkralex.socius.data.contacts.system.data.StructuredNameData
 
 fun loadFromURI(context: Context, uri: Uri): Contact {
@@ -70,6 +71,7 @@ fun loadFromURI(context: Context, uri: Uri): Contact {
                 
                 return Contact(
                     id = contactId,
+                    origin = ContactOrigin.URI,
                     displayName = displayName,
                     photoUri = photoUri,
                     photoBitmap = photoBitmap,
@@ -96,7 +98,7 @@ fun loadFromURI(context: Context, uri: Uri): Contact {
                     relations = relations,
                     groups = groups,
                     customFields = customFields,
-                    isStarred = isStarred
+                    isStarred = isStarred,
                 )
             }
         }
