@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Work
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import de.benkralex.socius.data.Contact
 
 @Composable
-fun SmallInformationWidget(
+fun WorkInformationWidget(
     contact: Contact
 ) {
     val phoneticName = listOfNotNull(
@@ -60,8 +60,8 @@ fun SmallInformationWidget(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                imageVector = Icons.Outlined.Info,
-                contentDescription = "Information",
+                imageVector = Icons.Outlined.Work,
+                contentDescription = "Work Information",
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .padding(8.dp)

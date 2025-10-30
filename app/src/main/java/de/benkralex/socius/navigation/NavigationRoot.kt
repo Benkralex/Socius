@@ -46,6 +46,7 @@ import de.benkralex.socius.pages.ContactListPage
 import de.benkralex.socius.pages.EditContactPage
 import de.benkralex.socius.pages.HighlightsPage
 import de.benkralex.socius.pages.ManagePage
+import de.benkralex.socius.pages.newContact.NewContactPage
 import de.benkralex.socius.pages.SettingsPage
 import de.benkralex.socius.widgets.CustomNavigationBar
 import kotlinx.serialization.Serializable
@@ -60,6 +61,8 @@ data object ManagePageNavKey: NavKey
 data object SettingsPageNavKey: NavKey
 @Serializable
 data object AllowPermissionsPageNavKey: NavKey
+@Serializable
+data object NewContactPageNavKey: NavKey
 @Serializable
 data class ContactDetailIntentNavKey(val contactId: String): NavKey
 @Serializable
@@ -185,7 +188,7 @@ fun NavigationRoot(
                                 )
                             },
                             onNewContactCreate = {
-                                backStack.add(ContactEditPageNavKey(null))
+                                backStack.add(NewContactPageNavKey)
                             },
                         )
                     }
@@ -349,7 +352,20 @@ fun NavigationRoot(
                             contactId = key.contactId,
                             onBackClick = {
                                 backStack.removeAt(backStack.size - 1)
-                            }
+                            },
+                        )
+                    }
+                }
+                is NewContactPageNavKey -> {
+                    NavEntry(
+                        key = key
+                    ) {
+                        NewContactPage(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(24.dp)),
+                            onBackClick = {
+                                backStack.removeAt(backStack.size - 1)
+                            },
                         )
                     }
                 }

@@ -65,7 +65,9 @@ class ContactsListViewModel : ViewModel() {
         loadingContacts
     }
 
-    var searchBarFocused = mutableStateOf(false)
+    val willRefresh by derivedStateOf {
+        (pullToRefreshState?.distanceFraction ?: 0f) > 1f
+    }
 
     var pullToRefreshState: PullToRefreshState? = null
 

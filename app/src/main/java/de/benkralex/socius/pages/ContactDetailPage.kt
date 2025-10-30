@@ -36,12 +36,12 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
 import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.contacts.editStarredStatus
 import de.benkralex.socius.data.settings.getFormattedName
 import de.benkralex.socius.widgets.contactInformation.CustomFieldsWidget
 import de.benkralex.socius.widgets.contactInformation.EmailsWidget
@@ -53,8 +53,10 @@ import de.benkralex.socius.widgets.contactInformation.PostalAddressesWidget
 import de.benkralex.socius.widgets.contactInformation.ProfilePicture
 import de.benkralex.socius.widgets.contactInformation.ProfileWithName
 import de.benkralex.socius.widgets.contactInformation.RelationsWidget
-import de.benkralex.socius.widgets.contactInformation.SmallInformationWidget
+import de.benkralex.socius.widgets.contactInformation.WorkInformationWidget
 import de.benkralex.socius.widgets.contactInformation.WebsitesWidget
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlin.math.min
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -126,7 +128,16 @@ fun ContactDetailPage(
                             .clickable {
                                 if (contact.isReadOnly()) return@clickable
                                 isStarred = !isStarred
-                                //TODO: Save the new starred status permanent
+                                Thread {
+                                    runBlocking {
+                                        launch {
+                                            editStarredStatus(
+                                                contact = contact,
+                                                isStarred = isStarred,
+                                            )
+                                        }
+                                    }
+                                }.start()
                             }
                     )
                     if (!contact.isReadOnly()) {
@@ -170,7 +181,7 @@ fun ContactDetailPage(
                 textAlign = TextAlign.Center,
             )
             NoteWidget(contact.note)
-            SmallInformationWidget(contact)
+            WorkInformationWidget(contact)
             GroupsWidget(groups = contact.groups)
             EmailsWidget(contact.emails)
             PhoneNumbersWidget(contact.phoneNumbers)

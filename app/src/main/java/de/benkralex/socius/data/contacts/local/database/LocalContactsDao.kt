@@ -20,4 +20,7 @@ interface LocalContactsDao {
 
     @Query("DELETE FROM local_contacts")
     suspend fun deleteAll()
+
+    @Query("UPDATE local_contacts SET isStarred = :isStarred WHERE id = :id")
+    suspend fun updateStarredStatus(id: Int, isStarred: Boolean)
 }

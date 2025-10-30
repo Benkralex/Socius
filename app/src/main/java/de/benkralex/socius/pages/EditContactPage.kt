@@ -15,7 +15,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.widgets.ContactEditWidget
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,12 +44,13 @@ fun EditContactPage(
             )
         },
     ) { paddingValues ->
-        ContactEditWidget(
+        Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(paddingValues)
+                .padding(10.dp)
                 .verticalScroll(rememberScrollState()),
-            contactId = contactId,
+            text = "Edit Contact Page"
         )
     }
 }

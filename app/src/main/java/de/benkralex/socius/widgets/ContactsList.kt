@@ -26,10 +26,14 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -37,6 +41,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.benkralex.socius.R
 import de.benkralex.socius.data.contacts.contacts
 import de.benkralex.socius.pages.ContactsListViewModel
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -46,13 +51,27 @@ fun ContactsList(
     viewModel: ContactsListViewModel = viewModel<ContactsListViewModel>(),
 ) {
     viewModel.pullToRefreshState = rememberPullToRefreshState()
-    val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
+    val hapticFeedback = LocalHapticFeedback.current
     Column (
         modifier = modifier
     ) {
         SearchBar(viewModel)
         GroupFilter(viewModel)
+        LaunchedEffect(viewModel.willRefresh) {
+            when {
+                viewModel.willRefresh -> {
+                    hapticFeedback.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    delay(70)
+                    hapticFeedback.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                    delay(100)
+                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                }
+
+                !viewModel.isRefreshing && (viewModel.pullToRefreshState?.distanceFraction ?: 0f) > 0f -> {
+                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                }
+            }
+        }
         PullToRefreshBox(
             isRefreshing = viewModel.isRefreshing,
             onRefresh = { viewModel.refreshContacts() },
@@ -87,11 +106,6 @@ fun ContactsList(
                             contact = c,
                             modifier = Modifier.clickable(
                                 onClick = {
-                                    if (viewModel.searchBarFocused.value) {
-                                        focusManager.clearFocus()
-                                        keyboardController?.hide()
-                                        return@clickable
-                                    }
                                     onContactSelected(contacts.indexOf(c))
                                 }
                             )
@@ -129,8 +143,7 @@ fun SearchBar(
         modifier = modifier
             .padding(8.dp)
             .padding(horizontal = 12.dp)
-            .fillMaxWidth()
-            .onFocusChanged { viewModel.searchBarFocused.value = it.isFocused },
+            .fillMaxWidth(),
         placeholder = {
             Text(
                 text = stringResource(R.string.searchbar_placeholder),

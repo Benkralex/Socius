@@ -64,25 +64,27 @@ fun ProfilePicture(
                 tint = MaterialTheme.colorScheme.background,
             )
         }
-        Icon (
-            imageVector = Icons.Outlined.Lock,
-            contentDescription = null,
-            modifier = Modifier
-                .size(size / 3)
-                .dropShadow(
-                    shape = MaterialShapes.Cookie9Sided.toShape(),
-                    shadow = Shadow(
-                        radius = 5.dp,
-                        spread = 5.dp,
+        if (contact.isReadOnly()) {
+            Icon (
+                imageVector = Icons.Outlined.Lock,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(size / 3)
+                    .dropShadow(
+                        shape = MaterialShapes.Cookie9Sided.toShape(),
+                        shadow = Shadow(
+                            radius = 5.dp,
+                            spread = 5.dp,
+                        )
                     )
-                )
-                .clip(MaterialShapes.Cookie9Sided.toShape())
-                .background(
-                    color = MaterialTheme.colorScheme.primary
-                )
-                .padding(size / 30)
-                .align(Alignment.BottomEnd),
-            tint = MaterialTheme.colorScheme.background,
-        )
+                    .clip(MaterialShapes.Cookie9Sided.toShape())
+                    .background(
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    .padding(size / 30)
+                    .align(Alignment.BottomEnd),
+                tint = MaterialTheme.colorScheme.background,
+            )
+        }
     }
 }
