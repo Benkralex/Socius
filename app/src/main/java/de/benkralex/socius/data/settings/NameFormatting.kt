@@ -13,6 +13,9 @@ val nameFormats = listOf(
 )
 
 fun getFormattedName(contact: Contact): String {
+    if (contact.displayName != null && contact.displayName!!.isNotBlank()) {
+        return contact.displayName!!
+    }
     /*
     contact.displayName: "%displayName%"
     contact.familyName: "%familyName%"

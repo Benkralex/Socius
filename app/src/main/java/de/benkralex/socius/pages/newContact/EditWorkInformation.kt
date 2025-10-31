@@ -1,7 +1,6 @@
 package de.benkralex.socius.pages.newContact
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,13 +8,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.RemoveCircleOutline
 import androidx.compose.material.icons.outlined.Work
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,7 +48,11 @@ fun EditWorkInformation(
                     .padding(horizontal = 8.dp)
                     .padding(bottom = 8.dp),
             ) {
-                AnimatedVisibility(viewModel.showJobTitleTextField) {
+                AnimatedVisibility(
+                    visible = viewModel.showJobTitleTextField,
+                    enter = newContactFormEnterTransition,
+                    exit = newContactFormExitTransition,
+                ) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -76,7 +77,11 @@ fun EditWorkInformation(
                         }
                     )
                 }
-                AnimatedVisibility(viewModel.showDepartmentTextField) {
+                AnimatedVisibility(
+                    visible = viewModel.showDepartmentTextField,
+                    enter = newContactFormEnterTransition,
+                    exit = newContactFormExitTransition,
+                ) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -101,7 +106,11 @@ fun EditWorkInformation(
                         },
                     )
                 }
-                AnimatedVisibility(viewModel.showOrganizationTextField) {
+                AnimatedVisibility(
+                    visible = viewModel.showOrganizationTextField,
+                    enter = newContactFormEnterTransition,
+                    exit = newContactFormExitTransition,
+                ) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -126,69 +135,6 @@ fun EditWorkInformation(
                         },
                     )
                 }
-                AnimatedVisibility(
-                    listOf(
-                        viewModel.showJobTitleTextField,
-                        viewModel.showDepartmentTextField,
-                        viewModel.showOrganizationTextField,
-                    ).any { !it }
-                ) {
-                    Button(
-                        modifier = Modifier
-                            .padding(top = 10.dp)
-                            .fillMaxWidth(),
-                        onClick = {
-                            viewModel.showAddWorkInformationFieldBottomModal = true
-                        }
-                    ) {
-                        Text("Feld hinzufügen")
-                    }
-                }
-            }
-        }
-    }
-    AnimatedVisibility(viewModel.showAddWorkInformationFieldBottomModal) {
-        ModalBottomSheet(
-            modifier = modifier,
-            onDismissRequest = {
-                viewModel.showAddWorkInformationFieldBottomModal = false
-            }
-        ) {
-            if (!viewModel.showJobTitleTextField) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .clickable {
-                            viewModel.showJobTitleTextField = true
-                            viewModel.showAddWorkInformationFieldBottomModal = false
-                        },
-                    text = "Job Titel hinzufügen"
-                )
-            }
-            if (!viewModel.showDepartmentTextField) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .clickable {
-                            viewModel.showDepartmentTextField = true
-                            viewModel.showAddWorkInformationFieldBottomModal = false
-                        },
-                    text = "Abteilung hinzufügen"
-                )
-            }
-            if (!viewModel.showOrganizationTextField) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .clickable {
-                            viewModel.showOrganizationTextField = true
-                            viewModel.showAddWorkInformationFieldBottomModal = false
-                        },
-                    text = "Organisation hinzufügen"
-                )
             }
         }
     }

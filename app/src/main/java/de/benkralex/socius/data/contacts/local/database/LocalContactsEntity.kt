@@ -19,6 +19,8 @@ import de.benkralex.socius.data.Website
 data class LocalContactsEntity (
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
 
+    var displayName: String? = null,
+
     var prefix: String? = null,
     var givenName: String? = null,
     var middleName: String? = null,
@@ -74,6 +76,7 @@ data class LocalContactsEntity (
         return Contact(
             id = this.id.toString(),
             origin = ContactOrigin.LOCAL,
+            displayName = displayName,
             prefix = prefix,
             givenName = givenName,
             middleName = middleName,
@@ -101,7 +104,6 @@ data class LocalContactsEntity (
             groups = groups,
             customFields = customFields,
 
-            displayName = null,
             birthday = null,
             anniversary = null,
         )

@@ -1,7 +1,6 @@
 package de.benkralex.socius.pages.newContact
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +14,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,7 +49,11 @@ fun EditStructuredName(
                     .padding(horizontal = 8.dp)
                     .padding(bottom = 8.dp),
             ) {
-                AnimatedVisibility(viewModel.showPrefixTextField) {
+                AnimatedVisibility(
+                    visible = viewModel.showPrefixTextField,
+                    enter = newContactFormEnterTransition,
+                    exit = newContactFormExitTransition,
+                ) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -76,34 +78,18 @@ fun EditStructuredName(
                         }
                     )
                 }
-                AnimatedVisibility(viewModel.showGivenNameTextField) {
-                    OutlinedTextField(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        value = viewModel.givenName,
-                        onValueChange = { viewModel.givenName = it },
-                        label = { Text("Vorname") },
-                        trailingIcon = {
-                            AnimatedVisibility(viewModel.showFamilyNameTextField) {
-                                IconButton(
-                                    onClick = {
-                                        viewModel.givenName = ""
-                                        viewModel.showGivenNameTextField = false
-                                    }
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.RemoveCircleOutline,
-                                        contentDescription = "Remove Given Name",
-                                        tint = MaterialTheme.colorScheme.error,
-                                        modifier = Modifier
-                                            .padding(8.dp)
-                                    )
-                                }
-                            }
-                        },
-                    )
-                }
-                AnimatedVisibility(viewModel.showMiddleNameTextField) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = viewModel.givenName,
+                    onValueChange = { viewModel.givenName = it },
+                    label = { Text("Vorname") },
+                )
+                AnimatedVisibility(
+                    visible = viewModel.showMiddleNameTextField,
+                    enter = newContactFormEnterTransition,
+                    exit = newContactFormExitTransition,
+                ) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -128,34 +114,18 @@ fun EditStructuredName(
                         },
                     )
                 }
-                AnimatedVisibility(viewModel.showFamilyNameTextField) {
-                    OutlinedTextField(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        value = viewModel.familyName,
-                        onValueChange = { viewModel.familyName = it },
-                        label = { Text("Nachname") },
-                        trailingIcon = {
-                            AnimatedVisibility(viewModel.showGivenNameTextField) {
-                                IconButton(
-                                    onClick = {
-                                        viewModel.familyName = ""
-                                        viewModel.showFamilyNameTextField = false
-                                    }
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Outlined.RemoveCircleOutline,
-                                        contentDescription = "Remove Family Line",
-                                        tint = MaterialTheme.colorScheme.error,
-                                        modifier = Modifier
-                                            .padding(8.dp)
-                                    )
-                                }
-                            }
-                        },
-                    )
-                }
-                AnimatedVisibility(viewModel.showSuffixTextField) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = viewModel.familyName,
+                    onValueChange = { viewModel.familyName = it },
+                    label = { Text("Nachname") },
+                )
+                AnimatedVisibility(
+                    visible = viewModel.showSuffixTextField,
+                    enter = newContactFormEnterTransition,
+                    exit = newContactFormExitTransition,
+                ) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -180,7 +150,11 @@ fun EditStructuredName(
                         },
                     )
                 }
-                AnimatedVisibility(viewModel.showNicknameTextField) {
+                AnimatedVisibility(
+                    visible = viewModel.showNicknameTextField,
+                    enter = newContactFormEnterTransition,
+                    exit = newContactFormExitTransition,
+                ) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -205,108 +179,6 @@ fun EditStructuredName(
                         },
                     )
                 }
-                AnimatedVisibility(
-                    listOf(
-                        viewModel.showPrefixTextField,
-                        viewModel.showGivenNameTextField,
-                        viewModel.showMiddleNameTextField,
-                        viewModel.showFamilyNameTextField,
-                        viewModel.showSuffixTextField,
-                        viewModel.showNicknameTextField,
-                    ).any { !it }
-                ) {
-                    Button(
-                        modifier = Modifier
-                            .padding(top = 10.dp)
-                            .fillMaxWidth(),
-                        onClick = {
-                            viewModel.showAddNameFieldBottomModal = true
-                        }
-                    ) {
-                        Text("Feld hinzufügen")
-                    }
-                }
-            }
-        }
-    }
-    AnimatedVisibility(viewModel.showAddNameFieldBottomModal) {
-        ModalBottomSheet(
-            modifier = modifier,
-            onDismissRequest = {
-                viewModel.showAddNameFieldBottomModal = false
-            }
-        ) {
-            if (!viewModel.showPrefixTextField) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .clickable {
-                            viewModel.showPrefixTextField = true
-                            viewModel.showAddNameFieldBottomModal = false
-                        },
-                    text = "Präfix hinzufügen"
-                )
-            }
-            if (!viewModel.showGivenNameTextField) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .clickable {
-                            viewModel.showGivenNameTextField = true
-                            viewModel.showAddNameFieldBottomModal = false
-                        },
-                    text = "Vorname hinzufügen"
-                )
-            }
-            if (!viewModel.showMiddleNameTextField) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .clickable {
-                            viewModel.showMiddleNameTextField = true
-                            viewModel.showAddNameFieldBottomModal = false
-                        },
-                    text = "Zweitname hinzufügen"
-                )
-            }
-            if (!viewModel.showFamilyNameTextField) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .clickable {
-                            viewModel.showFamilyNameTextField = true
-                            viewModel.showAddNameFieldBottomModal = false
-                        },
-                    text = "Nachname hinzufügen"
-                )
-            }
-            if (!viewModel.showSuffixTextField) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .clickable {
-                            viewModel.showSuffixTextField = true
-                            viewModel.showAddNameFieldBottomModal = false
-                        },
-                    text = "Suffix hinzufügen"
-                )
-            }
-            if (!viewModel.showNicknameTextField) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .clickable {
-                            viewModel.showNicknameTextField = true
-                            viewModel.showAddNameFieldBottomModal = false
-                        },
-                    text = "Spitzname hinzufügen"
-                )
             }
         }
     }

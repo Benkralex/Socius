@@ -1,5 +1,6 @@
 package de.benkralex.socius.pages.newContact
 
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -11,8 +12,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class NewContactViewModel : ViewModel() {
+    var showAddFieldBottomModal by mutableStateOf(false)
+
     //Name fields
-    var showAddNameFieldBottomModal by mutableStateOf(false)
     var prefix by mutableStateOf("")
     var showPrefixTextField by mutableStateOf(false)
     var givenName by mutableStateOf("")
@@ -27,7 +29,11 @@ class NewContactViewModel : ViewModel() {
     var showNicknameTextField by mutableStateOf(false)
 
     //Job information fields
-    var showAddWorkInformationFieldBottomModal by mutableStateOf(false)
+    val showWorkInformation by derivedStateOf {
+        showJobTitleTextField ||
+        showDepartmentTextField ||
+        showOrganizationTextField
+    }
     var jobTitle by mutableStateOf("")
     var showJobTitleTextField by mutableStateOf(false)
     var department by mutableStateOf("")
