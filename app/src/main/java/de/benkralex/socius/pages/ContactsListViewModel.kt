@@ -11,6 +11,7 @@ import de.benkralex.socius.data.contacts.groups
 import de.benkralex.socius.data.contacts.loadContacts
 import de.benkralex.socius.data.contacts.loadingContacts
 import de.benkralex.socius.data.settings.getFormattedName
+import java.util.Locale.getDefault
 
 class ContactsListViewModel : ViewModel() {
     var searchQuery by mutableStateOf("")
@@ -45,7 +46,10 @@ class ContactsListViewModel : ViewModel() {
     }
 
     val grouped by derivedStateOf {
-        filteredContacts.groupBy {
+        filteredContacts.sortedBy {
+            getFormattedName(it)
+                .uppercase(getDefault())
+        }.groupBy {
             if (it.isStarred) "starred"
             else getFormattedName(it).firstOrNull()?.uppercase() ?: "?"
         }.toSortedMap(compareBy {
