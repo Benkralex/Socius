@@ -5,7 +5,7 @@ import androidx.compose.ui.res.stringResource
 import de.benkralex.socius.R
 
 @Composable
-fun translateType(type: String?, label: String?): String {
+fun translateType(type: String?, label: String? = null): String {
     if (type.isNullOrBlank()) {
         return label ?: ""
     }

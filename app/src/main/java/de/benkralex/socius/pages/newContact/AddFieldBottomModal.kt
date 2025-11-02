@@ -9,7 +9,9 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import de.benkralex.socius.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,7 +34,7 @@ fun AddFieldBottomModal(
                         viewModel.showAddFieldBottomModal = false
                         viewModel.showPrefixTextField = true
                     },
-                text = "Präfix hinzufügen"
+                text = stringResource(R.string.name_prefix),
             )
         }
         AnimatedVisibility (!viewModel.showMiddleNameTextField) {
@@ -44,7 +46,7 @@ fun AddFieldBottomModal(
                         viewModel.showAddFieldBottomModal = false
                         viewModel.showMiddleNameTextField = true
                     },
-                text = "Zweitname hinzufügen"
+                text = stringResource(R.string.name_middle_name),
             )
         }
         AnimatedVisibility (!viewModel.showSuffixTextField) {
@@ -56,7 +58,7 @@ fun AddFieldBottomModal(
                         viewModel.showAddFieldBottomModal = false
                         viewModel.showSuffixTextField = true
                     },
-                text = "Suffix hinzufügen"
+                text = stringResource(R.string.name_suffix),
             )
         }
         AnimatedVisibility (!viewModel.showNicknameTextField) {
@@ -68,7 +70,7 @@ fun AddFieldBottomModal(
                         viewModel.showAddFieldBottomModal = false
                         viewModel.showNicknameTextField = true
                     },
-                text = "Spitzname hinzufügen"
+                text = stringResource(R.string.name_nickname),
             )
         }
         AnimatedVisibility (!viewModel.showJobTitleTextField) {
@@ -80,7 +82,7 @@ fun AddFieldBottomModal(
                         viewModel.showAddFieldBottomModal = false
                         viewModel.showJobTitleTextField = true
                     },
-                text = "Job Titel hinzufügen"
+                text = stringResource(R.string.job_title),
             )
         }
         AnimatedVisibility (!viewModel.showDepartmentTextField) {
@@ -92,7 +94,7 @@ fun AddFieldBottomModal(
                         viewModel.showAddFieldBottomModal = false
                         viewModel.showDepartmentTextField = true
                     },
-                text = "Abteilung hinzufügen"
+                text = stringResource(R.string.department),
             )
         }
         AnimatedVisibility (!viewModel.showOrganizationTextField) {
@@ -104,7 +106,7 @@ fun AddFieldBottomModal(
                         viewModel.showAddFieldBottomModal = false
                         viewModel.showOrganizationTextField = true
                     },
-                text = "Organisation hinzufügen"
+                text = stringResource(R.string.organization),
             )
         }
     }

@@ -1,11 +1,15 @@
 package de.benkralex.socius.pages.newContact
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import de.benkralex.socius.MainActivity
+import de.benkralex.socius.data.Email
+import de.benkralex.socius.data.PhoneNumber
 import de.benkralex.socius.data.contacts.loadContacts
 import de.benkralex.socius.data.contacts.local.database.LocalContactsEntity
 import kotlinx.coroutines.launch
@@ -17,16 +21,20 @@ class NewContactViewModel : ViewModel() {
     //Name fields
     var prefix by mutableStateOf("")
     var showPrefixTextField by mutableStateOf(false)
+
     var givenName by mutableStateOf("")
-    var showGivenNameTextField by mutableStateOf(true)
+
     var middleName by mutableStateOf("")
     var showMiddleNameTextField by mutableStateOf(false)
+
     var familyName by mutableStateOf("")
-    var showFamilyNameTextField by mutableStateOf(true)
+
     var suffix by mutableStateOf("")
     var showSuffixTextField by mutableStateOf(false)
+
     var nickname by mutableStateOf("")
     var showNicknameTextField by mutableStateOf(false)
+
 
     //Job information fields
     val showWorkInformation by derivedStateOf {
@@ -36,10 +44,29 @@ class NewContactViewModel : ViewModel() {
     }
     var jobTitle by mutableStateOf("")
     var showJobTitleTextField by mutableStateOf(false)
+
     var department by mutableStateOf("")
     var showDepartmentTextField by mutableStateOf(false)
+
     var organization by mutableStateOf("")
     var showOrganizationTextField by mutableStateOf(false)
+
+
+    //Email fields
+    val showEmailFields by derivedStateOf { emailCount > 0 }
+    var emailCount: Int by mutableIntStateOf(0)
+    var emailAddresses: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
+    var emailTypes: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
+    var emailLabels: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
+
+
+    //Phone fields
+    val showPhoneFields by derivedStateOf { phoneCount > 0 }
+    var phoneCount: Int by mutableIntStateOf(0)
+    var phoneNumbers: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
+    var phoneTypes: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
+    var phoneLabels: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
+
 
     var isSaving by mutableStateOf(false)
 
@@ -48,6 +75,30 @@ class NewContactViewModel : ViewModel() {
             runBlocking {
                 launch {
                     isSaving = true
+                    val emails: MutableList<Email> = mutableListOf()
+                    for (i in 0 .. (emailCount-1)) {
+                        if (emailAddresses[i].value.isNotBlank()) {
+                            emails.add(
+                                Email(
+                                    address = emailAddresses[i].value,
+                                    type = emailTypes[i].value.ifBlank { "home" },
+                                    label = emailLabels[i].value.ifBlank { null },
+                                )
+                            )
+                        }
+                    }
+                    val phones: MutableList<PhoneNumber> = mutableListOf()
+                    for (i in 0 .. (phoneCount-1)) {
+                        if (phoneNumbers[i].value.isNotBlank()) {
+                            emails.add(
+                                Email(
+                                    address = phoneNumbers[i].value,
+                                    type = phoneTypes[i].value.ifBlank { "home" },
+                                    label = phoneLabels[i].value.ifBlank { null },
+                                )
+                            )
+                        }
+                    }
                     MainActivity.localContactsDao.insert(
                         LocalContactsEntity(
                             prefix = prefix.ifBlank { null },
@@ -60,6 +111,8 @@ class NewContactViewModel : ViewModel() {
                             jobTitle = jobTitle.ifBlank { null },
                             department = department.ifBlank { null },
                             organization = organization.ifBlank { null },
+
+                            emails = emails,
                         )
                     )
                     loadContacts()

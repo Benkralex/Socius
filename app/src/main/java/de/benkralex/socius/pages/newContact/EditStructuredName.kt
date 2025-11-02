@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.RemoveCircleOutline
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -19,7 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import de.benkralex.socius.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,7 +40,7 @@ fun EditStructuredName(
         ) {
             Icon(
                 imageVector = Icons.Outlined.Person,
-                contentDescription = "Person Icon",
+                contentDescription = stringResource(R.string.content_desc_name),
                 modifier = Modifier
                     .padding(8.dp)
             )
@@ -49,17 +50,13 @@ fun EditStructuredName(
                     .padding(horizontal = 8.dp)
                     .padding(bottom = 8.dp),
             ) {
-                AnimatedVisibility(
-                    visible = viewModel.showPrefixTextField,
-                    enter = newContactFormEnterTransition,
-                    exit = newContactFormExitTransition,
-                ) {
+                AnimatedVisibility(viewModel.showPrefixTextField) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
                         value = viewModel.prefix,
                         onValueChange = { viewModel.prefix = it },
-                        label = { Text("Präfix") },
+                        label = { Text(stringResource(R.string.name_prefix)) },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
@@ -69,7 +66,7 @@ fun EditStructuredName(
                             ) {
                                 Icon(
                                     imageVector = Icons.Outlined.RemoveCircleOutline,
-                                    contentDescription = "Remove Prefix",
+                                    contentDescription = stringResource(R.string.remove),
                                     tint = MaterialTheme.colorScheme.error,
                                     modifier = Modifier
                                         .padding(8.dp)
@@ -83,19 +80,15 @@ fun EditStructuredName(
                         .fillMaxWidth(),
                     value = viewModel.givenName,
                     onValueChange = { viewModel.givenName = it },
-                    label = { Text("Vorname") },
+                    label = { Text(stringResource(R.string.name_given_name)) },
                 )
-                AnimatedVisibility(
-                    visible = viewModel.showMiddleNameTextField,
-                    enter = newContactFormEnterTransition,
-                    exit = newContactFormExitTransition,
-                ) {
+                AnimatedVisibility(viewModel.showMiddleNameTextField) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
                         value = viewModel.middleName,
                         onValueChange = { viewModel.middleName = it },
-                        label = { Text("Zweitname") },
+                        label = { Text(stringResource(R.string.name_middle_name)) },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
@@ -105,7 +98,7 @@ fun EditStructuredName(
                             ) {
                                 Icon(
                                     imageVector = Icons.Outlined.RemoveCircleOutline,
-                                    contentDescription = "Remove Middle Name",
+                                    contentDescription = stringResource(R.string.remove),
                                     tint = MaterialTheme.colorScheme.error,
                                     modifier = Modifier
                                         .padding(8.dp)
@@ -119,19 +112,15 @@ fun EditStructuredName(
                         .fillMaxWidth(),
                     value = viewModel.familyName,
                     onValueChange = { viewModel.familyName = it },
-                    label = { Text("Nachname") },
+                    label = { Text(stringResource(R.string.name_family_name)) },
                 )
-                AnimatedVisibility(
-                    visible = viewModel.showSuffixTextField,
-                    enter = newContactFormEnterTransition,
-                    exit = newContactFormExitTransition,
-                ) {
+                AnimatedVisibility(viewModel.showSuffixTextField) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
                         value = viewModel.suffix,
                         onValueChange = { viewModel.suffix = it },
-                        label = { Text("Suffix") },
+                        label = { Text(stringResource(R.string.name_suffix)) },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
@@ -141,7 +130,7 @@ fun EditStructuredName(
                             ) {
                                 Icon(
                                     imageVector = Icons.Outlined.RemoveCircleOutline,
-                                    contentDescription = "Remove Suffix",
+                                    contentDescription = stringResource(R.string.remove),
                                     tint = MaterialTheme.colorScheme.error,
                                     modifier = Modifier
                                         .padding(8.dp)
@@ -150,17 +139,13 @@ fun EditStructuredName(
                         },
                     )
                 }
-                AnimatedVisibility(
-                    visible = viewModel.showNicknameTextField,
-                    enter = newContactFormEnterTransition,
-                    exit = newContactFormExitTransition,
-                ) {
+                AnimatedVisibility(viewModel.showNicknameTextField) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
                         value = viewModel.nickname,
                         onValueChange = { viewModel.nickname = it },
-                        label = { Text("Spitzname") },
+                        label = { Text(stringResource(R.string.name_nickname)) },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
@@ -170,7 +155,7 @@ fun EditStructuredName(
                             ) {
                                 Icon(
                                     imageVector = Icons.Outlined.RemoveCircleOutline,
-                                    contentDescription = "Remove Nickname",
+                                    contentDescription = stringResource(R.string.remove),
                                     tint = MaterialTheme.colorScheme.error,
                                     modifier = Modifier
                                         .padding(8.dp)

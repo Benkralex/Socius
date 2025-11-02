@@ -80,4 +80,24 @@
     <string name="no_results">Keine Ergebnisse</string>
     <string name="content_desc_selected">Ausgewählt</string>
     <string name="content_desc_clear_search">Suchterm löschen</string>
+    <string name="email">Email</string>
+    <string name="phone">Telefon</string>
+    <string name="other">Sonstiges</string>
+    <string name="save">Speichern</string>
+    <string name="page_new_contact">Neuer Kontakt</string>
+    <string name="remove">Entfernen</string>
+    <string name="phone_label">Telefon Label</string>
+    <string name="email_label">Email Label</string>
+    <string name="phone_type">Telefon Typ</string>
+    <string name="email_type">Email Typ</string>
+    <string name="name_prefix">Präfix</string>
+    <string name="name_given_name">Vorname</string>
+    <string name="name_middle_name">Zweitname</string>
+    <string name="name_family_name">Nachname</string>
+    <string name="name_suffix">Suffix</string>
+    <string name="name_nickname">Spitzname</string>
+    <string name="content_desc_name">Name</string>
+    <string name="organization">Organisation</string>
+    <string name="department">Abteilung</string>
+    <string name="job_title">Job Titel</string>
 </resources>

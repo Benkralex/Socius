@@ -18,7 +18,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import de.benkralex.socius.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,17 +50,13 @@ fun EditWorkInformation(
                     .padding(horizontal = 8.dp)
                     .padding(bottom = 8.dp),
             ) {
-                AnimatedVisibility(
-                    visible = viewModel.showJobTitleTextField,
-                    enter = newContactFormEnterTransition,
-                    exit = newContactFormExitTransition,
-                ) {
+                AnimatedVisibility(viewModel.showJobTitleTextField) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
                         value = viewModel.jobTitle,
                         onValueChange = { viewModel.jobTitle = it },
-                        label = { Text("Job Titel") },
+                        label = { Text(stringResource(R.string.job_title)) },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
@@ -68,7 +66,7 @@ fun EditWorkInformation(
                             ) {
                                 Icon(
                                     imageVector = Icons.Outlined.RemoveCircleOutline,
-                                    contentDescription = "Remove Job Title",
+                                    contentDescription = stringResource(R.string.remove),
                                     tint = MaterialTheme.colorScheme.error,
                                     modifier = Modifier
                                         .padding(8.dp)
@@ -77,17 +75,13 @@ fun EditWorkInformation(
                         }
                     )
                 }
-                AnimatedVisibility(
-                    visible = viewModel.showDepartmentTextField,
-                    enter = newContactFormEnterTransition,
-                    exit = newContactFormExitTransition,
-                ) {
+                AnimatedVisibility(viewModel.showDepartmentTextField) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
                         value = viewModel.department,
                         onValueChange = { viewModel.department = it },
-                        label = { Text("Abteilung") },
+                        label = { Text(stringResource(R.string.department)) },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
@@ -97,7 +91,7 @@ fun EditWorkInformation(
                             ) {
                                 Icon(
                                     imageVector = Icons.Outlined.RemoveCircleOutline,
-                                    contentDescription = "Remove Department",
+                                    contentDescription = stringResource(R.string.remove),
                                     tint = MaterialTheme.colorScheme.error,
                                     modifier = Modifier
                                         .padding(8.dp)
@@ -106,17 +100,13 @@ fun EditWorkInformation(
                         },
                     )
                 }
-                AnimatedVisibility(
-                    visible = viewModel.showOrganizationTextField,
-                    enter = newContactFormEnterTransition,
-                    exit = newContactFormExitTransition,
-                ) {
+                AnimatedVisibility(viewModel.showOrganizationTextField) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
                         value = viewModel.organization,
                         onValueChange = { viewModel.organization = it },
-                        label = { Text("Organisation") },
+                        label = { Text(stringResource(R.string.organization)) },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
@@ -126,7 +116,7 @@ fun EditWorkInformation(
                             ) {
                                 Icon(
                                     imageVector = Icons.Outlined.RemoveCircleOutline,
-                                    contentDescription = "Remove Organization",
+                                    contentDescription = stringResource(R.string.remove),
                                     tint = MaterialTheme.colorScheme.error,
                                     modifier = Modifier
                                         .padding(8.dp)
