@@ -15,7 +15,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 val contacts by derivedStateOf {
-    (if (loadAndroidSystemContacts) systemContacts else mutableListOf<Contact>()
+    ((if (loadAndroidSystemContacts) systemContacts else mutableListOf())
             + localContacts
             + remoteContacts.values.flatten()
     ).toMutableList()

@@ -104,4 +104,7 @@
     <string name="settings_formatting">Formatierung</string>
     <string name="no_contacts">Noch keine Kontakte vorhanden</string>
     <string name="settings_load_android_system_contacts">Lade Android System-Kontakte</string>
+    <string name="delete">Löschen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="confirm_deletion">%name% löschen?</string>
 </resources>

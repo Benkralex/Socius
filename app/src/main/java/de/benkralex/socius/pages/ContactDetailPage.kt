@@ -167,18 +167,18 @@ fun ContactDetailPage(
                                     .padding(8.dp),
                             )
                         }
-                    }
-                    IconButton(
-                        onClick = {
-                            showDeletionConfirmationDialog = true
+                        IconButton(
+                            onClick = {
+                                showDeletionConfirmationDialog = true
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Delete,
+                                contentDescription = stringResource(R.string.content_desc_edit),
+                                modifier = Modifier
+                                    .padding(8.dp),
+                            )
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Delete,
-                            contentDescription = stringResource(R.string.content_desc_edit),
-                            modifier = Modifier
-                                .padding(8.dp),
-                        )
                     }
                 }
             )
@@ -201,7 +201,7 @@ fun ContactDetailPage(
                         Text(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            text = "Delete " + getFormattedName(contact) + "?",
+                            text =  stringResource(R.string.confirm_deletion).replace("%name%", getFormattedName(contact)),
                             style = MaterialTheme.typography.titleLarge,
                             textAlign = TextAlign.Center,
                         )
@@ -227,7 +227,7 @@ fun ContactDetailPage(
                             ),
                         ) {
                             Text(
-                                text = "Delete"
+                                text = stringResource(R.string.delete),
                             )
                         }
                         Spacer(Modifier.height(8.dp))
@@ -239,7 +239,7 @@ fun ContactDetailPage(
                             },
                         ) {
                             Text(
-                                text = "Cancel"
+                                text = stringResource(R.string.cancel),
                             )
                         }
                     }

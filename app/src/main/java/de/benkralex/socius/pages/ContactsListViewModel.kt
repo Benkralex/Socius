@@ -76,7 +76,7 @@ class ContactsListViewModel : ViewModel() {
     }
 
     val showNoContactsMsg by derivedStateOf {
-        contacts.isEmpty()
+        contacts.isEmpty() && !isRefreshing
     }
 
     val isRefreshing by derivedStateOf {
