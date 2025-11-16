@@ -21,3 +21,18 @@ suspend fun editStarredStatus(contact: Contact, isStarred: Boolean): Boolean {
     loadAllContacts()
     return true
 }
+
+suspend fun deleteContact(contact: Contact): Boolean {
+    val mainActivity = MainActivity
+    val id = contact.id.toIntOrNull() ?: return false
+    when (contact.origin) {
+        ContactOrigin.LOCAL -> {
+            mainActivity.localContactsDao.deleteById(id)
+        }
+        ContactOrigin.SYSTEM -> return false
+        ContactOrigin.REMOTE -> return false
+        ContactOrigin.URI -> return false
+    }
+    loadAllContacts()
+    return true
+}

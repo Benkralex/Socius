@@ -7,19 +7,28 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -41,6 +50,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
 import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.contacts.deleteContact
 import de.benkralex.socius.data.contacts.editStarredStatus
 import de.benkralex.socius.data.settings.getFormattedName
 import de.benkralex.socius.widgets.contactInformation.CustomFieldsWidget
@@ -53,10 +63,11 @@ import de.benkralex.socius.widgets.contactInformation.PostalAddressesWidget
 import de.benkralex.socius.widgets.contactInformation.ProfilePicture
 import de.benkralex.socius.widgets.contactInformation.ProfileWithName
 import de.benkralex.socius.widgets.contactInformation.RelationsWidget
-import de.benkralex.socius.widgets.contactInformation.WorkInformationWidget
 import de.benkralex.socius.widgets.contactInformation.WebsitesWidget
+import de.benkralex.socius.widgets.contactInformation.WorkInformationWidget
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.lang.Thread.sleep
 import kotlin.math.min
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,6 +80,7 @@ fun ContactDetailPage(
 ) {
     var showProfileFullscreen by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
+    var showDeletionConfirmationDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = modifier,
@@ -120,41 +132,120 @@ fun ContactDetailPage(
                     LaunchedEffect (contact.isStarred) {
                         isStarred = contact.isStarred
                     }
-                    Icon(
-                        imageVector = starIcon,
-                        contentDescription = starDescription,
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .clickable {
-                                if (contact.isReadOnly()) return@clickable
-                                isStarred = !isStarred
-                                Thread {
-                                    runBlocking {
-                                        launch {
-                                            editStarredStatus(
-                                                contact = contact,
-                                                isStarred = isStarred,
-                                            )
-                                        }
+                    IconButton(
+                        onClick = {
+                            if (contact.isReadOnly()) return@IconButton
+                            isStarred = !isStarred
+                            Thread {
+                                runBlocking {
+                                    launch {
+                                        editStarredStatus(
+                                            contact = contact,
+                                            isStarred = isStarred,
+                                        )
                                     }
-                                }.start()
-                            }
-                    )
-                    if (!contact.isReadOnly()) {
+                                }
+                            }.start()
+                        },
+                    ) {
                         Icon(
-                            imageVector = Icons.Outlined.Edit,
+                            imageVector = starIcon,
+                            contentDescription = starDescription,
+                            modifier = Modifier
+                                .padding(8.dp),
+                        )
+                    }
+
+                    if (!contact.isReadOnly()) {
+                        IconButton(
+                            onClick = onEditClick
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Edit,
+                                contentDescription = stringResource(R.string.content_desc_edit),
+                                modifier = Modifier
+                                    .padding(8.dp),
+                            )
+                        }
+                    }
+                    IconButton(
+                        onClick = {
+                            showDeletionConfirmationDialog = true
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Delete,
                             contentDescription = stringResource(R.string.content_desc_edit),
                             modifier = Modifier
-                                .padding(8.dp)
-                                .clickable(
-                                    onClick = onEditClick
-                                ),
+                                .padding(8.dp),
                         )
                     }
                 }
             )
         },
     ) { paddingValues ->
+        if (showDeletionConfirmationDialog) {
+            BasicAlertDialog(
+                modifier = Modifier
+                    .background(
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        shape = RoundedCornerShape(CornerSize(30.dp))
+                    )
+                    .padding(32.dp)
+                    .fillMaxWidth(),
+                onDismissRequest = {
+                    showDeletionConfirmationDialog = false
+                },
+                content = {
+                    Column {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = "Delete " + getFormattedName(contact) + "?",
+                            style = MaterialTheme.typography.titleLarge,
+                            textAlign = TextAlign.Center,
+                        )
+                        Spacer(Modifier.height(20.dp))
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            onClick = {
+                                if (contact.isReadOnly()) return@Button
+                                onBackClick()
+                                Thread {
+                                    runBlocking {
+                                        launch {
+                                            sleep(500)
+                                            deleteContact(contact)
+                                        }
+                                    }
+                                }.start()
+                            },
+                            colors = ButtonDefaults.buttonColors().copy(
+                                containerColor = MaterialTheme.colorScheme.errorContainer,
+                                contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                            ),
+                        ) {
+                            Text(
+                                text = "Delete"
+                            )
+                        }
+                        Spacer(Modifier.height(8.dp))
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            onClick = {
+                                showDeletionConfirmationDialog = false
+                            },
+                        ) {
+                            Text(
+                                text = "Cancel"
+                            )
+                        }
+                    }
+                },
+            )
+        }
         Column(
             modifier = Modifier
                 .verticalScroll(scrollState)
