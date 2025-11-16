@@ -8,13 +8,17 @@ import de.benkralex.socius.MainActivity
 import de.benkralex.socius.data.Contact
 import de.benkralex.socius.data.contacts.local.load.getLocalContacts
 import de.benkralex.socius.data.contacts.system.load.getAndroidSystemContacts
+import de.benkralex.socius.data.settings.loadAndroidSystemContacts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 val contacts by derivedStateOf {
-    (systemContacts + localContacts + remoteContacts.values.flatten()).toMutableList()
+    (if (loadAndroidSystemContacts) systemContacts else mutableListOf<Contact>()
+            + localContacts
+            + remoteContacts.values.flatten()
+    ).toMutableList()
 }
 
 val groups by derivedStateOf {
@@ -29,7 +33,7 @@ private var systemContacts by mutableStateOf<List<Contact>>(emptyList())
 private var localContacts by mutableStateOf<List<Contact>>(emptyList())
 private var remoteContacts by mutableStateOf<Map<String, List<Contact>>>(emptyMap())
 
-fun loadContacts() {
+fun loadAllContacts() {
     val mainActivity = MainActivity
     Thread {
         runBlocking {
@@ -67,7 +71,54 @@ fun loadContacts() {
     }.start()
 }
 
+fun reloadSystemContacts() {
+    val mainActivity = MainActivity
+    Thread {
+        runBlocking {
+            launch {
+                if (!loadingSystemContacts) {
+                    loadingSystemContacts = true
+                    loadSystemContacts(mainActivity)
+                    loadingSystemContacts = false
+                    println("Loaded system contacts: ${systemContacts.size}")
+                }
+            }
+        }
+    }.start()
+}
+
+fun reloadLocalContacts() {
+    val mainActivity = MainActivity
+    Thread {
+        runBlocking {
+            launch {
+                if (!loadingLocalContacts) {
+                    loadingLocalContacts = true
+                    loadLocalContacts(mainActivity)
+                    loadingLocalContacts = false
+                }
+            }
+        }
+    }.start()
+}
+
+fun reloadRemoteContacts() {
+    val mainActivity = MainActivity
+    Thread {
+        runBlocking {
+            launch {
+                if (!loadingRemoteContacts) {
+                    loadingRemoteContacts = true
+                    loadRemoteContacts(mainActivity)
+                    loadingRemoteContacts = false
+                }
+            }
+        }
+    }.start()
+}
+
 private suspend fun loadSystemContacts(mainActivity: MainActivity.Companion) {
+    if (!loadAndroidSystemContacts) return
     withContext(Dispatchers.IO) {
         val loadedContacts = getAndroidSystemContacts(context = mainActivity.instance)
         withContext(Dispatchers.Main) {

@@ -2,17 +2,18 @@ package de.benkralex.socius.navigation
 
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Favorite
@@ -27,9 +28,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
@@ -38,7 +40,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import de.benkralex.socius.R
 import de.benkralex.socius.data.contacts.contacts
-import de.benkralex.socius.data.contacts.loadContacts
+import de.benkralex.socius.data.contacts.loadAllContacts
 import de.benkralex.socius.data.settings.loadSettings
 import de.benkralex.socius.pages.AllowPermissionsPage
 import de.benkralex.socius.pages.ContactDetailPage
@@ -80,6 +82,7 @@ fun NavigationRoot(
     val context = LocalContext.current
     loadSettings(context)
     backStack = rememberNavBackStack(AllowPermissionsPageNavKey)
+    val density = LocalDensity.current
     NavDisplay(
         backStack = backStack,
         modifier = modifier,
@@ -114,14 +117,22 @@ fun NavigationRoot(
             )
         },
         predictivePopTransitionSpec = {
+            val offsetPx = with(density) { 100.dp.roundToPx() }
+
+            val slideSpecInt: FiniteAnimationSpec<IntOffset> = tween()
+            val scaleSpec: FiniteAnimationSpec<Float> = tween()
+
             ContentTransform(
-                targetContentEnter = fadeIn(
-                    animationSpec = spring(
-                        dampingRatio = 1.0f,
-                        stiffness = 16000.0f,
-                    )
-                ),
-                initialContentExit = scaleOut(targetScale = 0.7f),
+                targetContentEnter = scaleIn(initialScale = 1f),
+
+                initialContentExit =
+                    slideOutHorizontally(
+                        animationSpec = slideSpecInt,
+                        targetOffsetX = { offsetPx }
+                    ) + scaleOut(
+                        animationSpec = scaleSpec,
+                        targetScale = 0.8f,
+                    ),
             )
         },
         entryProvider = { key ->
@@ -131,10 +142,8 @@ fun NavigationRoot(
                         key = key
                     ) {
                         AllowPermissionsPage(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(24.dp)),
                             onAllPermissionsAllowed = {
-                                loadContacts()
+                                loadAllContacts()
                                 backStack.clear()
                                 backStack.add(ContactListPageNavKey)
                             }
@@ -146,8 +155,6 @@ fun NavigationRoot(
                         key = key
                     ) {
                         ContactListPage(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(24.dp)),
                             menuBar = {
                                 CustomNavigationBar(
                                     items = listOf(
@@ -198,8 +205,6 @@ fun NavigationRoot(
                         key = key
                     ) {
                         HighlightsPage(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(24.dp)),
                             menuBar = {
                                 CustomNavigationBar(
                                     items = listOf(
@@ -241,8 +246,6 @@ fun NavigationRoot(
                         key = key
                     ) {
                         ManagePage(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(24.dp)),
                             menuBar = {
                                 CustomNavigationBar(
                                     items = listOf(
@@ -287,8 +290,6 @@ fun NavigationRoot(
                         key = key
                     ) {
                         SettingsPage(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(24.dp)),
                             onBackClick = {
                                 backStack.removeAt(backStack.size - 1)
                             }
@@ -300,8 +301,6 @@ fun NavigationRoot(
                         key = key
                     ) {
                         ContactDetailPage(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(24.dp)),
                             contact = contacts[key.contactId],
                             onBackClick = {
                                 backStack.removeAt(backStack.size - 1)
@@ -347,8 +346,6 @@ fun NavigationRoot(
                         key = key
                     ) {
                         EditContactPage(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(24.dp)),
                             contactId = key.contactId,
                             onBackClick = {
                                 backStack.removeAt(backStack.size - 1)
@@ -361,8 +358,6 @@ fun NavigationRoot(
                         key = key
                     ) {
                         NewContactPage(
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(24.dp)),
                             onBackClick = {
                                 backStack.removeAt(backStack.size - 1)
                             },

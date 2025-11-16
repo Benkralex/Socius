@@ -5,7 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.provider.ContactsContract
 import android.util.Log
-import de.benkralex.socius.data.contacts.loadContacts
+import de.benkralex.socius.data.contacts.loadAllContacts
 
 fun updateStarred(contactId: String?, value: Boolean, context: Context) {
     if (contactId == null) {
@@ -23,5 +23,5 @@ fun updateStarred(contactId: String?, value: Boolean, context: Context) {
     } catch (e: Exception) {
         Log.e("updateStarred", "Fehler bei applyBatch: ${e.message}", e)
     }
-    loadContacts()
+    loadAllContacts()
 }

@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import de.benkralex.socius.MainActivity
 import de.benkralex.socius.data.Email
 import de.benkralex.socius.data.PhoneNumber
-import de.benkralex.socius.data.contacts.loadContacts
+import de.benkralex.socius.data.contacts.loadAllContacts
 import de.benkralex.socius.data.contacts.local.database.LocalContactsEntity
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -115,7 +115,7 @@ class NewContactViewModel : ViewModel() {
                             emails = emails,
                         )
                     )
-                    loadContacts()
+                    loadAllContacts()
                     isSaving = false
                 }
             }

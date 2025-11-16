@@ -1,6 +1,8 @@
 package de.benkralex.socius.pages
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,10 +10,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material.icons.outlined.DriveFileRenameOutline
+import androidx.compose.material.icons.outlined.FormatPaint
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -29,9 +32,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
+import de.benkralex.socius.data.contacts.reloadSystemContacts
+import de.benkralex.socius.data.settings.loadAndroidSystemContacts
+import de.benkralex.socius.data.settings.saveSettings
+import de.benkralex.socius.widgets.settings.BooleanSetting
+import de.benkralex.socius.widgets.settings.BooleanSettingState
 import de.benkralex.socius.widgets.settings.DateFormattingWidget
 import de.benkralex.socius.widgets.settings.NameFormattingWidget
 
@@ -65,14 +74,44 @@ fun SettingsPage(
         var selectedTabIndex by remember { mutableIntStateOf(0) }
         val tabsList = listOf(
             TabData(
-                title = stringResource(R.string.settings_name_formatting),
-                icon = Icons.Outlined.DriveFileRenameOutline,
-                content = { NameFormattingWidget() },
+                title = stringResource(R.string.settings_general),
+                icon = Icons.Outlined.Settings,
+                content = {
+                    val context = LocalContext.current
+                    BooleanSetting(
+                        title = stringResource(R.string.settings_load_android_system_contacts),
+                        state = BooleanSettingState(
+                            onChangeCallback = {
+                                loadAndroidSystemContacts = it
+                                saveSettings(context)
+                                if (it) reloadSystemContacts()
+                            },
+                            initialValue = loadAndroidSystemContacts,
+                        ),
+                    )
+                },
             ),
             TabData(
-                title = stringResource(R.string.settings_date_formatting),
-                icon = Icons.Outlined.DateRange,
-                content = { DateFormattingWidget() },
+                title = stringResource(R.string.settings_formatting),
+                icon = Icons.Outlined.FormatPaint,
+                content = {
+                    Column(
+                        modifier = Modifier
+                            .scrollable(
+                                state = rememberScrollState(),
+                                orientation = Orientation.Vertical,
+                            )
+                    ) {
+                        NameFormattingWidget()
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .padding(
+                                    vertical = 12.dp,
+                                )
+                        )
+                        DateFormattingWidget()
+                    }
+                },
             ),
         )
         val pagerState = rememberPagerState {

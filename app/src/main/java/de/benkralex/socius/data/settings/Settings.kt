@@ -1,6 +1,9 @@
 package de.benkralex.socius.data.settings
 
 import android.content.Context
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.core.content.edit
 
 data class Format(
@@ -11,27 +14,22 @@ data class Format(
 
 var nameFormat: Int = 0
 var dateFormat: Int = 0
+var loadAndroidSystemContacts by mutableStateOf(true)
 
 val charsToTrim: CharArray = charArrayOf(',', ' ', '/', '\\', '.', '-', '_', ' ')
 
 fun saveSettings(context: Context) {
     val sharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
     sharedPreferences.edit {
-        putString("nameFormat", nameFormat.toString())
-        putString("dateFormat", dateFormat.toString())
+        putInt("nameFormat", nameFormat)
+        putInt("dateFormat", dateFormat)
+        putBoolean("loadAndroidSystemContacts", loadAndroidSystemContacts)
     }
 }
 
 fun loadSettings(context: Context) {
     val sharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
-    nameFormat = try {
-        sharedPreferences.getString("nameFormat", "0")?.toInt() ?: 0
-    } catch (_: NumberFormatException) {
-        0 // Default to first format if parsing fails
-    }
-    dateFormat = try {
-        sharedPreferences.getString("dateFormat", "0")?.toInt() ?: 0
-    } catch (_: NumberFormatException) {
-        0 // Default to first format if parsing fails
-    }
+    nameFormat = sharedPreferences.getInt("nameFormat", 0)
+    dateFormat = sharedPreferences.getInt("dateFormat", 0)
+    loadAndroidSystemContacts = sharedPreferences.getBoolean("loadAndroidSystemContacts", true)
 }

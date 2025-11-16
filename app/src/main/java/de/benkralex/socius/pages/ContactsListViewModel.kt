@@ -8,7 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import de.benkralex.socius.data.contacts.contacts
 import de.benkralex.socius.data.contacts.groups
-import de.benkralex.socius.data.contacts.loadContacts
+import de.benkralex.socius.data.contacts.loadAllContacts
 import de.benkralex.socius.data.contacts.loadingContacts
 import de.benkralex.socius.data.settings.getFormattedName
 import java.util.Locale.getDefault
@@ -25,8 +25,18 @@ class ContactsListViewModel : ViewModel() {
 
     val filteredContacts by derivedStateOf {
         val searchQueryFiltered = if (searchQuery.isNotBlank()) {
-            contacts.filter {
-                getFormattedName(it).contains(searchQuery, ignoreCase = true)
+            contacts.filter { contact ->
+                getFormattedName(contact).contains(searchQuery, ignoreCase = true) ||
+                        contact.emails.any {it.address.contains(searchQuery, ignoreCase = true)} ||
+                        contact.phoneNumbers.any {it.number.contains(searchQuery, ignoreCase = true)} ||
+                        contact.websites.any {it.url.contains(searchQuery, ignoreCase = true)} ||
+                        contact.note?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.prefix?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.givenName?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.middleName?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.familyName?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.suffix?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.nickname?.contains(searchQuery, ignoreCase = true) ?: false
             }
         } else {
             contacts
@@ -65,6 +75,10 @@ class ContactsListViewModel : ViewModel() {
         grouped.isEmpty() && contacts.isNotEmpty()
     }
 
+    val showNoContactsMsg by derivedStateOf {
+        contacts.isEmpty()
+    }
+
     val isRefreshing by derivedStateOf {
         loadingContacts
     }
@@ -88,6 +102,6 @@ class ContactsListViewModel : ViewModel() {
     }
 
     fun refreshContacts() {
-        loadContacts()
+        loadAllContacts()
     }
 }

@@ -100,4 +100,8 @@
     <string name="organization">Organisation</string>
     <string name="department">Abteilung</string>
     <string name="job_title">Job Titel</string>
+    <string name="settings_general">Allgemein</string>
+    <string name="settings_formatting">Formatierung</string>
+    <string name="no_contacts">Noch keine Kontakte vorhanden</string>
+    <string name="settings_load_android_system_contacts">Lade Android System-Kontakte</string>
 </resources>

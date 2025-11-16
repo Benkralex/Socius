@@ -18,6 +18,6 @@ suspend fun editStarredStatus(contact: Contact, isStarred: Boolean): Boolean {
         ContactOrigin.REMOTE -> return false
         ContactOrigin.URI -> return false
     }
-    loadContacts()
+    loadAllContacts()
     return true
 }

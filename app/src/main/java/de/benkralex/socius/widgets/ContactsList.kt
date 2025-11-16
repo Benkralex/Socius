@@ -123,6 +123,21 @@ fun ContactsList(
                         }
                     }
                 }
+                //No contacts
+                if (viewModel.showNoContactsMsg) {
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                        ) {
+                            Text(
+                                text = stringResource(R.string.no_contacts)
+                            )
+                        }
+                    }
+                }
             }
         }
     }
