@@ -1,37 +1,66 @@
 package de.benkralex.socius.pages.newContact
 
+import android.window.OnBackInvokedCallback
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ListAlt
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.outlined.Event
+import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Mail
 import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarOutline
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MediumFloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigationevent.OnBackInvokedInput
 import de.benkralex.socius.R
+import de.benkralex.socius.data.contacts.deleteContact
+import de.benkralex.socius.data.settings.getFormattedName
 import de.benkralex.socius.theme.DarkColorScheme
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.lang.Thread.sleep
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -40,6 +69,87 @@ fun NewContactPage(
     onBackClick: () -> Unit = {},
     viewModel: NewContactViewModel = viewModel<NewContactViewModel>(),
 ) {
+    val scrollState = rememberScrollState()
+    val starIcon = if (viewModel.isStarred) Icons.Outlined.Star else Icons.Outlined.StarOutline
+    val starDescription = "${stringResource(R.string.content_desc_toggle_starred)} (${
+        if (viewModel.isStarred) {
+            stringResource(R.string.starred)
+        } else {
+            stringResource(R.string.not_starred)
+        }
+    })"
+    val saveRequested = remember { mutableStateOf(false) }
+    LaunchedEffect(viewModel.isSaving, viewModel.error, saveRequested.value) {
+        if (saveRequested.value && !viewModel.isSaving) {
+            saveRequested.value = false
+            if (!viewModel.error) {
+                onBackClick()
+            }
+        }
+    }
+    var showCloseDialog by remember { mutableStateOf(false) }
+    if (showCloseDialog) {
+        BasicAlertDialog(
+            modifier = Modifier
+                .background(
+                    color = MaterialTheme.colorScheme.surfaceBright,
+                    shape = RoundedCornerShape(CornerSize(30.dp))
+                )
+                .padding(16.dp)
+                .fillMaxWidth(),
+            onDismissRequest = {
+                showCloseDialog = false
+            },
+            content = {
+                Column {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        text =  stringResource(R.string.close_without_saving_dialog),
+                        style = MaterialTheme.typography.titleLarge,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                    Spacer(Modifier.height(20.dp))
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        onClick = onBackClick,
+                        colors = if (!isSystemInDarkTheme()) ButtonDefaults.buttonColors().copy(
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError,
+                        ) else ButtonDefaults.buttonColors().copy(
+                            containerColor = MaterialTheme.colorScheme.errorContainer,
+                            contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                        ),
+                    ) {
+                        Text(
+                            text = stringResource(R.string.close),
+                        )
+                    }
+                    Spacer(Modifier.height(8.dp))
+                    Button(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        onClick = {
+                            showCloseDialog = false
+                        },
+                    ) {
+                        Text(
+                            text = stringResource(R.string.cancel),
+                        )
+                    }
+                }
+            },
+        )
+    }
+    BackHandler {
+        if (viewModel.checkEmpty()) {
+            onBackClick()
+        } else {
+            showCloseDialog
+        }
+    }
     Scaffold (
         modifier = modifier,
         topBar = {
@@ -54,42 +164,70 @@ fun NewContactPage(
                         modifier = Modifier
                             .padding(5.dp)
                             .clickable(
-                                onClick = onBackClick
+                                onClick = {
+                                    if (viewModel.checkEmpty()) {
+                                        onBackClick()
+                                    } else {
+                                        showCloseDialog
+                                    }
+                                }
                             )
                     )
                 },
+                actions = {
+                    Row {
+                        IconButton(
+                            onClick = {
+                                viewModel.isStarred = !viewModel.isStarred
+                            }
+                        ) {
+                            Icon(
+                                imageVector = starIcon,
+                                contentDescription = starDescription,
+                                modifier = Modifier
+                                    .padding(8.dp),
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                saveRequested.value = true
+                                viewModel.saveContact()
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Save,
+                                contentDescription = stringResource(R.string.save),
+                            )
+                        }
+                    }
+                }
             )
         },
-        floatingActionButton = {
-            MediumFloatingActionButton(
-                onClick = {
-                    viewModel.saveContact()
-                    onBackClick()
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Save,
-                    contentDescription = stringResource(R.string.save),
-                )
-            }
-        }
     ) { paddingValues ->
         Column (
             modifier = Modifier
                 .padding(paddingValues)
                 .padding(10.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .imePadding(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             EditStructuredName(viewModel = viewModel)
-            AnimatedVisibility(viewModel.showWorkInformation) {
+            AnimatedVisibility(viewModel.workInformationState.showFields) {
                 EditWorkInformation(viewModel = viewModel)
             }
-            AnimatedVisibility(viewModel.showEmailFields) {
+            AnimatedVisibility(viewModel.emailsState.showFields) {
                 EditEmails(viewModel = viewModel)
             }
-            AnimatedVisibility(viewModel.showPhoneFields) {
+            AnimatedVisibility(viewModel.phoneNumbersState.showFields) {
                 EditPhone(viewModel = viewModel)
+            }
+            AnimatedVisibility(viewModel.eventsState.showFields) {
+                EditEvents(viewModel = viewModel)
+            }
+            AnimatedVisibility(viewModel.postalAddressesState.showFields) {
+                EditPostalAddresses(viewModel = viewModel)
             }
             Row (
                 horizontalArrangement = Arrangement.spacedBy(24.dp),
@@ -100,12 +238,7 @@ fun NewContactPage(
                 Button(
                     modifier = Modifier
                         .weight(1f),
-                    onClick = {
-                        viewModel.emailAddresses.add(mutableStateOf(""))
-                        viewModel.emailTypes.add(mutableStateOf("home"))
-                        viewModel.emailLabels.add(mutableStateOf(""))
-                        viewModel.emailCount++
-                    },
+                    onClick = { viewModel.emailsState.addNew() },
                 ) {
                     Row (
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -122,12 +255,7 @@ fun NewContactPage(
                 Button(
                     modifier = Modifier
                         .weight(1f),
-                    onClick = {
-                        viewModel.phoneNumbers.add(mutableStateOf(""))
-                        viewModel.phoneTypes.add(mutableStateOf("home"))
-                        viewModel.phoneLabels.add(mutableStateOf(""))
-                        viewModel.phoneCount++
-                    },
+                    onClick = { viewModel.phoneNumbersState.addNew() },
                 ) {
                     Row (
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -139,6 +267,47 @@ fun NewContactPage(
                             contentDescription = null,
                         )
                         Text(stringResource(R.string.phone))
+                    }
+                }
+            }
+            Row (
+                horizontalArrangement = Arrangement.spacedBy(24.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
+            ) {
+                Button(
+                    modifier = Modifier
+                        .weight(1f),
+                    onClick = { viewModel.eventsState.addNew() },
+                ) {
+                    Row (
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier
+                            .padding(vertical = 12.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Event,
+                            contentDescription = null,
+                        )
+                        Text(stringResource(R.string.event))
+                    }
+                }
+                Button(
+                    modifier = Modifier
+                        .weight(1f),
+                    onClick = { viewModel.postalAddressesState.addNew() },
+                ) {
+                    Row (
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        modifier = Modifier
+                            .padding(vertical = 12.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.LocationOn,
+                            contentDescription = null,
+                        )
+                        Text(stringResource(R.string.postalAddress))
                     }
                 }
             }

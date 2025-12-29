@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -100,11 +101,9 @@ fun ContactDetailPage(
                         modifier = Modifier
                             .alpha(alpha),
                         contact = contact,
-                        onProfileClick = {
-                            if (contact.photoBitmap != null) {
-                                showProfileFullscreen = true
-                            }
-                        }
+                        onProfileClick = if (contact.photoBitmap != null) {
+                            {showProfileFullscreen = true}
+                        } else null
                     )
                 },
                 navigationIcon = {
@@ -188,10 +187,10 @@ fun ContactDetailPage(
             BasicAlertDialog(
                 modifier = Modifier
                     .background(
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        color = MaterialTheme.colorScheme.surfaceBright,
                         shape = RoundedCornerShape(CornerSize(30.dp))
                     )
-                    .padding(32.dp)
+                    .padding(16.dp)
                     .fillMaxWidth(),
                 onDismissRequest = {
                     showDeletionConfirmationDialog = false
@@ -204,6 +203,7 @@ fun ContactDetailPage(
                             text =  stringResource(R.string.confirm_deletion).replace("%name%", getFormattedName(contact)),
                             style = MaterialTheme.typography.titleLarge,
                             textAlign = TextAlign.Center,
+                            color = MaterialTheme.colorScheme.onSurface,
                         )
                         Spacer(Modifier.height(20.dp))
                         Button(
@@ -221,7 +221,10 @@ fun ContactDetailPage(
                                     }
                                 }.start()
                             },
-                            colors = ButtonDefaults.buttonColors().copy(
+                            colors = if (!isSystemInDarkTheme()) ButtonDefaults.buttonColors().copy(
+                                containerColor = MaterialTheme.colorScheme.error,
+                                contentColor = MaterialTheme.colorScheme.onError,
+                            ) else ButtonDefaults.buttonColors().copy(
                                 containerColor = MaterialTheme.colorScheme.errorContainer,
                                 contentColor = MaterialTheme.colorScheme.onErrorContainer,
                             ),
@@ -256,10 +259,10 @@ fun ContactDetailPage(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 16.dp, bottom = 8.dp)
-                    .clickable {
-                        if (contact.photoBitmap != null) {
-                            showProfileFullscreen = true
-                        }
+                    .clickable (
+                        enabled = contact.photoBitmap != null,
+                    ) {
+                        showProfileFullscreen = true
                     },
                 contact = contact,
                 size = 150.dp,

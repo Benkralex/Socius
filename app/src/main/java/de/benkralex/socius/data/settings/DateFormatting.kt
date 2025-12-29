@@ -3,6 +3,10 @@ package de.benkralex.socius.data.settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import de.benkralex.socius.R
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 val dateFormats = listOf(
     Format(format = "%dayNoLeadingZero%.%monthNoLeadingZero%.%yearLong%", displayNameResource = R.string.settings_date_format_d_m_yyyy_dot, id = 0),
@@ -50,4 +54,14 @@ fun getFormattedDate(day: Int, month: Int, year: Int): String {
     }
     formattedDate = formattedDate.trim(*charsToTrim)
     return formattedDate
+}
+
+@Composable
+fun getFormattedDate(millis: Long): String {
+    val calendar = Calendar.getInstance().apply { timeInMillis = millis }
+    return getFormattedDate(
+        day = calendar.get(Calendar.DAY_OF_MONTH),
+        month = calendar.get(Calendar.MONTH) + 1,
+        year = calendar.get(Calendar.YEAR),
+    )
 }

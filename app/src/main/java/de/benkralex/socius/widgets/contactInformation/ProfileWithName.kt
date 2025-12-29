@@ -20,20 +20,29 @@ import de.benkralex.socius.data.settings.getFormattedName
 fun ProfileWithName(
     contact: Contact,
     modifier: Modifier = Modifier,
-    onProfileClick: () -> Unit = {},
+    onProfileClick: (() -> Unit)? = null,
 ) {
     Row(
         modifier = modifier
             .padding(16.dp)
     )
     {
-        ProfilePicture(
-            contact = contact,
-            size = 40.dp,
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .clickable { onProfileClick() }
-        )
+        if (onProfileClick != null) {
+            ProfilePicture(
+                contact = contact,
+                size = 40.dp,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .clickable { onProfileClick() }
+            )
+        } else {
+            ProfilePicture(
+                contact = contact,
+                size = 40.dp,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+            )
+        }
         Text(
             text = getFormattedName(contact),
             modifier = Modifier

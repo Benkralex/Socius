@@ -60,7 +60,7 @@ fun EditPhone(
                     .padding(horizontal = 8.dp)
                     .padding(bottom = 8.dp),
             ) {
-                for (i in 0 .. (viewModel.phoneCount-1)) {
+                for (i in 0..<viewModel.phoneNumbersState.count) {
                     var numberFocused by remember { mutableStateOf(false) }
                     var typeFocused by remember { mutableStateOf(false) }
                     var labelFocused by remember { mutableStateOf(false) }
@@ -71,8 +71,8 @@ fun EditPhone(
                             .onFocusChanged {
                                 numberFocused = it.isFocused
                             },
-                        value = viewModel.phoneNumbers[i].value,
-                        onValueChange = { viewModel.phoneNumbers[i].value = it },
+                        value = viewModel.phoneNumbersState.numbers[i].value,
+                        onValueChange = { viewModel.phoneNumbersState.numbers[i].value = it },
                         label = {
                             Text(
                                 text = if (expanded)
@@ -80,18 +80,18 @@ fun EditPhone(
                                 else
                                     stringResource(R.string.phone) + " (" +
                                             translateType(
-                                                type = viewModel.phoneTypes[i].value,
-                                                label = viewModel.phoneLabels[i].value.ifBlank { null }
+                                                type = viewModel.phoneNumbersState.types[i].value,
+                                                label = viewModel.phoneNumbersState.labels[i].value.ifBlank { null }
                                             ) + ")"
                             )
                         },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    viewModel.phoneNumbers.removeAt(i)
-                                    viewModel.phoneTypes.removeAt(i)
-                                    viewModel.phoneLabels.removeAt(i)
-                                    viewModel.phoneCount--
+                                    viewModel.phoneNumbersState.numbers.removeAt(i)
+                                    viewModel.phoneNumbersState.types.removeAt(i)
+                                    viewModel.phoneNumbersState.labels.removeAt(i)
+                                    viewModel.phoneNumbersState.count--
                                 }
                             ) {
                                 Icon(
@@ -120,7 +120,7 @@ fun EditPhone(
                                         .onFocusChanged {
                                             typeFocused = it.isFocused
                                         },
-                                    value = translateType(viewModel.phoneTypes[i].value),
+                                    value = translateType(viewModel.phoneNumbersState.types[i].value),
                                     onValueChange = { },
                                     readOnly = true,
                                     label = { Text(stringResource(R.string.phone_type)) },
@@ -141,7 +141,7 @@ fun EditPhone(
                                         DropdownMenuItem(
                                             text = { Text(translateType(o)) },
                                             onClick = {
-                                                viewModel.phoneTypes[i].value = o
+                                                viewModel.phoneNumbersState.types[i].value = o
                                                 dropdownExpanded = false
                                             },
                                             contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
@@ -149,15 +149,15 @@ fun EditPhone(
                                     }
                                 }
                             }
-                            AnimatedVisibility(viewModel.phoneTypes[i].value == "custom") {
+                            AnimatedVisibility(viewModel.phoneNumbersState.types[i].value == "custom") {
                                 OutlinedTextField(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .onFocusChanged {
                                             labelFocused = it.isFocused
                                         },
-                                    value = viewModel.phoneLabels[i].value,
-                                    onValueChange = { viewModel.phoneLabels[i].value = it },
+                                    value = viewModel.phoneNumbersState.labels[i].value,
+                                    onValueChange = { viewModel.phoneNumbersState.labels[i].value = it },
                                     label = { Text(stringResource(R.string.phone_label)) },
                                 )
                             }

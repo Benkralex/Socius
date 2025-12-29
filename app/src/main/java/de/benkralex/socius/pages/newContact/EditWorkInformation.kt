@@ -50,18 +50,18 @@ fun EditWorkInformation(
                     .padding(horizontal = 8.dp)
                     .padding(bottom = 8.dp),
             ) {
-                AnimatedVisibility(viewModel.showJobTitleTextField) {
+                AnimatedVisibility(viewModel.workInformationState.showJobTitleTextField) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        value = viewModel.jobTitle,
-                        onValueChange = { viewModel.jobTitle = it },
+                        value = viewModel.workInformationState.jobTitle,
+                        onValueChange = { viewModel.workInformationState.jobTitle = it },
                         label = { Text(stringResource(R.string.job_title)) },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    viewModel.jobTitle = ""
-                                    viewModel.showJobTitleTextField = false
+                                    viewModel.workInformationState.jobTitle = ""
+                                    viewModel.workInformationState.showJobTitleTextField = false
                                 }
                             ) {
                                 Icon(
@@ -75,18 +75,18 @@ fun EditWorkInformation(
                         }
                     )
                 }
-                AnimatedVisibility(viewModel.showDepartmentTextField) {
+                AnimatedVisibility(viewModel.workInformationState.showDepartmentTextField) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        value = viewModel.department,
-                        onValueChange = { viewModel.department = it },
+                        value = viewModel.workInformationState.department,
+                        onValueChange = { viewModel.workInformationState.department = it },
                         label = { Text(stringResource(R.string.department)) },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    viewModel.department = ""
-                                    viewModel.showDepartmentTextField = false
+                                    viewModel.workInformationState.department = ""
+                                    viewModel.workInformationState.showDepartmentTextField = false
                                 }
                             ) {
                                 Icon(
@@ -100,18 +100,18 @@ fun EditWorkInformation(
                         },
                     )
                 }
-                AnimatedVisibility(viewModel.showOrganizationTextField) {
+                AnimatedVisibility(viewModel.workInformationState.showOrganizationTextField) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        value = viewModel.organization,
-                        onValueChange = { viewModel.organization = it },
+                        value = viewModel.workInformationState.organization,
+                        onValueChange = { viewModel.workInformationState.organization = it },
                         label = { Text(stringResource(R.string.organization)) },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    viewModel.organization = ""
-                                    viewModel.showOrganizationTextField = false
+                                    viewModel.workInformationState.organization = ""
+                                    viewModel.workInformationState.showOrganizationTextField = false
                                 }
                             ) {
                                 Icon(

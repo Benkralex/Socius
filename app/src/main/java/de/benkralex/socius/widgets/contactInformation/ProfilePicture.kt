@@ -73,15 +73,16 @@ fun ProfilePicture(
                     .dropShadow(
                         shape = MaterialShapes.Cookie9Sided.toShape(),
                         shadow = Shadow(
-                            radius = 5.dp,
-                            spread = 5.dp,
+                            radius = size / 20,
+                            spread = size / 20,
+                            color = MaterialTheme.colorScheme.surfaceDim,
                         )
                     )
                     .clip(MaterialShapes.Cookie9Sided.toShape())
                     .background(
                         color = MaterialTheme.colorScheme.primary
                     )
-                    .padding(size / 30)
+                    .padding(size / 20)
                     .align(Alignment.BottomEnd),
                 tint = MaterialTheme.colorScheme.background,
             )

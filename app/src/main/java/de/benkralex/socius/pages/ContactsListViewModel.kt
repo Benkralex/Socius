@@ -5,12 +5,15 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
+import de.benkralex.socius.R
 import de.benkralex.socius.data.contacts.contacts
 import de.benkralex.socius.data.contacts.groups
 import de.benkralex.socius.data.contacts.loadAllContacts
 import de.benkralex.socius.data.contacts.loadingContacts
 import de.benkralex.socius.data.settings.getFormattedName
+import de.benkralex.socius.data.settings.noName
 import java.util.Locale.getDefault
 
 class ContactsListViewModel : ViewModel() {
@@ -57,15 +60,17 @@ class ContactsListViewModel : ViewModel() {
 
     val grouped by derivedStateOf {
         filteredContacts.sortedBy {
-            getFormattedName(it)
-                .uppercase(getDefault())
+            getFormattedName(it).uppercase()
         }.groupBy {
             if (it.isStarred) "starred"
+            else if (getFormattedName(it) == noName) "?"
+            else if (getFormattedName(it).firstOrNull()?.isDigit() ?: false) "#"
             else getFormattedName(it).firstOrNull()?.uppercase() ?: "?"
         }.toSortedMap(compareBy {
             when (it) {
                 "starred" -> "A"
                 "?" -> "AA"
+                "#" -> "AAA"
                 else -> it + "B"
             }
         })

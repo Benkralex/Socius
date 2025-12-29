@@ -107,4 +107,19 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="confirm_deletion">Delete %name%?</string>
+    <string name="event">Event</string>
+    <string name="event_type">Event type</string>
+    <string name="event_label">Event label</string>
+    <string name="pick_date">Pick date</string>
+    <string name="postalAddress">Address</string>
+    <string name="postalAddress_label">Address Label</string>
+    <string name="postalAddress_street">Street</string>
+    <string name="postalAddress_city">City</string>
+    <string name="postalAddress_region">Region</string>
+    <string name="postalAddress_postcode">Postcode</string>
+    <string name="postalAddress_country">Country</string>
+    <string name="postalAddress_type">Address type</string>
+    <string name="postalAddress_house_number">House number</string>
+    <string name="close">Close</string>
+    <string name="close_without_saving_dialog">Close without saving?</string>
 </resources>

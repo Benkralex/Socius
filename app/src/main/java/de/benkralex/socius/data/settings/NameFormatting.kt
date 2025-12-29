@@ -12,6 +12,8 @@ val nameFormats = listOf(
     Format(format = "%prefix% %familyName%, %givenName% %middleName% %suffix%", displayNameResource = R.string.settings_name_format_full_last_first, id = 5),
 )
 
+var noName: String? = null
+
 fun getFormattedName(contact: Contact): String {
     if (contact.displayName != null && contact.displayName!!.isNotBlank()) {
         return contact.displayName!!
@@ -41,5 +43,14 @@ fun getFormattedName(contact: Contact): String {
     formattedName = formattedName.replace("%suffix%", contact.suffix ?: "")
     formattedName = formattedName.trim(*charsToTrim)
     formattedName = formattedName.replace("  ", " ") // Replace double spaces with single space
+    if (formattedName.isBlank()) {
+        if (contact.phoneNumbers.isNotEmpty()) {
+            return (contact.phoneNumbers.firstOrNull { it.type == "home" } ?: contact.phoneNumbers.first()).number
+        }
+        if (contact.emails.isNotEmpty()) {
+            return (contact.emails.firstOrNull { it.type == "home" } ?: contact.emails.first()).address
+        }
+        return noName ?: ""
+    }
     return formattedName
 }

@@ -25,86 +25,86 @@ fun AddFieldBottomModal(
             viewModel.showAddFieldBottomModal = false
         }
     ) {
-        AnimatedVisibility (!viewModel.showPrefixTextField) {
+        AnimatedVisibility (!viewModel.structuredNameState.showPrefixTextField) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
                         viewModel.showAddFieldBottomModal = false
-                        viewModel.showPrefixTextField = true
+                        viewModel.structuredNameState.showPrefixTextField = true
                     },
                 text = stringResource(R.string.name_prefix),
             )
         }
-        AnimatedVisibility (!viewModel.showMiddleNameTextField) {
+        AnimatedVisibility (!viewModel.structuredNameState.showMiddleNameTextField) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
                         viewModel.showAddFieldBottomModal = false
-                        viewModel.showMiddleNameTextField = true
+                        viewModel.structuredNameState.showMiddleNameTextField = true
                     },
                 text = stringResource(R.string.name_middle_name),
             )
         }
-        AnimatedVisibility (!viewModel.showSuffixTextField) {
+        AnimatedVisibility (!viewModel.structuredNameState.showSuffixTextField) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
                         viewModel.showAddFieldBottomModal = false
-                        viewModel.showSuffixTextField = true
+                        viewModel.structuredNameState.showSuffixTextField = true
                     },
                 text = stringResource(R.string.name_suffix),
             )
         }
-        AnimatedVisibility (!viewModel.showNicknameTextField) {
+        AnimatedVisibility (!viewModel.structuredNameState.showNicknameTextField) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
                         viewModel.showAddFieldBottomModal = false
-                        viewModel.showNicknameTextField = true
+                        viewModel.structuredNameState.showNicknameTextField = true
                     },
                 text = stringResource(R.string.name_nickname),
             )
         }
-        AnimatedVisibility (!viewModel.showJobTitleTextField) {
+        AnimatedVisibility (!viewModel.workInformationState.showJobTitleTextField) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
                         viewModel.showAddFieldBottomModal = false
-                        viewModel.showJobTitleTextField = true
+                        viewModel.workInformationState.showJobTitleTextField = true
                     },
                 text = stringResource(R.string.job_title),
             )
         }
-        AnimatedVisibility (!viewModel.showDepartmentTextField) {
+        AnimatedVisibility (!viewModel.workInformationState.showDepartmentTextField) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
                         viewModel.showAddFieldBottomModal = false
-                        viewModel.showDepartmentTextField = true
+                        viewModel.workInformationState.showDepartmentTextField = true
                     },
                 text = stringResource(R.string.department),
             )
         }
-        AnimatedVisibility (!viewModel.showOrganizationTextField) {
+        AnimatedVisibility (!viewModel.workInformationState.showOrganizationTextField) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
                         viewModel.showAddFieldBottomModal = false
-                        viewModel.showOrganizationTextField = true
+                        viewModel.workInformationState.showOrganizationTextField = true
                     },
                 text = stringResource(R.string.organization),
             )

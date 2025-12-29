@@ -12,6 +12,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -20,6 +21,7 @@ import androidx.navigation3.runtime.NavKey
 import de.benkralex.socius.data.contacts.local.database.LocalContactsDao
 import de.benkralex.socius.data.contacts.local.database.LocalContactsDatabase
 import de.benkralex.socius.data.contacts.system.load.loadFromURI
+import de.benkralex.socius.data.settings.noName
 import de.benkralex.socius.navigation.ContactDetailIntentNavKey
 import de.benkralex.socius.navigation.NavigationRoot
 import de.benkralex.socius.navigation.backStack
@@ -45,6 +47,7 @@ class MainActivity : ComponentActivity() {
         localContactsDao = localContactsDatabase.localContactsDao()
 
         setContent {
+            noName = stringResource(R.string.contact_no_name)
             ContactsTheme {
                 NavigationRoot(Modifier)
             }

@@ -1,0 +1,56 @@
+package de.benkralex.socius.pages.newContact
+
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import de.benkralex.socius.data.ContactEvent
+import java.util.Calendar
+
+class EditEventsState {
+    val showFields by derivedStateOf { count > 0 }
+    var count: Int by mutableIntStateOf(0)
+    var dates: MutableList<MutableState<Long?>> by mutableStateOf(mutableListOf())
+    var types: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
+    var labels: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
+
+    fun hasRelevantData(): Boolean {
+        return dates.any { it.value != null }
+    }
+
+    fun isRelevant(i: Int): Boolean {
+        return dates[i].value != null
+    }
+    
+    fun getRelevantData(): List<ContactEvent> {
+        val events: MutableList<ContactEvent> = mutableListOf()
+        for (i in 0..<count) {
+            if (isRelevant(i)) {
+                val calendar = Calendar.getInstance().apply { timeInMillis = dates[i].value!! }
+
+                events.add(
+                    ContactEvent(
+                        day = calendar.get(Calendar.DAY_OF_MONTH),
+                        month = calendar.get(Calendar.MONTH) + 1,
+                        year = calendar.get(Calendar.YEAR),
+                        type = types[i].value.trim().ifBlank { "anniversary" },
+                        label = labels[i].value.trim().ifBlank { null },
+                    )
+                )
+            }
+        }
+        return events
+    }
+
+    fun addNew() {
+        dates.add(mutableStateOf(null))
+        if (types.none { it.value == "birthday" })
+            types.add(mutableStateOf("birthday"))
+        else
+            types.add(mutableStateOf("anniversary"))
+        labels.add(mutableStateOf(""))
+        count++
+    }
+}

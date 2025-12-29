@@ -50,18 +50,18 @@ fun EditStructuredName(
                     .padding(horizontal = 8.dp)
                     .padding(bottom = 8.dp),
             ) {
-                AnimatedVisibility(viewModel.showPrefixTextField) {
+                AnimatedVisibility(viewModel.structuredNameState.showPrefixTextField) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        value = viewModel.prefix,
-                        onValueChange = { viewModel.prefix = it },
+                        value = viewModel.structuredNameState.prefix,
+                        onValueChange = { viewModel.structuredNameState.prefix = it },
                         label = { Text(stringResource(R.string.name_prefix)) },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    viewModel.prefix = ""
-                                    viewModel.showPrefixTextField = false
+                                    viewModel.structuredNameState.prefix = ""
+                                    viewModel.structuredNameState.showPrefixTextField = false
                                 }
                             ) {
                                 Icon(
@@ -78,22 +78,22 @@ fun EditStructuredName(
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    value = viewModel.givenName,
-                    onValueChange = { viewModel.givenName = it },
+                    value = viewModel.structuredNameState.givenName,
+                    onValueChange = { viewModel.structuredNameState.givenName = it },
                     label = { Text(stringResource(R.string.name_given_name)) },
                 )
-                AnimatedVisibility(viewModel.showMiddleNameTextField) {
+                AnimatedVisibility(viewModel.structuredNameState.showMiddleNameTextField) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        value = viewModel.middleName,
-                        onValueChange = { viewModel.middleName = it },
+                        value = viewModel.structuredNameState.middleName,
+                        onValueChange = { viewModel.structuredNameState.middleName = it },
                         label = { Text(stringResource(R.string.name_middle_name)) },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    viewModel.middleName = ""
-                                    viewModel.showMiddleNameTextField = false
+                                    viewModel.structuredNameState.middleName = ""
+                                    viewModel.structuredNameState.showMiddleNameTextField = false
                                 }
                             ) {
                                 Icon(
@@ -110,22 +110,22 @@ fun EditStructuredName(
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    value = viewModel.familyName,
-                    onValueChange = { viewModel.familyName = it },
+                    value = viewModel.structuredNameState.familyName,
+                    onValueChange = { viewModel.structuredNameState.familyName = it },
                     label = { Text(stringResource(R.string.name_family_name)) },
                 )
-                AnimatedVisibility(viewModel.showSuffixTextField) {
+                AnimatedVisibility(viewModel.structuredNameState.showSuffixTextField) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        value = viewModel.suffix,
-                        onValueChange = { viewModel.suffix = it },
+                        value = viewModel.structuredNameState.suffix,
+                        onValueChange = { viewModel.structuredNameState.suffix = it },
                         label = { Text(stringResource(R.string.name_suffix)) },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    viewModel.suffix = ""
-                                    viewModel.showSuffixTextField = false
+                                    viewModel.structuredNameState.suffix = ""
+                                    viewModel.structuredNameState.showSuffixTextField = false
                                 }
                             ) {
                                 Icon(
@@ -139,18 +139,18 @@ fun EditStructuredName(
                         },
                     )
                 }
-                AnimatedVisibility(viewModel.showNicknameTextField) {
+                AnimatedVisibility(viewModel.structuredNameState.showNicknameTextField) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        value = viewModel.nickname,
-                        onValueChange = { viewModel.nickname = it },
+                        value = viewModel.structuredNameState.nickname,
+                        onValueChange = { viewModel.structuredNameState.nickname = it },
                         label = { Text(stringResource(R.string.name_nickname)) },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    viewModel.nickname = ""
-                                    viewModel.showNicknameTextField = false
+                                    viewModel.structuredNameState.nickname = ""
+                                    viewModel.structuredNameState.showNicknameTextField = false
                                 }
                             ) {
                                 Icon(
