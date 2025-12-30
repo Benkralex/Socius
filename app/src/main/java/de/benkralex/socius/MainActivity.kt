@@ -25,6 +25,7 @@ import de.benkralex.socius.data.settings.noName
 import de.benkralex.socius.navigation.ContactDetailIntentNavKey
 import de.benkralex.socius.navigation.NavigationRoot
 import de.benkralex.socius.navigation.backStack
+import de.benkralex.socius.sync.SyncManager
 import de.benkralex.socius.theme.ContactsTheme
 
 class MainActivity : ComponentActivity() {
@@ -66,7 +67,29 @@ class MainActivity : ComponentActivity() {
                 ),
                 1
             )
+        } else {
+            // Initialize sync account and trigger initial sync when permissions are granted
+            initializeSyncAdapter()
         }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1 && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+            // Initialize sync after permissions are granted
+            initializeSyncAdapter()
+        }
+    }
+
+    private fun initializeSyncAdapter() {
+        // Create the sync account if it doesn't exist
+        SyncManager.getOrCreateSyncAccount(this)
+        // Request an initial sync
+        SyncManager.requestSync(this)
     }
 
     override fun onNewIntent(intent: Intent) {

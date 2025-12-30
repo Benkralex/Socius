@@ -48,6 +48,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,6 +71,7 @@ fun NewContactPage(
     viewModel: NewContactViewModel = viewModel<NewContactViewModel>(),
 ) {
     val scrollState = rememberScrollState()
+    val keyboardController = LocalSoftwareKeyboardController.current
     val starIcon = if (viewModel.isStarred) Icons.Outlined.Star else Icons.Outlined.StarOutline
     val starDescription = "${stringResource(R.string.content_desc_toggle_starred)} (${
         if (viewModel.isStarred) {
@@ -321,6 +323,7 @@ fun NewContactPage(
                     modifier = Modifier
                         .weight(1f),
                     onClick = {
+                        keyboardController?.hide()
                         viewModel.showAddFieldBottomModal = true
                     },
                 ) {

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import de.benkralex.socius.MainActivity
 import de.benkralex.socius.data.contacts.loadAllContacts
 import de.benkralex.socius.data.contacts.local.database.LocalContactsEntity
+import de.benkralex.socius.sync.SyncManager
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
@@ -65,6 +66,8 @@ class NewContactViewModel : ViewModel() {
                         )
                     )
                     loadAllContacts()
+                    // Sync local contacts to system after saving
+                    SyncManager.requestSync(MainActivity.instance)
                     isSaving = false
                 }
             }

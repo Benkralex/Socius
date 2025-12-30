@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -19,8 +22,21 @@ fun AddFieldBottomModal(
     modifier: Modifier = Modifier,
     viewModel: NewContactViewModel,
 ) {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
+
+    fun hideSheet(action: () -> Unit = {}) {
+        scope.launch { sheetState.hide() }.invokeOnCompletion {
+            if (!sheetState.isVisible) {
+                viewModel.showAddFieldBottomModal = false
+                action()
+            }
+        }
+    }
+
     ModalBottomSheet(
         modifier = modifier,
+        sheetState = sheetState,
         onDismissRequest = {
             viewModel.showAddFieldBottomModal = false
         }
@@ -31,8 +47,7 @@ fun AddFieldBottomModal(
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
-                        viewModel.showAddFieldBottomModal = false
-                        viewModel.structuredNameState.showPrefixTextField = true
+                        hideSheet { viewModel.structuredNameState.showPrefixTextField = true }
                     },
                 text = stringResource(R.string.name_prefix),
             )
@@ -43,8 +58,7 @@ fun AddFieldBottomModal(
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
-                        viewModel.showAddFieldBottomModal = false
-                        viewModel.structuredNameState.showMiddleNameTextField = true
+                        hideSheet { viewModel.structuredNameState.showMiddleNameTextField = true }
                     },
                 text = stringResource(R.string.name_middle_name),
             )
@@ -55,8 +69,7 @@ fun AddFieldBottomModal(
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
-                        viewModel.showAddFieldBottomModal = false
-                        viewModel.structuredNameState.showSuffixTextField = true
+                        hideSheet { viewModel.structuredNameState.showSuffixTextField = true }
                     },
                 text = stringResource(R.string.name_suffix),
             )
@@ -67,8 +80,7 @@ fun AddFieldBottomModal(
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
-                        viewModel.showAddFieldBottomModal = false
-                        viewModel.structuredNameState.showNicknameTextField = true
+                        hideSheet { viewModel.structuredNameState.showNicknameTextField = true }
                     },
                 text = stringResource(R.string.name_nickname),
             )
@@ -79,8 +91,7 @@ fun AddFieldBottomModal(
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
-                        viewModel.showAddFieldBottomModal = false
-                        viewModel.workInformationState.showJobTitleTextField = true
+                        hideSheet { viewModel.workInformationState.showJobTitleTextField = true }
                     },
                 text = stringResource(R.string.job_title),
             )
@@ -91,8 +102,7 @@ fun AddFieldBottomModal(
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
-                        viewModel.showAddFieldBottomModal = false
-                        viewModel.workInformationState.showDepartmentTextField = true
+                        hideSheet { viewModel.workInformationState.showDepartmentTextField = true }
                     },
                 text = stringResource(R.string.department),
             )
@@ -103,8 +113,7 @@ fun AddFieldBottomModal(
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
-                        viewModel.showAddFieldBottomModal = false
-                        viewModel.workInformationState.showOrganizationTextField = true
+                        hideSheet { viewModel.workInformationState.showOrganizationTextField = true }
                     },
                 text = stringResource(R.string.organization),
             )

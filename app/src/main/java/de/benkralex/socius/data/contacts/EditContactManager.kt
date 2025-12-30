@@ -3,6 +3,7 @@ package de.benkralex.socius.data.contacts
 import de.benkralex.socius.MainActivity
 import de.benkralex.socius.data.Contact
 import de.benkralex.socius.data.ContactOrigin
+import de.benkralex.socius.sync.SyncManager
 
 suspend fun editStarredStatus(contact: Contact, isStarred: Boolean): Boolean {
     val mainActivity = MainActivity
@@ -19,6 +20,8 @@ suspend fun editStarredStatus(contact: Contact, isStarred: Boolean): Boolean {
         ContactOrigin.URI -> return false
     }
     loadAllContacts()
+    // Sync local contacts to system after editing
+    SyncManager.requestSync(MainActivity.instance)
     return true
 }
 
@@ -34,5 +37,7 @@ suspend fun deleteContact(contact: Contact): Boolean {
         ContactOrigin.URI -> return false
     }
     loadAllContacts()
+    // Sync local contacts to system after deleting
+    SyncManager.requestSync(MainActivity.instance)
     return true
 }
