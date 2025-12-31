@@ -1,6 +1,5 @@
 package de.benkralex.socius.pages.newContact
 
-import android.window.OnBackInvokedCallback
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -29,7 +28,6 @@ import androidx.compose.material.icons.outlined.Mail
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarOutline
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -54,22 +52,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigationevent.OnBackInvokedInput
 import de.benkralex.socius.R
-import de.benkralex.socius.data.contacts.deleteContact
-import de.benkralex.socius.data.settings.getFormattedName
+import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.ContactOrigin
 import de.benkralex.socius.theme.DarkColorScheme
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import java.lang.Thread.sleep
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun NewContactPage(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
+    //openContact: (Int) -> Unit = {},
     viewModel: NewContactViewModel = viewModel<NewContactViewModel>(),
+    contact: Contact = Contact(id = "new", ContactOrigin.LOCAL),
 ) {
+    if (!viewModel.isInitialized) viewModel.loadFromContact(contact)
     val scrollState = rememberScrollState()
     val keyboardController = LocalSoftwareKeyboardController.current
     val starIcon = if (viewModel.isStarred) Icons.Outlined.Star else Icons.Outlined.StarOutline
@@ -116,7 +113,9 @@ fun NewContactPage(
                     Button(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        onClick = onBackClick,
+                        onClick = {
+                            onBackClick()
+                        },
                         colors = if (!isSystemInDarkTheme()) ButtonDefaults.buttonColors().copy(
                             containerColor = MaterialTheme.colorScheme.error,
                             contentColor = MaterialTheme.colorScheme.onError,
@@ -146,7 +145,7 @@ fun NewContactPage(
         )
     }
     BackHandler {
-        if (viewModel.checkEmpty()) {
+        if (viewModel.hasNoChanges()) {
             onBackClick()
         } else {
             showCloseDialog = true
@@ -167,7 +166,7 @@ fun NewContactPage(
                             .padding(5.dp)
                             .clickable(
                                 onClick = {
-                                    if (viewModel.checkEmpty()) {
+                                    if (viewModel.hasNoChanges()) {
                                         onBackClick()
                                     } else {
                                         showCloseDialog = true

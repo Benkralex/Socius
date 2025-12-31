@@ -6,6 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.Email
 import de.benkralex.socius.data.PhoneNumber
 
 class EditPhoneNumbersState {
@@ -44,5 +46,21 @@ class EditPhoneNumbersState {
         types.add(mutableStateOf("home"))
         labels.add(mutableStateOf(""))
         count++
+    }
+
+    fun loadFromContact(contact: Contact) {
+        for (num: PhoneNumber in contact.phoneNumbers) {
+            count++
+            numbers.add(mutableStateOf(num.number))
+            types.add(mutableStateOf(num.type))
+            labels.add(mutableStateOf(num.label ?: ""))
+        }
+    }
+
+    fun reset() {
+        count = 0
+        numbers.clear()
+        types.clear()
+        labels.clear()
     }
 }

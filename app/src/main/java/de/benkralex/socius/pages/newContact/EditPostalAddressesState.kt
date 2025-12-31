@@ -1,12 +1,17 @@
 package de.benkralex.socius.pages.newContact
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.text.isDigitsOnly
+import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.ContactEvent
 import de.benkralex.socius.data.PostalAddress
+import java.util.Calendar
 
 class EditPostalAddressesState {
     val showFields by derivedStateOf { count > 0 }
@@ -71,5 +76,32 @@ class EditPostalAddressesState {
         types.add(mutableStateOf("home"))
         labels.add(mutableStateOf(""))
         count++
+    }
+
+    fun loadFromContact(contact: Contact) {
+        for (address: PostalAddress in contact.addresses) {
+            count++
+            val houseNumber = address.street?.split(" ")?.first { it.isDigitsOnly() } ?: ""
+            streets.add(mutableStateOf(address.street?.replace(" $houseNumber", "") ?: ""))
+            houseNumbers.add(mutableStateOf(houseNumber))
+            cities.add(mutableStateOf(address.city ?: ""))
+            regions.add(mutableStateOf(address.region ?: ""))
+            postcodes.add(mutableStateOf(address.postcode ?: ""))
+            countries.add(mutableStateOf(address.country ?: ""))
+            types.add(mutableStateOf(address.type))
+            labels.add(mutableStateOf(address.label ?: ""))
+        }
+    }
+
+    fun reset() {
+        count = 0
+        streets.clear()
+        houseNumbers.clear()
+        cities.clear()
+        regions.clear()
+        postcodes.clear()
+        countries.clear()
+        types.clear()
+        labels.clear()
     }
 }

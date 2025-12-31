@@ -25,6 +25,7 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +34,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
@@ -50,6 +52,7 @@ import de.benkralex.socius.pages.HighlightsPage
 import de.benkralex.socius.pages.ManagePage
 import de.benkralex.socius.pages.newContact.NewContactPage
 import de.benkralex.socius.pages.SettingsPage
+import de.benkralex.socius.pages.newContact.NewContactViewModel
 import de.benkralex.socius.widgets.CustomNavigationBar
 import kotlinx.serialization.Serializable
 
@@ -70,7 +73,7 @@ data class ContactDetailIntentNavKey(val contactId: String): NavKey
 @Serializable
 data class ContactDetailPageNavKey(val contactId: Int): NavKey
 @Serializable
-data class ContactEditPageNavKey(val contactId: Int? = null): NavKey
+data class ContactEditPageNavKey(val contactId: Int): NavKey
 
 lateinit var backStack: NavBackStack<NavKey>
 
@@ -345,11 +348,16 @@ fun NavigationRoot(
                     NavEntry(
                         key = key
                     ) {
-                        EditContactPage(
-                            contactId = key.contactId,
+                        val viewModel: NewContactViewModel = viewModel<NewContactViewModel>()
+                        LaunchedEffect(Unit) {
+                            viewModel.reset()
+                        }
+                        NewContactPage(
+                            viewModel = viewModel,
                             onBackClick = {
                                 backStack.removeAt(backStack.size - 1)
                             },
+                            contact = contacts[key.contactId],
                         )
                     }
                 }
@@ -357,7 +365,12 @@ fun NavigationRoot(
                     NavEntry(
                         key = key
                     ) {
+                        val viewModel: NewContactViewModel = viewModel<NewContactViewModel>()
+                        LaunchedEffect(Unit) {
+                            viewModel.reset()
+                        }
                         NewContactPage(
+                            viewModel = viewModel,
                             onBackClick = {
                                 backStack.removeAt(backStack.size - 1)
                             },
