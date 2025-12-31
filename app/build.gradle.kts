@@ -18,8 +18,8 @@ android {
         applicationId = "de.benkralex.socius"
         minSdk = 28
         targetSdk = 36
-        versionCode = 1
-        versionName = "V4.1.0-beta"
+        versionCode = 2
+        versionName = "V5.0.0-beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
