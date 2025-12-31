@@ -58,8 +58,8 @@
     <string name="month_october">October</string>
     <string name="month_november">November</string>
     <string name="month_december">December</string>
-    <string name="settings_date_formatting">Date formatting</string>
-    <string name="settings_name_formatting">Name formatting</string>
+    <string name="settings_date_formatting">Date</string>
+    <string name="settings_name_formatting">Name</string>
     <string name="settings_name_format_first_last">Firstname Lastname</string>
     <string name="settings_name_format_last_first">Lastname, Firstname</string>
     <string name="settings_date_format_d_m_yyyy_dot">D.M.YYYY</string>
@@ -127,4 +127,6 @@
     <string name="postalAddress_house_number">House number</string>
     <string name="close">Close</string>
     <string name="close_without_saving_dialog">Close without saving?</string>
+    <string name="preferNickname">Prefer Nickname</string>
+    <string name="settings_full_name_formatting">Fullname</string>
 </resources>

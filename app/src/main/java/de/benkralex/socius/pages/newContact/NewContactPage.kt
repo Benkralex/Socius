@@ -149,7 +149,7 @@ fun NewContactPage(
         if (viewModel.checkEmpty()) {
             onBackClick()
         } else {
-            showCloseDialog
+            showCloseDialog = true
         }
     }
     Scaffold (
@@ -170,7 +170,7 @@ fun NewContactPage(
                                     if (viewModel.checkEmpty()) {
                                         onBackClick()
                                     } else {
-                                        showCloseDialog
+                                        showCloseDialog = true
                                     }
                                 }
                             )

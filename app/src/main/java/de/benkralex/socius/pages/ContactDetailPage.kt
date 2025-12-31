@@ -28,6 +28,7 @@ import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -58,6 +59,7 @@ import de.benkralex.socius.widgets.contactInformation.CustomFieldsWidget
 import de.benkralex.socius.widgets.contactInformation.EmailsWidget
 import de.benkralex.socius.widgets.contactInformation.EventsWidget
 import de.benkralex.socius.widgets.contactInformation.GroupsWidget
+import de.benkralex.socius.widgets.contactInformation.NameWidget
 import de.benkralex.socius.widgets.contactInformation.NoteWidget
 import de.benkralex.socius.widgets.contactInformation.PhoneNumbersWidget
 import de.benkralex.socius.widgets.contactInformation.PostalAddressesWidget
@@ -71,7 +73,7 @@ import kotlinx.coroutines.runBlocking
 import java.lang.Thread.sleep
 import kotlin.math.min
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ContactDetailPage(
     modifier: Modifier = Modifier,
@@ -267,13 +269,7 @@ fun ContactDetailPage(
                 contact = contact,
                 size = 150.dp,
             )
-            Text(
-                text = getFormattedName(contact),
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                textAlign = TextAlign.Center,
-            )
+            NameWidget(contact)
             NoteWidget(contact.note)
             WorkInformationWidget(contact)
             GroupsWidget(groups = contact.groups)

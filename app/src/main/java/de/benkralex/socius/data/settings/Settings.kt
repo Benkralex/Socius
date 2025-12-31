@@ -13,6 +13,8 @@ data class Format(
 )
 
 var nameFormat: Int = 0
+var fullNameFormat: Int = 0
+var preferNickname by mutableStateOf(true)
 var dateFormat: Int = 0
 var loadAndroidSystemContacts by mutableStateOf(true)
 
@@ -22,6 +24,8 @@ fun saveSettings(context: Context) {
     val sharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
     sharedPreferences.edit {
         putInt("nameFormat", nameFormat)
+        putInt("fullNameFormat", fullNameFormat)
+        putBoolean("preferNickname", preferNickname)
         putInt("dateFormat", dateFormat)
         putBoolean("loadAndroidSystemContacts", loadAndroidSystemContacts)
     }
@@ -30,6 +34,8 @@ fun saveSettings(context: Context) {
 fun loadSettings(context: Context) {
     val sharedPreferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
     nameFormat = sharedPreferences.getInt("nameFormat", 0)
+    fullNameFormat = sharedPreferences.getInt("fullNameFormat", 0)
+    preferNickname = sharedPreferences.getBoolean("preferNickname", true)
     dateFormat = sharedPreferences.getInt("dateFormat", 0)
     loadAndroidSystemContacts = sharedPreferences.getBoolean("loadAndroidSystemContacts", true)
 }

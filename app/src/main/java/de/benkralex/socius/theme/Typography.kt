@@ -4,6 +4,7 @@ import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import de.benkralex.socius.R
 
 // Set of Material typography styles to start with
@@ -23,10 +24,23 @@ val balooBhaijaan2Family = FontFamily(
     Font(R.font.baloo_bhaijaan_2_extra_bold, FontWeight.ExtraBold),
 )
 
+val bangers = FontFamily(
+    Font(R.font.bangers_regular, FontWeight.Normal),
+)
+
 val Typography = Typography(
-    displayLarge = Typography().displayLarge.copy(fontFamily = baloo2Family),
-    displayMedium = Typography().displayMedium.copy(fontFamily = baloo2Family),
-    displaySmall = Typography().displaySmall.copy(fontFamily = baloo2Family),
+    displayLarge = Typography().displayLarge.copy(
+        fontFamily = bangers,
+        letterSpacing = (3.5).sp,
+    ),
+    displayMedium = Typography().displayMedium.copy(
+        fontFamily = bangers,
+        letterSpacing = (3.5).sp,
+    ),
+    displaySmall = Typography().displaySmall.copy(
+        fontFamily = bangers,
+        letterSpacing = (3.5).sp,
+    ),
 
     headlineLarge = Typography().headlineLarge.copy(fontFamily = baloo2Family),
     headlineMedium = Typography().headlineMedium.copy(fontFamily = baloo2Family),

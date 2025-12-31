@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.FormatPaint
@@ -38,10 +39,12 @@ import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
 import de.benkralex.socius.data.contacts.reloadSystemContacts
 import de.benkralex.socius.data.settings.loadAndroidSystemContacts
+import de.benkralex.socius.data.settings.preferNickname
 import de.benkralex.socius.data.settings.saveSettings
 import de.benkralex.socius.widgets.settings.BooleanSetting
 import de.benkralex.socius.widgets.settings.BooleanSettingState
 import de.benkralex.socius.widgets.settings.DateFormattingWidget
+import de.benkralex.socius.widgets.settings.FullNameFormattingWidget
 import de.benkralex.socius.widgets.settings.NameFormattingWidget
 
 @Composable
@@ -95,21 +98,33 @@ fun SettingsPage(
                 title = stringResource(R.string.settings_formatting),
                 icon = Icons.Outlined.FormatPaint,
                 content = {
-                    Column(
-                        modifier = Modifier
-                            .scrollable(
-                                state = rememberScrollState(),
-                                orientation = Orientation.Vertical,
-                            )
-                    ) {
-                        NameFormattingWidget()
+                    Column {
+                        val context = LocalContext.current
+                        DateFormattingWidget()
                         HorizontalDivider(
                             modifier = Modifier
                                 .padding(
                                     vertical = 12.dp,
                                 )
                         )
-                        DateFormattingWidget()
+                        NameFormattingWidget()
+                        BooleanSetting(
+                            title = stringResource(R.string.preferNickname),
+                            state = BooleanSettingState(
+                                onChangeCallback = {
+                                    preferNickname = it
+                                    saveSettings(context)
+                                },
+                                initialValue = preferNickname,
+                            ),
+                        )
+                        HorizontalDivider(
+                            modifier = Modifier
+                                .padding(
+                                    vertical = 12.dp,
+                                )
+                        )
+                        FullNameFormattingWidget()
                     }
                 },
             ),
@@ -160,6 +175,7 @@ fun SettingsPage(
             ) { page ->
                 Box (
                     modifier = Modifier
+                        .verticalScroll(rememberScrollState())
                         .padding(16.dp)
                         .fillMaxSize(),
                     contentAlignment = Alignment.TopCenter

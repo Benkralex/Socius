@@ -20,18 +20,7 @@ import de.benkralex.socius.data.Contact
 fun WorkInformationWidget(
     contact: Contact
 ) {
-    val phoneticName = listOfNotNull(
-        contact.phoneticGivenName,
-        contact.phoneticMiddleName,
-        contact.phoneticFamilyName,
-    )
     val smallInfos = listOfNotNull(
-        contact.nickname,
-        if (!phoneticName.isEmpty()) {
-            "\"" + phoneticName.joinToString(" ") + "\""
-        } else {
-            null
-        },
         contact.jobTitle,
         contact.department,
         contact.organization,

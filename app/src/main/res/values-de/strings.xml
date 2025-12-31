@@ -53,8 +53,8 @@
     <string name="month_december">Dezember</string>
     <string name="month_january">Januar</string>
     <string name="month_february">Februar</string>
-    <string name="settings_date_formatting">Datumsformat</string>
-    <string name="settings_name_formatting">Namensformat</string>
+    <string name="settings_date_formatting">Datum</string>
+    <string name="settings_name_formatting">Name</string>
     <string name="settings_name_format_first_last">Vorname Nachname</string>
     <string name="settings_name_format_last_first">Nachname, Vorname</string>
     <string name="settings_date_format_d_m_yyyy_dot">T.M.JJJJ</string>
@@ -122,4 +122,6 @@
     <string name="postalAddress_house_number">Hausnummer</string>
     <string name="close">Schließen</string>
     <string name="close_without_saving_dialog">Schließen ohne zu speichern?</string>
+    <string name="preferNickname">Spitzname präferieren</string>
+    <string name="settings_full_name_formatting">Voller Name</string>
 </resources>
