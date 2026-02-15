@@ -11,8 +11,6 @@ import de.benkralex.socius.data.PhoneNumber
 import de.benkralex.socius.data.PostalAddress
 import de.benkralex.socius.data.Relation
 import de.benkralex.socius.data.Website
-import java.util.Locale
-import java.util.Locale.getDefault
 import kotlin.math.min
 
 fun parseCSVLine(line: String): List<String> {

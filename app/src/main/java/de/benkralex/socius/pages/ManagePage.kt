@@ -41,7 +41,7 @@ fun getLinesOfFile(uri: Uri, activity: ComponentActivity): List<String> {
     val stream = resolver.openInputStream(uri) ?: return emptyList()
     val lines = stream.bufferedReader().use(BufferedReader::readLines)
     val newLines: MutableList<String> = mutableListOf()
-    var c: Int = 0
+    var c = 0
     for (l in lines) {
         if (c % 2 == 0) {
             newLines.add(l)

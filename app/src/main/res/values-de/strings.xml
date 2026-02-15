@@ -111,7 +111,7 @@
     <string name="event_type">Event Typ</string>
     <string name="event_label">Event Label</string>
     <string name="pick_date">Datum auswählen</string>
-    <string name="postalAddress">Addresse</string>
+    <string name="postalAddress">Adresse</string>
     <string name="postalAddress_label">Addressen Label</string>
     <string name="postalAddress_street">Straße</string>
     <string name="postalAddress_city">Stadt</string>
