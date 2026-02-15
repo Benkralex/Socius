@@ -19,6 +19,7 @@ suspend fun editStarredStatus(contact: Contact, isStarred: Boolean): Boolean {
         ContactOrigin.SYSTEM -> return false
         ContactOrigin.REMOTE -> return false
         ContactOrigin.URI -> return false
+        ContactOrigin.IMPORT -> return false
     }
     loadAllContacts()
     SyncManager.requestSync(MainActivity.instance)
@@ -35,6 +36,7 @@ suspend fun deleteContact(contact: Contact): Boolean {
         ContactOrigin.SYSTEM -> return false
         ContactOrigin.REMOTE -> return false
         ContactOrigin.URI -> return false
+        ContactOrigin.IMPORT -> return false
     }
     loadAllContacts()
     SyncManager.requestSync(MainActivity.instance)
@@ -79,6 +81,7 @@ suspend fun editContact(contact: Contact): Boolean {
         ContactOrigin.SYSTEM -> return false
         ContactOrigin.REMOTE -> return false
         ContactOrigin.URI -> return false
+        ContactOrigin.IMPORT -> return false
     }
     loadAllContacts()
     SyncManager.requestSync(MainActivity.instance)

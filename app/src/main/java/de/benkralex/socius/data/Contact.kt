@@ -287,4 +287,5 @@ enum class ContactOrigin {
     LOCAL,
     REMOTE,
     URI,
+    IMPORT,
 }

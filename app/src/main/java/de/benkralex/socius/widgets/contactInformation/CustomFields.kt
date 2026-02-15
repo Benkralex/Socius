@@ -1,5 +1,6 @@
 package de.benkralex.socius.widgets.contactInformation
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,13 +44,19 @@ fun CustomFieldsWidget(
                         .padding(8.dp)
                         .padding(start = 16.dp)
                 )
-                Text(
-                    text = key,
-                )
-                Text(
-                    text = value,
-                    style = MaterialTheme.typography.bodySmall,
-                )
+                Column (
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(8.dp),
+                ) {
+                    Text(
+                        text = key,
+                    )
+                    Text(
+                        text = value,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
             }
         }
     }

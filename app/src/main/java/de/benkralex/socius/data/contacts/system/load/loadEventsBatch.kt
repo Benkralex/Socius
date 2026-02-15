@@ -41,12 +41,12 @@ fun loadEventsBatch(contentResolver: ContentResolver, contactIds: List<String>):
                 val date = startDate.replace("-", "")
                 when (date.length) {
                     8 -> {
-                        year = date.substring(0, 4).toIntOrNull()
+                        year = date.take(4).toIntOrNull()
                         month = date.substring(4, 6).toIntOrNull()
                         day = date.substring(6, 8).toIntOrNull()
                     }
                     4 -> {
-                        month = date.substring(0, 2).toIntOrNull()
+                        month = date.take(2).toIntOrNull()
                         day = date.substring(2, 4).toIntOrNull()
                     }
                     else -> {
