@@ -1,6 +1,8 @@
 package de.benkralex.socius.widgets.contactInformation
 
 import android.graphics.Bitmap
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,11 +18,13 @@ import androidx.compose.material3.MaterialShapes
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.toShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -41,23 +45,19 @@ fun ProfilePicture(
         bitmap = contact.thumbnailBitmap
     }
 
+    val rotation by animateFloatAsState(
+        targetValue = if (isSelected) 180f else 0f,
+        animationSpec = tween(durationMillis = 400),
+    )
+
     Box (
-        modifier = modifier,
+        modifier = modifier
+            .graphicsLayer {
+                rotationY = rotation
+                cameraDistance = 12f * density
+            },
     ) {
-        if (isSelected) {
-            Icon (
-                imageVector = Icons.Outlined.Check,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(size)
-                    .clip(MaterialShapes.Cookie6Sided.toShape())
-                    .background(
-                        color = MaterialTheme.colorScheme.tertiary
-                    )
-                    .padding(5.dp),
-                tint = MaterialTheme.colorScheme.onTertiary,
-            )
-        } else {
+        if (rotation <= 90f) {
             if (bitmap != null) {
                 Image(
                     bitmap = bitmap.asImageBitmap(),
@@ -80,6 +80,20 @@ fun ProfilePicture(
                     tint = MaterialTheme.colorScheme.background,
                 )
             }
+        } else {
+            Icon (
+                imageVector = Icons.Outlined.Check,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(size)
+                    .graphicsLayer { rotationY = 180f }
+                    .clip(MaterialShapes.Cookie9Sided.toShape())
+                    .background(
+                        color = MaterialTheme.colorScheme.tertiary
+                    )
+                    .padding(5.dp),
+                tint = MaterialTheme.colorScheme.onTertiary,
+            )
         }
         if (contact.isReadOnly()) {
             Icon (

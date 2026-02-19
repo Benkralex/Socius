@@ -112,7 +112,6 @@ class ContactsListViewModel : ViewModel() {
 
     fun select(contact: Contact) {
         selected += contact
-        Log.d("Select", "Contact ${contact.givenName} ${contact.familyName} was selected")
     }
 
     fun deselect(contact: Contact) {
