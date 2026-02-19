@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -31,6 +32,7 @@ fun ProfilePicture(
     modifier: Modifier = Modifier,
     contact: Contact,
     size: Dp,
+    isSelected: Boolean = false,
 ) {
     var bitmap: Bitmap? = null
     if (size > 100.dp && contact.photoBitmap != null) {
@@ -42,27 +44,42 @@ fun ProfilePicture(
     Box (
         modifier = modifier,
     ) {
-        if (bitmap != null) {
-            Image (
-                bitmap = bitmap.asImageBitmap(),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(size)
-                    .clip(MaterialShapes.Cookie6Sided.toShape())
-            )
-        } else {
+        if (isSelected) {
             Icon (
-                imageVector = Icons.Outlined.Person,
+                imageVector = Icons.Outlined.Check,
                 contentDescription = null,
                 modifier = Modifier
                     .size(size)
                     .clip(MaterialShapes.Cookie6Sided.toShape())
                     .background(
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.tertiary
                     )
                     .padding(5.dp),
-                tint = MaterialTheme.colorScheme.background,
+                tint = MaterialTheme.colorScheme.onTertiary,
             )
+        } else {
+            if (bitmap != null) {
+                Image(
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(size)
+                        .clip(MaterialShapes.Cookie6Sided.toShape())
+                )
+            } else {
+                Icon(
+                    imageVector = Icons.Outlined.Person,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(size)
+                        .clip(MaterialShapes.Cookie6Sided.toShape())
+                        .background(
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                        .padding(5.dp),
+                    tint = MaterialTheme.colorScheme.background,
+                )
+            }
         }
         if (contact.isReadOnly()) {
             Icon (

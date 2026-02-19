@@ -24,6 +24,7 @@ import de.benkralex.socius.widgets.contactInformation.ProfilePicture
 fun ContactCard(
     modifier: Modifier = Modifier,
     contact: Contact,
+    isSelected: Boolean = false,
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -41,6 +42,7 @@ fun ContactCard(
                 size = 40.dp,
                 modifier = Modifier
                     .align(Alignment.CenterVertically),
+                isSelected = isSelected,
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column {

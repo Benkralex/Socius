@@ -1,8 +1,11 @@
 package de.benkralex.socius.widgets
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,9 +20,12 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Deselect
+import androidx.compose.material.icons.outlined.SelectAll
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -32,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.benkralex.socius.R
@@ -51,8 +58,44 @@ fun ContactsList(
     Column (
         modifier = modifier
     ) {
-        SearchBar(viewModel)
-        GroupFilter(viewModel)
+        AnimatedVisibility(viewModel.displaySelectionActions) {
+            Row(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .padding(horizontal = 12.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text("${viewModel.selected.size} ausgewählt")
+                Spacer(Modifier.weight(1f))
+                IconButton(
+                    onClick = {
+                        viewModel.selectAll()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.SelectAll,
+                        contentDescription = null,
+                    )
+                }
+                IconButton(
+                    onClick = {
+                        viewModel.deselectAll()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Deselect,
+                        contentDescription = null,
+                    )
+                }
+            }
+        }
+        AnimatedVisibility(viewModel.displaySearch) {
+            SearchBar(viewModel)
+        }
+        AnimatedVisibility(viewModel.displayLabels) {
+            GroupFilter(viewModel)
+        }
         LaunchedEffect(viewModel.willRefresh) {
             when {
                 viewModel.willRefresh -> {
@@ -100,11 +143,22 @@ fun ContactsList(
                     items(contactsForInitial) { c ->
                         ContactCard(
                             contact = c,
-                            modifier = Modifier.clickable(
-                                onClick = {
-                                    onContactSelected(contacts.indexOf(c))
-                                }
-                            )
+                            modifier = Modifier
+                                .combinedClickable(
+                                    onClick = {
+                                        if (viewModel.selected.isEmpty())
+                                            onContactSelected(contacts.indexOf(c))
+                                        else
+                                            viewModel.toggleSelection(c)
+                                    },
+                                    onLongClick = {
+                                        if (viewModel.selected.isNotEmpty())
+                                            onContactSelected(contacts.indexOf(c))
+                                        else
+                                            viewModel.toggleSelection(c)
+                                    }
+                                ),
+                            isSelected = viewModel.selected.contains(c),
                         )
                     }
                 }

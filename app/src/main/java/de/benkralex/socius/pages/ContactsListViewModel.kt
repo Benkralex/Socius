@@ -1,5 +1,6 @@
 package de.benkralex.socius.pages
 
+import android.util.Log
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -8,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import de.benkralex.socius.R
+import de.benkralex.socius.data.Contact
 import de.benkralex.socius.data.contacts.contacts
 import de.benkralex.socius.data.contacts.groups
 import de.benkralex.socius.data.contacts.loadAllContacts
@@ -93,6 +95,45 @@ class ContactsListViewModel : ViewModel() {
     }
 
     var pullToRefreshState: PullToRefreshState? = null
+
+    val displaySearch by derivedStateOf {
+        !displaySelectionActions
+    }
+
+    val displayLabels by derivedStateOf {
+        true
+    }
+
+    val displaySelectionActions by derivedStateOf {
+        selected.isNotEmpty()
+    }
+
+    var selected: List<Contact> by mutableStateOf(emptyList())
+
+    fun select(contact: Contact) {
+        selected += contact
+        Log.d("Select", "Contact ${contact.givenName} ${contact.familyName} was selected")
+    }
+
+    fun deselect(contact: Contact) {
+        if (!selected.contains(contact)) return
+        selected -= contact
+    }
+
+    fun toggleSelection(contact: Contact) {
+        if (!selected.contains(contact))
+            selected += contact
+        else
+            selected -= contact
+    }
+
+    fun selectAll() {
+        selected = filteredContacts
+    }
+
+    fun deselectAll() {
+        selected = emptyList()
+    }
 
     fun onSearchQueryChange(newQuery: String) {
         searchQuery = newQuery
