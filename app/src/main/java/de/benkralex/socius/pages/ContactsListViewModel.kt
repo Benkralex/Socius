@@ -11,14 +11,19 @@ import androidx.lifecycle.ViewModel
 import de.benkralex.socius.R
 import de.benkralex.socius.data.Contact
 import de.benkralex.socius.data.contacts.contacts
+import de.benkralex.socius.data.contacts.deleteContact
 import de.benkralex.socius.data.contacts.groups
 import de.benkralex.socius.data.contacts.loadAllContacts
 import de.benkralex.socius.data.contacts.loadingContacts
 import de.benkralex.socius.data.settings.getFormattedName
 import de.benkralex.socius.data.settings.noName
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.lang.Thread.sleep
 import java.util.Locale.getDefault
 
 class ContactsListViewModel : ViewModel() {
+    var showDeleteSelectedConfirmationDialog by mutableStateOf(false)
     var searchQuery by mutableStateOf("")
         private set
     var selectedGroupsFilter by mutableStateOf(emptySet<String>())
@@ -132,6 +137,24 @@ class ContactsListViewModel : ViewModel() {
 
     fun deselectAll() {
         selected = emptyList()
+    }
+
+    fun reverseSelection() {
+        selected = filteredContacts - selected.toSet()
+    }
+
+    fun deleteSelected() {
+        Thread {
+            runBlocking {
+                launch {
+                    for (c in selected) {
+                        if (c.isReadOnly()) continue
+                        deleteContact(c)
+                        selected -= c
+                    }
+                }
+            }
+        }.start()
     }
 
     fun onSearchQueryChange(newQuery: String) {

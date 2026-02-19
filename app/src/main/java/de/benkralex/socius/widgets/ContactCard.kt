@@ -25,6 +25,7 @@ fun ContactCard(
     modifier: Modifier = Modifier,
     contact: Contact,
     isSelected: Boolean = false,
+    onProfilePictureClick: () -> Unit = {},
 ) {
     Card(
         colors = CardDefaults.cardColors(
@@ -43,6 +44,7 @@ fun ContactCard(
                 modifier = Modifier
                     .align(Alignment.CenterVertically),
                 isSelected = isSelected,
+                onClick = onProfilePictureClick,
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column {

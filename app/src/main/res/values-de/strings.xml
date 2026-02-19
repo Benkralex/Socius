@@ -125,4 +125,9 @@
     <string name="preferNickname">Spitzname präferieren</string>
     <string name="settings_full_name_formatting">Voller Name</string>
     <string name="import_contacts">Import</string>
+    <string name="selected_count">%count% ausgewählt</string>
+    <string name="content_desc_deselect_all">Alle abwählen</string>
+    <string name="content_desc_select_all">Alle auswählen</string>
+    <string name="content_desc_reverse_selection">Auswahl umkehren</string>
+    <string name="delete_count_contacts">%count% Kontakte löschen?</string>
 </resources>

@@ -130,4 +130,9 @@
     <string name="preferNickname">Prefer Nickname</string>
     <string name="settings_full_name_formatting">Fullname</string>
     <string name="import_contacts">Import</string>
+    <string name="selected_count">%count% selected</string>
+    <string name="content_desc_deselect_all">Deselect all</string>
+    <string name="content_desc_select_all">Select all</string>
+    <string name="content_desc_reverse_selection">Reverse selection</string>
+    <string name="delete_count_contacts">Delete %count% contacts?</string>
 </resources>
