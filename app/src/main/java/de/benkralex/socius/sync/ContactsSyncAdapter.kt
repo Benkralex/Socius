@@ -274,7 +274,6 @@ class ContactsSyncAdapter(
         // Apply all operations
         try {
             context.contentResolver.applyBatch(ContactsContract.AUTHORITY, operations)
-            Log.d(TAG, "Inserted contact: ${contact.displayName ?: contact.id}")
         } catch (e: Exception) {
             Log.e(TAG, "Error inserting contact ${contact.id}", e)
         }

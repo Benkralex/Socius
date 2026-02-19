@@ -18,6 +18,7 @@ kotlinxSerializationCore = "1.9.0"
 kspVersion = "2.2.20-2.0.4"
 roomRuntime = "2.8.4"
 animation = "1.10.0"
+vcardAndroidparser = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -47,6 +48,7 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "animation" }
+vcard-androidparser = { module = "com.github.aarsy.vcard-androidParser:vcard-androidParser", version.ref = "vcardAndroidparser" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

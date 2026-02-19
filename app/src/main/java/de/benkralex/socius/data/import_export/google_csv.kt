@@ -50,24 +50,12 @@ fun checkIfLabelIsType(label: String): Boolean {
     }
 }
 
-fun loadPicture(link: String): Bitmap {
-    val url = java.net.URL(link)
-    val connection = url.openConnection() as java.net.HttpURLConnection
-    connection.doInput = true
-    connection.connect()
-    val input = connection.inputStream
-    return android.graphics.BitmapFactory.decodeStream(input)
-}
-
 fun googleCsvToContacts(file: List<String>): List<Contact> {
     val contacts: MutableList<Contact> = mutableListOf()
     val cols: List<String> = file[0].split(",")
     for (i in 1..<file.size) {
         val line = file[i]
         val values: List<String> = parseCSVLine(line)
-
-        Log.d("Cols", cols.toString())
-        Log.d("Values", values.toString())
 
         val contact = Contact(
             id = "",
