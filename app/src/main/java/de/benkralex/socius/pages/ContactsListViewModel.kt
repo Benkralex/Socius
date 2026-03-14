@@ -1,5 +1,7 @@
 package de.benkralex.socius.pages
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -12,6 +14,8 @@ import de.benkralex.socius.data.contacts.deleteContact
 import de.benkralex.socius.data.contacts.groups
 import de.benkralex.socius.data.contacts.loadAllContacts
 import de.benkralex.socius.data.contacts.loadingContacts
+import de.benkralex.socius.data.import_export.contactsToGoogleCsv
+import de.benkralex.socius.data.import_export.exportContacts
 import de.benkralex.socius.data.settings.getFormattedName
 import de.benkralex.socius.data.settings.noName
 import kotlinx.coroutines.launch
@@ -157,5 +161,22 @@ class ContactsListViewModel : ViewModel() {
 
     fun refreshContacts() {
         loadAllContacts()
+    }
+
+    fun exportSelectedContacts(
+        context: Context,
+        shareExportWithString: String, //stringResource(R.string.share_export_with)
+        exportContactsString: String, //stringResource(R.string.export_contacts)
+    ) {
+        val fileLines = contactsToGoogleCsv(selected)
+        Log.d("Contact Export", fileLines.joinToString("\n"))
+        exportContacts(
+            fileLines = fileLines,
+            fileName = "socius-google-csv-export.csv",
+            fileType = "text/csv",
+            context = context,
+            shareExportWithString = shareExportWithString,
+            exportContactsString = exportContactsString,
+        )
     }
 }

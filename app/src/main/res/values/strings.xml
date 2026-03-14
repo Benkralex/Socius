@@ -135,4 +135,6 @@
     <string name="content_desc_select_all">Select all</string>
     <string name="content_desc_reverse_selection">Reverse selection</string>
     <string name="delete_count_contacts">Delete %count% contacts?</string>
+    <string name="export_contacts">Export</string>
+    <string name="share_export_with">Share contacts with...</string>
 </resources>

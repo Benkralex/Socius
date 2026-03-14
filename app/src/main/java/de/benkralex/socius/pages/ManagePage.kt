@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.automirrored.outlined.Input
+import androidx.compose.material.icons.outlined.ImportExport
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,7 +28,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import de.benkralex.socius.MainActivity
 import de.benkralex.socius.R
+import de.benkralex.socius.data.contacts.contacts
+import de.benkralex.socius.data.import_export.contactsToGoogleCsv
+import de.benkralex.socius.data.import_export.exportContacts
 import de.benkralex.socius.data.import_export.googleCsvToContacts
 import de.benkralex.socius.data.import_export.importContacts
 import kotlinx.coroutines.Dispatchers
@@ -148,6 +153,41 @@ fun ManagePage(
                 )
                 Text(
                     text = stringResource(R.string.import_contacts),
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .weight(1f)
+                        .align(Alignment.CenterVertically),
+                )
+            }
+            val shareExportWithString = stringResource(R.string.share_export_with)
+            val exportContactsString = stringResource(R.string.export_contacts)
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+                    .clickable(
+                        onClick = {
+                            exportContacts(
+                                context = MainActivity.instance,
+                                fileLines = contactsToGoogleCsv(contacts),
+                                fileType = "text/csv",
+                                fileName = "socius-google-csv-export.csv",
+                                shareExportWithString = shareExportWithString,
+                                exportContactsString = exportContactsString,
+                            )
+                        }
+                    ),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.ImportExport,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .align(Alignment.CenterVertically),
+                )
+                Text(
+                    text = stringResource(R.string.export_contacts),
                     modifier = Modifier
                         .padding(8.dp)
                         .weight(1f)

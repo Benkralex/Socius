@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Flip
+import androidx.compose.material.icons.outlined.ImportExport
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.SelectAll
 import androidx.compose.material3.BasicAlertDialog
@@ -61,6 +62,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import de.benkralex.socius.MainActivity
 import de.benkralex.socius.R
 import de.benkralex.socius.data.contacts.contacts
 import de.benkralex.socius.data.settings.getFormattedName
@@ -308,6 +310,22 @@ fun SelectionActions(
             Icon(
                 imageVector = Icons.Outlined.Flip,
                 contentDescription = stringResource(R.string.content_desc_reverse_selection),
+            )
+        }
+        val shareExportWithString = stringResource(R.string.share_export_with)
+        val exportContactsString = stringResource(R.string.export_contacts)
+        IconButton(
+            onClick = {
+                viewModel.exportSelectedContacts(
+                    context = MainActivity.instance,
+                    shareExportWithString = shareExportWithString,
+                    exportContactsString = exportContactsString,
+                )
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.ImportExport,
+                contentDescription = null,
             )
         }
         Box {
