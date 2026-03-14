@@ -131,5 +131,5 @@
     <string name="content_desc_reverse_selection">Auswahl umkehren</string>
     <string name="delete_count_contacts">%count% Kontakte löschen?</string>
     <string name="export_contacts">Export</string>
-    <string name="share_export_with">Kontakte teilen über...</string>
+    <string name="share_export_with">Kontakte teilen über…</string>
 </resources>
