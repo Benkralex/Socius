@@ -15,6 +15,7 @@ import de.benkralex.socius.data.contacts.groups
 import de.benkralex.socius.data.contacts.loadAllContacts
 import de.benkralex.socius.data.contacts.loadingContacts
 import de.benkralex.socius.data.import_export.contactsToGoogleCsv
+import de.benkralex.socius.data.import_export.contactsToSociusJson
 import de.benkralex.socius.data.import_export.exportContacts
 import de.benkralex.socius.data.settings.getFormattedName
 import de.benkralex.socius.data.settings.noName
@@ -168,10 +169,9 @@ class ContactsListViewModel : ViewModel() {
         shareExportWithString: String, //stringResource(R.string.share_export_with)
         exportContactsString: String, //stringResource(R.string.export_contacts)
     ) {
-        val fileLines = contactsToGoogleCsv(selected)
-        Log.d("Contact Export", fileLines.joinToString("\n"))
+        Log.d("Contact Export", contactsToSociusJson(selected).joinToString("\n"))
         exportContacts(
-            fileLines = fileLines,
+            fileLines = contactsToGoogleCsv(selected),
             fileName = "socius-google-csv-export.csv",
             fileType = "text/csv",
             context = context,

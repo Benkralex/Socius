@@ -1,8 +1,10 @@
 package de.benkralex.socius.data
 
 import android.graphics.Bitmap
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
+@Serializable
 data class Contact(
     var id: String,
     var origin: ContactOrigin,
@@ -29,8 +31,10 @@ data class Contact(
     var anniversary: String? = null, // Format: YYYY-MM-DD
 
     var photoUri: String? = null,
+    @Contextual
     var photoBitmap: Bitmap? = null,
     var thumbnailUri: String? = null,
+    @Contextual
     var thumbnailBitmap: Bitmap? = null,
 
     var phoneNumbers: List<PhoneNumber> = emptyList(),

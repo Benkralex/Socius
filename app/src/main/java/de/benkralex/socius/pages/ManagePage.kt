@@ -5,33 +5,44 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.automirrored.outlined.Input
 import androidx.compose.material.icons.outlined.ImportExport
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import de.benkralex.socius.MainActivity
 import de.benkralex.socius.R
 import de.benkralex.socius.data.contacts.contacts
 import de.benkralex.socius.data.import_export.contactsToGoogleCsv
+import de.benkralex.socius.data.import_export.contactsToSociusJson
 import de.benkralex.socius.data.import_export.exportContacts
 import de.benkralex.socius.data.import_export.googleCsvToContacts
 import de.benkralex.socius.data.import_export.importContacts
@@ -39,6 +50,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.IOException
+import java.nio.file.WatchEvent
 
 @Throws(IOException::class)
 fun getLinesOfFile(uri: Uri, activity: ComponentActivity): List<String> {
@@ -161,20 +173,66 @@ fun ManagePage(
             }
             val shareExportWithString = stringResource(R.string.share_export_with)
             val exportContactsString = stringResource(R.string.export_contacts)
+            var showExportFormatSelectionDialog by remember { mutableStateOf(false) }
+            if (showExportFormatSelectionDialog) {
+                Dialog(
+                    onDismissRequest = {
+                        showExportFormatSelectionDialog = false
+                    }
+                ) {
+                    Card {
+                        Column (
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier
+                                .padding(16.dp),
+                        ) {
+                            Text("Wähle aus, wie du deine Kontakte exportieren möchtest:")
+                            ElevatedButton (
+                                onClick = {
+                                    exportContacts(
+                                        context = MainActivity.instance,
+                                        fileLines = contactsToGoogleCsv(contacts),
+                                        fileType = "text/csv",
+                                        fileName = "socius-google-csv-export.csv",
+                                        shareExportWithString = shareExportWithString,
+                                        exportContactsString = exportContactsString,
+                                    )
+                                }
+                            ) {
+                                Text("Google CSV")
+                            }
+                            ElevatedButton (
+                                onClick = {
+                                    exportContacts(
+                                        context = MainActivity.instance,
+                                        fileLines = contactsToSociusJson(contacts),
+                                        fileType = "text/json",
+                                        fileName = "socius-export.json",
+                                        shareExportWithString = shareExportWithString,
+                                        exportContactsString = exportContactsString,
+                                    )
+                                }
+                            ) {
+                                Text("Socius JSON")
+                            }
+                            ElevatedButton (
+                                onClick = {
+                                    showExportFormatSelectionDialog = false
+                                }
+                            ) {
+                                Text("Abbrechen")
+                            }
+                        }
+                    }
+                }
+            }
             Row (
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
                     .clickable(
                         onClick = {
-                            exportContacts(
-                                context = MainActivity.instance,
-                                fileLines = contactsToGoogleCsv(contacts),
-                                fileType = "text/csv",
-                                fileName = "socius-google-csv-export.csv",
-                                shareExportWithString = shareExportWithString,
-                                exportContactsString = exportContactsString,
-                            )
+                            showExportFormatSelectionDialog = true
                         }
                     ),
                 verticalAlignment = Alignment.CenterVertically,
