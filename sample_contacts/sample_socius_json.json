@@ -1,0 +1,238 @@
+[
+    {
+        "id": "905",
+        "origin": "LOCAL",
+        "givenName": "Max",
+        "familyName": "Mustermann",
+        "organization": "Muster GmbH",
+        "jobTitle": "Geschäftsführer",
+        "isStarred": true,
+        "phoneNumbers": [
+            {
+                "number": "+49 151 1234567",
+                "type": "mobile",
+                "label": ""
+            }
+        ],
+        "emails": [
+            {
+                "address": "max.mustermann@example.com",
+                "type": "work",
+                "label": ""
+            }
+        ]
+    },
+    {
+        "id": "906",
+        "origin": "LOCAL",
+        "givenName": "Erika",
+        "familyName": "Gabler",
+        "organization": "Berlin Tech",
+        "jobTitle": "Entwicklerin",
+        "phoneNumbers": [
+            {
+                "number": "+49 30 9876543",
+                "type": "home",
+                "label": ""
+            }
+        ],
+        "emails": [
+            {
+                "address": "erika.gabler@example.com",
+                "type": "home",
+                "label": ""
+            }
+        ]
+    },
+    {
+        "id": "907",
+        "origin": "LOCAL",
+        "givenName": "Lukas",
+        "middleName": "Franz",
+        "familyName": "Schmidt",
+        "organization": "Schmidt KG",
+        "jobTitle": "Vertrieb",
+        "phoneNumbers": [
+            {
+                "number": "+49 162 5555555",
+                "type": "mobile",
+                "label": ""
+            }
+        ],
+        "emails": [
+            {
+                "address": "lukas.schmidt@example.de",
+                "type": "work",
+                "label": ""
+            }
+        ],
+        "events": [
+            {
+                "day": 30,
+                "month": 11,
+                "type": "anniversary",
+                "label": ""
+            }
+        ]
+    },
+    {
+        "id": "908",
+        "origin": "LOCAL",
+        "givenName": "Julia",
+        "familyName": "Weber",
+        "phoneNumbers": [
+            {
+                "number": "+49 173 1112223",
+                "type": "mobile",
+                "label": ""
+            }
+        ],
+        "emails": [
+            {
+                "address": "julia.weber@example.com",
+                "type": "home",
+                "label": ""
+            }
+        ]
+    },
+    {
+        "id": "909",
+        "origin": "LOCAL",
+        "givenName": "Leon",
+        "familyName": "Becker",
+        "organization": "Becker & Co",
+        "jobTitle": "Manager",
+        "phoneNumbers": [
+            {
+                "number": "+49 89 4443332",
+                "type": "work",
+                "label": ""
+            }
+        ],
+        "emails": [
+            {
+                "address": "leon.becker@example.net",
+                "type": "work",
+                "label": ""
+            }
+        ]
+    },
+    {
+        "id": "910",
+        "origin": "LOCAL",
+        "givenName": "Mia",
+        "middleName": "Eva",
+        "familyName": "Wagner",
+        "organization": "Hafen Logistik",
+        "jobTitle": "Personalreferentin",
+        "phoneNumbers": [
+            {
+                "number": "+49 40 7778889",
+                "type": "work",
+                "label": ""
+            }
+        ],
+        "emails": [
+            {
+                "address": "mia.wagner@example.org",
+                "type": "work",
+                "label": ""
+            }
+        ]
+    },
+    {
+        "id": "911",
+        "origin": "LOCAL",
+        "givenName": "Felix",
+        "familyName": "Hoffmann",
+        "phoneNumbers": [
+            {
+                "number": "+49 175 9990001",
+                "type": "mobile",
+                "label": ""
+            }
+        ],
+        "emails": [
+            {
+                "address": "felix.hoffmann@example.com",
+                "type": "home",
+                "label": ""
+            }
+        ]
+    },
+    {
+        "id": "912",
+        "origin": "LOCAL",
+        "givenName": "Franziska",
+        "familyName": "Schäfer",
+        "nickname": "Franzi",
+        "organization": "Frankfurt Finance",
+        "jobTitle": "Analystin",
+        "isStarred": true,
+        "phoneNumbers": [
+            {
+                "number": "+49 69 4445556",
+                "type": "work",
+                "label": ""
+            }
+        ],
+        "emails": [
+            {
+                "address": "laura.schaefer@example.de",
+                "type": "work",
+                "label": ""
+            }
+        ],
+        "events": [
+            {
+                "day": 12,
+                "month": 4,
+                "year": 2009,
+                "type": "birthday",
+                "label": ""
+            }
+        ]
+    },
+    {
+        "id": "913",
+        "origin": "LOCAL",
+        "givenName": "Tim",
+        "familyName": "Koch",
+        "phoneNumbers": [
+            {
+                "number": "+49 221 3334445",
+                "type": "home",
+                "label": ""
+            }
+        ],
+        "emails": [
+            {
+                "address": "tim.koch@example.com",
+                "type": "home",
+                "label": ""
+            }
+        ]
+    },
+    {
+        "id": "914",
+        "origin": "LOCAL",
+        "givenName": "Sarah",
+        "familyName": "Bauer",
+        "organization": "Bauer Design",
+        "jobTitle": "Designerin",
+        "phoneNumbers": [
+            {
+                "number": "+49 152 2221110",
+                "type": "mobile",
+                "label": ""
+            }
+        ],
+        "emails": [
+            {
+                "address": "sarah.bauer@example.net",
+                "type": "work",
+                "label": ""
+            }
+        ]
+    }
+]

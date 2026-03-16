@@ -1,0 +1,11 @@
+First Name,Middle Name,Last Name,Nickname,Labels,E-mail 1 - Label,E-mail 1 - Value,Phone 1 - Label,Phone 1 - Value,Organization Name,Organization Title,Organization Department,Event 1 - Label,Event 1 - Value
+Max,,Mustermann,,* myContacts ::: * starred,Work,max.mustermann@example.com,Mobile,+49 151 1234567,Muster GmbH,Geschäftsführer,,,
+Erika,,Gabler,,* myContacts,Home,erika.gabler@example.com,Home,+49 30 9876543,Berlin Tech,Entwicklerin,,,
+Lukas,Franz,Schmidt,,* myContacts,Work,lukas.schmidt@example.de,Mobile,+49 162 5555555,Schmidt KG,Vertrieb,,Anniversary,--11-30
+Julia,,Weber,,* myContacts,Home,julia.weber@example.com,Mobile,+49 173 1112223,,,,,
+Leon,,Becker,,* myContacts,Work,leon.becker@example.net,Work,+49 89 4443332,Becker & Co,Manager,,,
+Mia,Eva,Wagner,,* myContacts,Work,mia.wagner@example.org,Work,+49 40 7778889,Hafen Logistik,Personalreferentin,,,
+Felix,,Hoffmann,,* myContacts,Home,felix.hoffmann@example.com,Mobile,+49 175 9990001,,,,,
+Franziska,,Schäfer,Franzi,* myContacts ::: * starred,Work,laura.schaefer@example.de,Work,+49 69 4445556,Frankfurt Finance,Analystin,,Birthday,2009-04-12
+Tim,,Koch,,* myContacts,Home,tim.koch@example.com,Home,+49 221 3334445,,,,,
+Sarah,,Bauer,,* myContacts,Work,sarah.bauer@example.net,Mobile,+49 152 2221110,Bauer Design,Designerin,,,
