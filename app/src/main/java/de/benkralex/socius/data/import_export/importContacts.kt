@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 fun importContacts(contacts: List<Contact>) {
-    Thread {
+    val thread = Thread {
         runBlocking {
             launch {
                 for (c in contacts) {
@@ -22,5 +22,7 @@ fun importContacts(contacts: List<Contact>) {
                 return@launch
             }
         }
-    }.start()
+    }
+    thread.start()
+    thread.join()
 }

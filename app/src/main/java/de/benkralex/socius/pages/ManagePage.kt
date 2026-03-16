@@ -20,9 +20,11 @@ import androidx.compose.material.icons.outlined.ImportExport
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -264,22 +266,26 @@ fun ExportDialog (
                         Button (
                             onClick = {
                                 when (selectedOption) {
-                                    ImportExportOption.None -> {}
+                                    ImportExportOption.None -> {
+                                        onDismiss()
+                                    }
                                     ImportExportOption.SociusJson -> {
                                         exportContacts(
                                             context = context,
                                             fileLines = contactsToSociusJson(contacts),
-                                            fileType = "text/json",
+                                            fileType = "application/json",
                                             fileName = "socius-export.json",
                                         )
+                                        onDismiss()
                                     }
                                     ImportExportOption.GoogleCsv -> {
                                         exportContacts(
                                             context = context,
                                             fileLines = contactsToGoogleCsv(contacts),
-                                            fileType = "text/csv",
+                                            fileType = "text/comma-separated-values",
                                             fileName = "socius-google-csv-export.csv",
                                         )
+                                        onDismiss()
                                     }
                                 }
                             }
@@ -298,6 +304,8 @@ fun ImportDialog (
     onDismiss: () -> Unit = {},
     context: Context = LocalContext.current,
 ) {
+    var isImporting: Boolean by remember { mutableStateOf(false) }
+
     val activity = remember(context) { context as? ComponentActivity }
     val scope = rememberCoroutineScope()
 
@@ -314,6 +322,8 @@ fun ImportDialog (
             } catch (th: IOException) {
                 Log.e("ManagePage", "Unable to read import file", th)
             }
+            isImporting = false
+            onDismiss()
         }
     }
 
@@ -325,18 +335,24 @@ fun ImportDialog (
             try {
                 val lines = getLinesOfFile(uri, activity)
                 if (lines.isNotEmpty()) {
-                    importContacts(sociusJsonToContacts(lines))
+                    val contacts = sociusJsonToContacts(lines)
+                    importContacts(contacts)
                 }
             } catch (th: IOException) {
                 Log.e("ManagePage", "Unable to read import file", th)
             }
+            isImporting = false
+            onDismiss()
         }
     }
 
     var selectedOption: ImportExportOption by remember { mutableStateOf(ImportExportOption.None) }
 
     Dialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = {
+            if (isImporting) return@Dialog
+            onDismiss()
+        },
     ) {
         Card {
             Column (
@@ -344,63 +360,77 @@ fun ImportDialog (
                 modifier = Modifier
                     .padding(16.dp),
             ) {
-                Text(stringResource(R.string.import_dialog_title))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            selectedOption = ImportExportOption.SociusJson
-                        },
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    RadioButton(
-                        selected = selectedOption == ImportExportOption.SociusJson,
-                        onClick = {
-                            selectedOption = ImportExportOption.SociusJson
-                        }
-                    )
-                    Text(stringResource(R.string.import_export_format_socius_json))
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            selectedOption = ImportExportOption.GoogleCsv
-                        },
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    RadioButton(
-                        selected = selectedOption == ImportExportOption.GoogleCsv,
-                        onClick = {
-                            selectedOption = ImportExportOption.GoogleCsv
-                        }
-                    )
-                    Text(stringResource(R.string.import_export_format_google_csv))
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
-                ) {
-                    ElevatedButton (
-                        onClick = onDismiss
+                if (!isImporting) {
+                    Text(stringResource(R.string.import_dialog_title))
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                selectedOption = ImportExportOption.SociusJson
+                            },
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(stringResource(R.string.cancel))
-                    }
-                    Spacer(Modifier.weight(1f))
-                    if (selectedOption != ImportExportOption.None) {
-                        Button (
+                        RadioButton(
+                            selected = selectedOption == ImportExportOption.SociusJson,
                             onClick = {
-                                when (selectedOption) {
-                                    ImportExportOption.None -> {}
-                                    ImportExportOption.GoogleCsv -> googleCsvLauncher.launch(arrayOf("text/csv"))
-                                    ImportExportOption.SociusJson -> sociusJsonLauncher.launch(arrayOf("text/json"))
-                                }
+                                selectedOption = ImportExportOption.SociusJson
                             }
+                        )
+                        Text(stringResource(R.string.import_export_format_socius_json))
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                selectedOption = ImportExportOption.GoogleCsv
+                            },
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        RadioButton(
+                            selected = selectedOption == ImportExportOption.GoogleCsv,
+                            onClick = {
+                                selectedOption = ImportExportOption.GoogleCsv
+                            }
+                        )
+                        Text(stringResource(R.string.import_export_format_google_csv))
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                    ) {
+                        ElevatedButton(
+                            onClick = onDismiss
                         ) {
-                            Text(stringResource(R.string.next))
+                            Text(stringResource(R.string.cancel))
+                        }
+                        Spacer(Modifier.weight(1f))
+                        if (selectedOption != ImportExportOption.None) {
+                            Button(
+                                onClick = {
+                                    when (selectedOption) {
+                                        ImportExportOption.None -> {
+                                            onDismiss()
+                                        }
+
+                                        ImportExportOption.SociusJson -> {
+                                            sociusJsonLauncher.launch(arrayOf("application/json"))
+                                            isImporting = true
+                                        }
+
+                                        ImportExportOption.GoogleCsv -> {
+                                            googleCsvLauncher.launch(arrayOf("text/comma-separated-values"))
+                                            isImporting = true
+                                        }
+                                    }
+                                }
+                            ) {
+                                Text(stringResource(R.string.next))
+                            }
                         }
                     }
+                } else {
+                    CircularProgressIndicator()
                 }
             }
         }
