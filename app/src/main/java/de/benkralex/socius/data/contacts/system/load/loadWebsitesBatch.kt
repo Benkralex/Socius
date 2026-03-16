@@ -2,7 +2,7 @@ package de.benkralex.socius.data.contacts.system.load
 
 import android.content.ContentResolver
 import android.provider.ContactsContract
-import de.benkralex.socius.data.Website
+import de.benkralex.socius.data.model.Website
 
 fun loadWebsitesBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, List<Website>> {
     val result = mutableMapOf<String, MutableList<Website>>()

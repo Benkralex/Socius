@@ -1,6 +1,6 @@
-package de.benkralex.socius.data.import_export
+package de.benkralex.socius.data.import_export.socius_json
 
-import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.model.Contact
 import kotlinx.serialization.json.Json
 
 fun sociusJsonToContacts(file: List<String>): List<Contact> {

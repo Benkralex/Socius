@@ -1,10 +1,10 @@
-package de.benkralex.socius.data.import_export
+package de.benkralex.socius.data.import_export.common
 
 import de.benkralex.socius.MainActivity
-import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.contacts.loadAllContacts
 import de.benkralex.socius.data.contacts.local.database.LocalContactsEntity
-import de.benkralex.socius.sync.SyncManager
+import de.benkralex.socius.syncadapter.SyncManager
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 

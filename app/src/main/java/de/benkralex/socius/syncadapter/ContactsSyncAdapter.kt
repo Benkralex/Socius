@@ -1,4 +1,4 @@
-package de.benkralex.socius.sync
+package de.benkralex.socius.syncadapter
 
 import android.accounts.Account
 import android.content.AbstractThreadedSyncAdapter
@@ -9,7 +9,7 @@ import android.content.SyncResult
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
-import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.contacts.local.database.LocalContactsDatabase
 import de.benkralex.socius.data.settings.getFormattedName
 import de.benkralex.socius.data.settings.noName

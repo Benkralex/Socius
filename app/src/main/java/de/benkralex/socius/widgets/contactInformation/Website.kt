@@ -21,7 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import de.benkralex.socius.R
-import de.benkralex.socius.data.Website
+import de.benkralex.socius.data.model.Website
 import de.benkralex.socius.widgets.contactInformation.helpers.translateType
 
 @Composable

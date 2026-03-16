@@ -1,6 +1,5 @@
 package de.benkralex.socius.pages.newContact
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -8,10 +7,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.text.isDigitsOnly
-import de.benkralex.socius.data.Contact
-import de.benkralex.socius.data.ContactEvent
-import de.benkralex.socius.data.PostalAddress
-import java.util.Calendar
+import de.benkralex.socius.data.model.Contact
+import de.benkralex.socius.data.model.PostalAddress
 
 class EditPostalAddressesState {
     val showFields by derivedStateOf { count > 0 }

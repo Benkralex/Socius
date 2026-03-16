@@ -4,7 +4,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.model.Contact
 
 class EditWorkInformationState {
     val showFields by derivedStateOf {

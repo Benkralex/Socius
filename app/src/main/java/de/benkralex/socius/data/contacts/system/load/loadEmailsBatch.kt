@@ -2,7 +2,7 @@ package de.benkralex.socius.data.contacts.system.load
 
 import android.content.ContentResolver
 import android.provider.ContactsContract
-import de.benkralex.socius.data.Email
+import de.benkralex.socius.data.model.Email
 
 fun loadEmailsBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, List<Email>> {
     val result = mutableMapOf<String, MutableList<Email>>()

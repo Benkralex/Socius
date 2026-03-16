@@ -25,7 +25,7 @@ import de.benkralex.socius.data.settings.noName
 import de.benkralex.socius.navigation.ContactDetailIntentNavKey
 import de.benkralex.socius.navigation.NavigationRoot
 import de.benkralex.socius.navigation.backStack
-import de.benkralex.socius.sync.SyncManager
+import de.benkralex.socius.syncadapter.SyncManager
 import de.benkralex.socius.theme.ContactsTheme
 
 class MainActivity : ComponentActivity() {

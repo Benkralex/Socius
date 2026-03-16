@@ -1,7 +1,7 @@
-package de.benkralex.socius.data.import_export
+package de.benkralex.socius.data.import_export.google_csv
 
-import de.benkralex.socius.data.Contact
-import de.benkralex.socius.data.ContactEvent
+import de.benkralex.socius.data.model.Contact
+import de.benkralex.socius.data.model.ContactEvent
 
 fun prepareStringForCsvValue(s: String): String {
     if (s.contains("\n") || s.contains(",")) {

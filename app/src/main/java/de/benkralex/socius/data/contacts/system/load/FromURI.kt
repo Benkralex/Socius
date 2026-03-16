@@ -5,8 +5,8 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.ContactsContract
 import androidx.core.net.toUri
-import de.benkralex.socius.data.Contact
-import de.benkralex.socius.data.ContactOrigin
+import de.benkralex.socius.data.model.Contact
+import de.benkralex.socius.data.model.ContactOrigin
 import de.benkralex.socius.data.contacts.system.data.StructuredNameData
 
 fun loadFromURI(context: Context, uri: Uri): Contact {

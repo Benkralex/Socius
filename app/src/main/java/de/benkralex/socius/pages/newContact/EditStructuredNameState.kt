@@ -3,7 +3,7 @@ package de.benkralex.socius.pages.newContact
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.model.Contact
 
 class EditStructuredNameState {
     var prefix by mutableStateOf("")

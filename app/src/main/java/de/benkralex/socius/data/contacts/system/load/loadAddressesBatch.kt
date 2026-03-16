@@ -2,7 +2,7 @@ package de.benkralex.socius.data.contacts.system.load
 
 import android.content.ContentResolver
 import android.provider.ContactsContract
-import de.benkralex.socius.data.PostalAddress
+import de.benkralex.socius.data.model.PostalAddress
 
 fun loadAddressesBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, List<PostalAddress>> {
     val result = mutableMapOf<String, MutableList<PostalAddress>>()

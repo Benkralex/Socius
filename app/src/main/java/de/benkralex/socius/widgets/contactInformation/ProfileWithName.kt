@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.settings.getFormattedName
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)

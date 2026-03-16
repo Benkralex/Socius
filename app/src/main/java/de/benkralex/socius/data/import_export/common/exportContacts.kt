@@ -1,11 +1,12 @@
-package de.benkralex.socius.data.import_export
+package de.benkralex.socius.data.import_export.common
 
+import android.content.Context
 import android.content.Intent
 import androidx.core.content.FileProvider
 import java.io.File
 
 fun exportContacts(
-    context: android.content.Context,
+    context: Context,
     fileLines: List<String>,
     fileType: String = "text/plain",
     fileName: String = "contacts_export.txt",

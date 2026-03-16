@@ -51,7 +51,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
-import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.contacts.deleteContact
 import de.benkralex.socius.data.contacts.editStarredStatus
 import de.benkralex.socius.data.settings.getFormattedName

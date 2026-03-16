@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.settings.getFormattedName
 import de.benkralex.socius.widgets.contactInformation.ProfilePicture
 

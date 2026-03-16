@@ -6,13 +6,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import de.benkralex.socius.MainActivity
-import de.benkralex.socius.data.Contact
-import de.benkralex.socius.data.ContactOrigin
+import de.benkralex.socius.data.model.Contact
+import de.benkralex.socius.data.model.ContactOrigin
 import de.benkralex.socius.data.contacts.editContact
 import de.benkralex.socius.data.contacts.loadAllContacts
 import de.benkralex.socius.data.contacts.local.database.LocalContactsEntity
 import de.benkralex.socius.data.settings.getFormattedName
-import de.benkralex.socius.sync.SyncManager
+import de.benkralex.socius.syncadapter.SyncManager
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 

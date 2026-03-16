@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
-import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.contacts.contacts
 import de.benkralex.socius.data.settings.getFormattedDate
 import de.benkralex.socius.data.settings.getFormattedName

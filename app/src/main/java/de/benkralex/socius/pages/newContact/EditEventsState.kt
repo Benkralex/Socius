@@ -7,9 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import de.benkralex.socius.data.Contact
-import de.benkralex.socius.data.ContactEvent
-import de.benkralex.socius.data.PhoneNumber
+import de.benkralex.socius.data.model.Contact
+import de.benkralex.socius.data.model.ContactEvent
 import java.util.Calendar
 
 class EditEventsState {

@@ -2,7 +2,7 @@ package de.benkralex.socius.data.contacts.system.load
 
 import android.content.ContentResolver
 import android.provider.ContactsContract
-import de.benkralex.socius.data.Group
+import de.benkralex.socius.data.model.Group
 
 fun loadGroupsBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, List<Group>> {
     val result = mutableMapOf<String, MutableList<Group>>()

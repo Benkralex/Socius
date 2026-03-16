@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.data.Group
+import de.benkralex.socius.data.model.Group
 
 @Composable
 fun GroupsWidget(

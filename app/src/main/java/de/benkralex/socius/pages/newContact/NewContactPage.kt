@@ -53,8 +53,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import de.benkralex.socius.R
-import de.benkralex.socius.data.Contact
-import de.benkralex.socius.data.ContactOrigin
+import de.benkralex.socius.data.model.Contact
+import de.benkralex.socius.data.model.ContactOrigin
 import de.benkralex.socius.theme.DarkColorScheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)

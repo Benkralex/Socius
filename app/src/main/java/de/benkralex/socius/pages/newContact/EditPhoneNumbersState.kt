@@ -6,9 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import de.benkralex.socius.data.Contact
-import de.benkralex.socius.data.Email
-import de.benkralex.socius.data.PhoneNumber
+import de.benkralex.socius.data.model.Contact
+import de.benkralex.socius.data.model.PhoneNumber
 
 class EditPhoneNumbersState {
     val showFields by derivedStateOf { count > 0 }

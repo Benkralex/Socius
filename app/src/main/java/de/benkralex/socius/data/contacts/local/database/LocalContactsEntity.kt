@@ -5,15 +5,15 @@ import android.graphics.BitmapFactory
 import androidx.core.net.toUri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import de.benkralex.socius.data.Contact
-import de.benkralex.socius.data.ContactEvent
-import de.benkralex.socius.data.ContactOrigin
-import de.benkralex.socius.data.Email
-import de.benkralex.socius.data.Group
-import de.benkralex.socius.data.PhoneNumber
-import de.benkralex.socius.data.PostalAddress
-import de.benkralex.socius.data.Relation
-import de.benkralex.socius.data.Website
+import de.benkralex.socius.data.model.Contact
+import de.benkralex.socius.data.model.ContactEvent
+import de.benkralex.socius.data.model.ContactOrigin
+import de.benkralex.socius.data.model.Email
+import de.benkralex.socius.data.model.Group
+import de.benkralex.socius.data.model.PhoneNumber
+import de.benkralex.socius.data.model.PostalAddress
+import de.benkralex.socius.data.model.Relation
+import de.benkralex.socius.data.model.Website
 
 @Entity(tableName = "local_contacts")
 data class LocalContactsEntity (

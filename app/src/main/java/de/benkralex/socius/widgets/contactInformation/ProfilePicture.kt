@@ -29,7 +29,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.model.Contact
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable

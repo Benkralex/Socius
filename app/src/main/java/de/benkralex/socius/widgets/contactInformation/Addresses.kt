@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.data.PostalAddress
+import de.benkralex.socius.data.model.PostalAddress
 import androidx.core.net.toUri
 import de.benkralex.socius.R
 import de.benkralex.socius.widgets.contactInformation.helpers.translateType

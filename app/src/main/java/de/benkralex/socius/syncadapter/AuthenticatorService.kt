@@ -1,4 +1,4 @@
-package de.benkralex.socius.sync
+package de.benkralex.socius.syncadapter
 
 import android.app.Service
 import android.content.Intent

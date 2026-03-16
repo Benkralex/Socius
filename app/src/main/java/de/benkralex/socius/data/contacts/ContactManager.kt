@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import de.benkralex.socius.MainActivity
-import de.benkralex.socius.data.Contact
+import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.contacts.local.load.getLocalContacts
 import de.benkralex.socius.data.contacts.system.load.getAndroidSystemContacts
 import de.benkralex.socius.data.settings.loadAndroidSystemContacts

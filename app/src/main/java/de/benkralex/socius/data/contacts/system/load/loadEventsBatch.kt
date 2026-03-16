@@ -2,7 +2,7 @@ package de.benkralex.socius.data.contacts.system.load
 
 import android.content.ContentResolver
 import android.provider.ContactsContract
-import de.benkralex.socius.data.ContactEvent
+import de.benkralex.socius.data.model.ContactEvent
 
 fun loadEventsBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, List<ContactEvent>> {
     val result = mutableMapOf<String, MutableList<ContactEvent>>()
