@@ -50,6 +50,8 @@ fun checkIfLabelIsType(label: String): Boolean {
         "mobile" -> true
         "other" -> true
         "custom" -> true
+        "anniversary" -> true
+        "birthday" -> true
         else -> false
     }
 }
@@ -206,77 +208,87 @@ fun googleCsvToContacts(file: List<String>): List<Contact> {
                     }
                 }
                 col.startsWith("E-mail ") -> {
-                    val mailIndex = col.substring(7, col.length - 8).toInt()
                     if (col.endsWith(" - Label")) {
+                        val mailIndex = col.substring(7, col.length - 8).toInt()
                         emailLabels[mailIndex] = value
                     } else if (col.endsWith(" - Value")) {
+                        val mailIndex = col.substring(7, col.length - 8).toInt()
                         if (value.isEmpty()) continue
                         emailAddresses[mailIndex] = value
                     }
                 }
                 col.startsWith("Phone ") -> {
-                    val phoneIndex = col.substring(6, col.length - 8).toInt()
                     if (col.endsWith(" - Label")) {
+                        val phoneIndex = col.substring(6, col.length - 8).toInt()
                         phoneLabels[phoneIndex] = value
                     } else if (col.endsWith(" - Value")) {
+                        val phoneIndex = col.substring(6, col.length - 8).toInt()
                         if (value.isEmpty()) continue
                         phoneNumbers[phoneIndex] = value
                     }
                 }
                 col.startsWith("Relation ") -> {
-                    val relationIndex = col.substring(9, col.length - 8).toInt()
                     if (col.endsWith(" - Label")) {
+                        val relationIndex = col.substring(9, col.length - 8).toInt()
                         relationLabels[relationIndex] = value
                     } else if (col.endsWith(" - Value")) {
+                        val relationIndex = col.substring(9, col.length - 8).toInt()
                         if (value.isEmpty()) continue
                         relationNames[relationIndex] = value
                     }
                 }
                 col.startsWith("Website ") -> {
-                    val websiteIndex = col.substring(8, col.length - 8).toInt()
                     if (col.endsWith(" - Label")) {
+                        val websiteIndex = col.substring(8, col.length - 8).toInt()
                         websiteLabels[websiteIndex] = value
                     } else if (col.endsWith(" - Value")) {
+                        val websiteIndex = col.substring(8, col.length - 8).toInt()
                         if (value.isEmpty()) continue
                         websiteURLs[websiteIndex] = value
                     }
                 }
                 col.startsWith("Custom Field ") -> {
-                    val customIndex = col.substring(13, col.length - 8).toInt()
                     if (col.endsWith(" - Label")) {
+                        val customIndex = col.substring(13, col.length - 8).toInt()
                         customLabels[customIndex] = value
                     } else if (col.endsWith(" - Value")) {
+                        val customIndex = col.substring(13, col.length - 8).toInt()
                         if (value.isEmpty()) continue
                         customValues[customIndex] = value
                     }
                 }
                 col.startsWith("Event ") -> {
-                    val eventIndex = col.substring(6, col.length - 8).toInt()
                     if (col.endsWith(" - Label")) {
+                        val eventIndex = col.substring(6, col.length - 8).toInt()
                         eventLabels[eventIndex] = value
                     } else if (col.endsWith(" - Value")) {
+                        val eventIndex = col.substring(6, col.length - 8).toInt()
                         if (value.isEmpty()) continue
-                        Log.d("Add EventDate", value)
                         eventDates[eventIndex] = value
                     }
                 }
                 col.startsWith("Address ") -> {
-                    val addressIndex = col.substring(8).split("-")[0].trim().toInt()
                     if (col.endsWith(" - Label")) {
+                        val addressIndex = col.substring(8).split("-")[0].trim().toInt()
                         addressLabels[addressIndex] = value
                     } else if (col.endsWith(" - Street")) {
+                        val addressIndex = col.substring(8).split("-")[0].trim().toInt()
                         if (value.isEmpty()) continue
                         addressStreets[addressIndex] = value
                     } else if (col.endsWith(" - City")) {
+                        val addressIndex = col.substring(8).split("-")[0].trim().toInt()
                         if (value.isEmpty()) continue
                         addressCities[addressIndex] = value
                     } else if (col.endsWith(" - Region")) {
+                        val addressIndex = col.substring(8).split("-")[0].trim().toInt()
                         if (value.isEmpty()) continue
                         addressRegions[addressIndex] = value
                     } else if (col.endsWith(" - Postal Code")) {
+                        val addressIndex = col.substring(8).split("-")[0].trim().toInt()
                         if (value.isEmpty()) continue
                         addressPostcodes[addressIndex] = value
                     } else if (col.endsWith(" - Country")) {
+                        val addressIndex = col.substring(8).split("-")[0].trim().toInt()
                         if (value.isEmpty()) continue
                         addressCountries[addressIndex] = value
                     }
@@ -353,7 +365,6 @@ fun googleCsvToContacts(file: List<String>): List<Contact> {
                 }
             }
         }
-        Log.d("EventDates", eventDates.toString())
         for ((k, v) in eventLabels) {
             if (eventDates.containsKey(k) && !eventDates[k].isNullOrBlank()) {
                 val dates = eventDates[k]!!.split(" ::: ").map { it.trim().replace("-", "") }
