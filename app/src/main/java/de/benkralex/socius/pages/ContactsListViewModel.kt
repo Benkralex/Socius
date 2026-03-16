@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import de.benkralex.socius.data.Contact
 import de.benkralex.socius.data.contacts.contacts
 import de.benkralex.socius.data.contacts.deleteContact
+import de.benkralex.socius.data.contacts.deleteContacts
 import de.benkralex.socius.data.contacts.groups
 import de.benkralex.socius.data.contacts.loadAllContacts
 import de.benkralex.socius.data.contacts.loadingContacts
@@ -138,10 +139,8 @@ class ContactsListViewModel : ViewModel() {
         Thread {
             runBlocking {
                 launch {
-                    for (c in selected) {
-                        if (c.isReadOnly()) continue
-                        deleteContact(c)
-                        selected -= c
+                    for ((contact, successful) in deleteContacts(selected)) {
+                        if (successful && (contact in selected)) selected -= contact
                     }
                 }
             }

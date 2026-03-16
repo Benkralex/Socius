@@ -43,6 +43,31 @@ suspend fun deleteContact(contact: Contact): Boolean {
     return true
 }
 
+suspend fun deleteContacts(contacts: List<Contact>): Map<Contact, Boolean> {
+    val returnMap: MutableMap<Contact, Boolean> = mutableMapOf()
+    val mainActivity = MainActivity
+    for (contact in contacts) {
+        val id = contact.id.toIntOrNull()
+        if (id == null) {
+            returnMap[contact] = false
+            continue
+        }
+        when (contact.origin) {
+            ContactOrigin.LOCAL -> {
+                mainActivity.localContactsDao.deleteById(id)
+                returnMap[contact] = true
+            }
+            ContactOrigin.SYSTEM -> returnMap[contact] = false
+            ContactOrigin.REMOTE -> returnMap[contact] = false
+            ContactOrigin.URI -> returnMap[contact] = false
+            ContactOrigin.IMPORT -> returnMap[contact] = false
+        }
+    }
+    loadAllContacts()
+    SyncManager.requestSync(MainActivity.instance)
+    return returnMap
+}
+
 suspend fun editContact(contact: Contact): Boolean {
     val mainActivity = MainActivity
     val id = contact.id.toIntOrNull() ?: return false
