@@ -134,39 +134,36 @@ fun ImportDialog (
                         )
                         Text(stringResource(R.string.import_export_format_google_csv))
                     }
-                    Row(
+                    ElevatedButton(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End,
+                        onClick = onDismiss,
                     ) {
-                        ElevatedButton(
-                            onClick = onDismiss
-                        ) {
-                            Text(stringResource(R.string.cancel))
-                        }
-                        Spacer(Modifier.weight(1f))
-                        if (selectedOption != ImportExportOption.None) {
-                            Button(
-                                onClick = {
-                                    when (selectedOption) {
-                                        ImportExportOption.None -> {
-                                            onDismiss()
-                                        }
+                        Text(stringResource(R.string.cancel))
+                    }
+                    if (selectedOption != ImportExportOption.None) {
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            onClick = {
+                                when (selectedOption) {
+                                    ImportExportOption.None -> {
+                                        onDismiss()
+                                    }
 
-                                        ImportExportOption.SociusJson -> {
-                                            sociusJsonLauncher.launch(arrayOf("application/json"))
-                                            isImporting = true
-                                        }
+                                    ImportExportOption.SociusJson -> {
+                                        sociusJsonLauncher.launch(arrayOf("application/json"))
+                                        isImporting = true
+                                    }
 
-                                        ImportExportOption.GoogleCsv -> {
-                                            googleCsvLauncher.launch(arrayOf("text/comma-separated-values"))
-                                            isImporting = true
-                                        }
+                                    ImportExportOption.GoogleCsv -> {
+                                        googleCsvLauncher.launch(arrayOf("text/comma-separated-values"))
+                                        isImporting = true
                                     }
                                 }
-                            ) {
-                                Text(stringResource(R.string.next))
-                            }
+                            },
+                        ) {
+                            Text(stringResource(R.string.next))
                         }
                     }
                 } else {
