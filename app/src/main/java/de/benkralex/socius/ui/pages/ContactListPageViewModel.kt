@@ -1,0 +1,161 @@
+package de.benkralex.socius.ui.pages
+
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import de.benkralex.socius.data.model.Contact
+import de.benkralex.socius.data.contacts.contacts
+import de.benkralex.socius.data.contacts.deleteContacts
+import de.benkralex.socius.data.contacts.groups
+import de.benkralex.socius.data.contacts.loadAllContacts
+import de.benkralex.socius.data.contacts.loadingContacts
+import de.benkralex.socius.data.settings.getFormattedName
+import de.benkralex.socius.data.settings.noName
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlin.collections.iterator
+
+class ContactListPageViewModel : ViewModel() {
+    var showDeleteSelectedConfirmationDialog by mutableStateOf(false)
+    var showExportTypeSelectionDialog by mutableStateOf(false)
+    var searchQuery by mutableStateOf("")
+        private set
+    var selectedGroupsFilter by mutableStateOf(emptySet<String>())
+        private set
+
+    val unselectedGroupsFilter by derivedStateOf {
+        groups.filter { !it.name.isNullOrBlank() }.map { it.name!! }.toSet() - selectedGroupsFilter
+    }
+
+    val filteredContacts by derivedStateOf {
+        val searchQueryFiltered = if (searchQuery.isNotBlank()) {
+            contacts.filter { contact ->
+                getFormattedName(contact).contains(searchQuery, ignoreCase = true) ||
+                        contact.emails.any {it.address.contains(searchQuery, ignoreCase = true)} ||
+                        contact.phoneNumbers.any {it.number.contains(searchQuery, ignoreCase = true)} ||
+                        contact.websites.any {it.url.contains(searchQuery, ignoreCase = true)} ||
+                        contact.note?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.prefix?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.givenName?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.middleName?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.familyName?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.suffix?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.nickname?.contains(searchQuery, ignoreCase = true) ?: false
+            }
+        } else {
+            contacts
+        }
+
+        val groupsFiltered = if (selectedGroupsFilter.isNotEmpty()) {
+            searchQueryFiltered.filter { contact ->
+                selectedGroupsFilter.all { group ->
+                    group in contact.groups.filter { !it.name.isNullOrBlank() }.map { it.name!! }
+                }
+            }
+        } else {
+            searchQueryFiltered
+        }
+
+        groupsFiltered
+    }
+
+    val grouped by derivedStateOf {
+        filteredContacts.sortedBy {
+            getFormattedName(it).uppercase()
+        }.groupBy {
+            if (it.isStarred) "starred"
+            else if (getFormattedName(it) == noName) "?"
+            else if (getFormattedName(it).firstOrNull()?.isDigit() ?: false) "#"
+            else getFormattedName(it).firstOrNull()?.uppercase() ?: "?"
+        }.toSortedMap(compareBy {
+            when (it) {
+                "starred" -> "A"
+                "?" -> "AA"
+                "#" -> "AAA"
+                else -> it + "B"
+            }
+        })
+    }
+
+    val showNoResultsMsg by derivedStateOf {
+        grouped.isEmpty() && contacts.isNotEmpty()
+    }
+
+    val showNoContactsMsg by derivedStateOf {
+        contacts.isEmpty() && !isRefreshing
+    }
+
+    val isRefreshing by derivedStateOf {
+        loadingContacts
+    }
+
+    val willRefresh by derivedStateOf {
+        (pullToRefreshState?.distanceFraction ?: 0f) > 1f
+    }
+
+    var pullToRefreshState: PullToRefreshState? = null
+
+    val displaySearch by derivedStateOf {
+        !displaySelectionActions
+    }
+
+    val displayLabels by derivedStateOf {
+        true
+    }
+
+    val displaySelectionActions by derivedStateOf {
+        selected.isNotEmpty()
+    }
+
+    var selected: List<Contact> by mutableStateOf(emptyList())
+
+    fun toggleSelection(contact: Contact) {
+        if (!selected.contains(contact))
+            selected += contact
+        else
+            selected -= contact
+    }
+
+    fun selectAll() {
+        selected = filteredContacts
+    }
+
+    fun deselectAll() {
+        selected = emptyList()
+    }
+
+    fun reverseSelection() {
+        selected = filteredContacts - selected.toSet()
+    }
+
+    fun deleteSelected() {
+        Thread {
+            runBlocking {
+                launch {
+                    for ((contact, successful) in deleteContacts(selected)) {
+                        if (successful && (contact in selected)) selected -= contact
+                    }
+                }
+            }
+        }.start()
+    }
+
+    fun onSearchQueryChange(newQuery: String) {
+        searchQuery = newQuery
+    }
+
+    fun addGroupFilter(group: String) {
+        selectedGroupsFilter = selectedGroupsFilter + group
+    }
+
+    fun removeGroupFilter(group: String) {
+        selectedGroupsFilter = selectedGroupsFilter - group
+    }
+
+    fun refreshContacts() {
+        loadAllContacts()
+    }
+}

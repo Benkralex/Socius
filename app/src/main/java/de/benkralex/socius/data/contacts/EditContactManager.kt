@@ -4,7 +4,7 @@ import de.benkralex.socius.MainActivity
 import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.model.ContactOrigin
 import de.benkralex.socius.data.contacts.local.database.LocalContactsEntity
-import de.benkralex.socius.syncadapter.SyncManager
+import de.benkralex.socius.data.syncadapter.SyncManager
 
 suspend fun editStarredStatus(contact: Contact, isStarred: Boolean): Boolean {
     val mainActivity = MainActivity

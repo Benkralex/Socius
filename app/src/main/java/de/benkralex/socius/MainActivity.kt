@@ -22,11 +22,11 @@ import de.benkralex.socius.data.contacts.local.database.LocalContactsDao
 import de.benkralex.socius.data.contacts.local.database.LocalContactsDatabase
 import de.benkralex.socius.data.contacts.system.load.loadFromURI
 import de.benkralex.socius.data.settings.noName
-import de.benkralex.socius.navigation.ContactDetailIntentNavKey
-import de.benkralex.socius.navigation.NavigationRoot
-import de.benkralex.socius.navigation.backStack
-import de.benkralex.socius.syncadapter.SyncManager
-import de.benkralex.socius.theme.ContactsTheme
+import de.benkralex.socius.ui.navigation.ContactDetailIntentNavKey
+import de.benkralex.socius.ui.navigation.NavigationRoot
+import de.benkralex.socius.ui.navigation.backStack
+import de.benkralex.socius.data.syncadapter.SyncManager
+import de.benkralex.socius.ui.theme.ContactsTheme
 
 class MainActivity : ComponentActivity() {
     companion object {

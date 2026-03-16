@@ -4,7 +4,7 @@ import de.benkralex.socius.MainActivity
 import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.contacts.loadAllContacts
 import de.benkralex.socius.data.contacts.local.database.LocalContactsEntity
-import de.benkralex.socius.syncadapter.SyncManager
+import de.benkralex.socius.data.syncadapter.SyncManager
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
