@@ -312,14 +312,10 @@ fun SelectionActions(
                 contentDescription = stringResource(R.string.content_desc_reverse_selection),
             )
         }
-        val shareExportWithString = stringResource(R.string.share_export_with)
-        val exportContactsString = stringResource(R.string.export_contacts)
         IconButton(
             onClick = {
                 viewModel.exportSelectedContacts(
                     context = MainActivity.instance,
-                    shareExportWithString = shareExportWithString,
-                    exportContactsString = exportContactsString,
                 )
             }
         ) {

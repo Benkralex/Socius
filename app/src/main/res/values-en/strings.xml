@@ -131,5 +131,6 @@
     <string name="content_desc_reverse_selection">Reverse selection</string>
     <string name="delete_count_contacts">Delete %count% contacts?</string>
     <string name="export_contacts">Export</string>
-    <string name="share_export_with">Share contacts with…</string>
+    <string name="import_dialog_title">Select, how you would like to import your contacts:</string>
+    <string name="export_dialog_title">Select, how you would like to export your contacts:</string>
 </resources>

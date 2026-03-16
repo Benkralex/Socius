@@ -164,19 +164,13 @@ class ContactsListViewModel : ViewModel() {
         loadAllContacts()
     }
 
-    fun exportSelectedContacts(
-        context: Context,
-        shareExportWithString: String, //stringResource(R.string.share_export_with)
-        exportContactsString: String, //stringResource(R.string.export_contacts)
-    ) {
+    fun exportSelectedContacts(context: Context) {
         Log.d("Contact Export", contactsToSociusJson(selected).joinToString("\n"))
         exportContacts(
             fileLines = contactsToGoogleCsv(selected),
             fileName = "socius-google-csv-export.csv",
             fileType = "text/csv",
             context = context,
-            shareExportWithString = shareExportWithString,
-            exportContactsString = exportContactsString,
         )
     }
 }

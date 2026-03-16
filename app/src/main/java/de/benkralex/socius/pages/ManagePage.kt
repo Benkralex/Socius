@@ -1,24 +1,22 @@
 package de.benkralex.socius.pages
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.automirrored.outlined.Input
 import androidx.compose.material.icons.outlined.ImportExport
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,7 +36,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import de.benkralex.socius.MainActivity
 import de.benkralex.socius.R
 import de.benkralex.socius.data.contacts.contacts
 import de.benkralex.socius.data.import_export.contactsToGoogleCsv
@@ -46,11 +43,11 @@ import de.benkralex.socius.data.import_export.contactsToSociusJson
 import de.benkralex.socius.data.import_export.exportContacts
 import de.benkralex.socius.data.import_export.googleCsvToContacts
 import de.benkralex.socius.data.import_export.importContacts
+import de.benkralex.socius.data.import_export.sociusJsonToContacts
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.IOException
-import java.nio.file.WatchEvent
 
 @Throws(IOException::class)
 fun getLinesOfFile(uri: Uri, activity: ComponentActivity): List<String> {
@@ -77,23 +74,22 @@ fun ManagePage(
     menuBar: @Composable () -> Unit,
     navigateSettings: () -> Unit = {},
 ) {
-    val context = LocalContext.current
-    val activity = remember(context) { context as? ComponentActivity }
-    val scope = rememberCoroutineScope()
-    val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.OpenDocument()
-    ) { uri ->
-        if (uri == null || activity == null) return@rememberLauncherForActivityResult
-        scope.launch(Dispatchers.IO) {
-            try {
-                val lines = getLinesOfFile(uri, activity)
-                if (lines.isNotEmpty()) {
-                    importContacts(googleCsvToContacts(lines))
-                }
-            } catch (th: IOException) {
-                Log.e("ManagePage", "Unable to read import file", th)
+    var showImportFormatSelectionDialog by remember { mutableStateOf(false) }
+    var showExportFormatSelectionDialog by remember { mutableStateOf(false) }
+
+    if (showImportFormatSelectionDialog) {
+        ImportDialog(
+            onDismiss = {
+                showImportFormatSelectionDialog = false
             }
-        }
+        )
+    }
+    if (showExportFormatSelectionDialog) {
+        ExportDialog(
+            onDismiss = {
+                showExportFormatSelectionDialog = false
+            }
+        )
     }
 
     Scaffold (
@@ -151,7 +147,7 @@ fun ManagePage(
                     .padding(8.dp)
                     .clickable(
                         onClick = {
-                            launcher.launch(arrayOf("*/*"))
+                            showImportFormatSelectionDialog = true
                         }
                     ),
                 verticalAlignment = Alignment.CenterVertically,
@@ -170,61 +166,6 @@ fun ManagePage(
                         .weight(1f)
                         .align(Alignment.CenterVertically),
                 )
-            }
-            val shareExportWithString = stringResource(R.string.share_export_with)
-            val exportContactsString = stringResource(R.string.export_contacts)
-            var showExportFormatSelectionDialog by remember { mutableStateOf(false) }
-            if (showExportFormatSelectionDialog) {
-                Dialog(
-                    onDismissRequest = {
-                        showExportFormatSelectionDialog = false
-                    }
-                ) {
-                    Card {
-                        Column (
-                            verticalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier
-                                .padding(16.dp),
-                        ) {
-                            Text("Wähle aus, wie du deine Kontakte exportieren möchtest:")
-                            ElevatedButton (
-                                onClick = {
-                                    exportContacts(
-                                        context = MainActivity.instance,
-                                        fileLines = contactsToGoogleCsv(contacts),
-                                        fileType = "text/csv",
-                                        fileName = "socius-google-csv-export.csv",
-                                        shareExportWithString = shareExportWithString,
-                                        exportContactsString = exportContactsString,
-                                    )
-                                }
-                            ) {
-                                Text("Google CSV")
-                            }
-                            ElevatedButton (
-                                onClick = {
-                                    exportContacts(
-                                        context = MainActivity.instance,
-                                        fileLines = contactsToSociusJson(contacts),
-                                        fileType = "text/json",
-                                        fileName = "socius-export.json",
-                                        shareExportWithString = shareExportWithString,
-                                        exportContactsString = exportContactsString,
-                                    )
-                                }
-                            ) {
-                                Text("Socius JSON")
-                            }
-                            ElevatedButton (
-                                onClick = {
-                                    showExportFormatSelectionDialog = false
-                                }
-                            ) {
-                                Text("Abbrechen")
-                            }
-                        }
-                    }
-                }
             }
             Row (
                 modifier = Modifier
@@ -251,6 +192,130 @@ fun ManagePage(
                         .weight(1f)
                         .align(Alignment.CenterVertically),
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun ExportDialog (
+    onDismiss: () -> Unit = {},
+    context: Context = LocalContext.current,
+) {
+    Dialog(
+        onDismissRequest = onDismiss,
+    ) {
+        Card {
+            Column (
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .padding(16.dp),
+            ) {
+                Text(stringResource(R.string.export_dialog_title))
+                ElevatedButton (
+                    onClick = {
+                        exportContacts(
+                            context = context,
+                            fileLines = contactsToGoogleCsv(contacts),
+                            fileType = "text/csv",
+                            fileName = "socius-google-csv-export.csv",
+                        )
+                    }
+                ) {
+                    Text(stringResource(R.string.import_export_format_google_csv))
+                }
+                ElevatedButton (
+                    onClick = {
+                        exportContacts(
+                            context = context,
+                            fileLines = contactsToSociusJson(contacts),
+                            fileType = "text/json",
+                            fileName = "socius-export.json",
+                        )
+                    }
+                ) {
+                    Text(stringResource(R.string.import_export_format_socius_json))
+                }
+                ElevatedButton (
+                    onClick = onDismiss
+                ) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ImportDialog (
+    onDismiss: () -> Unit = {},
+    context: Context = LocalContext.current,
+) {
+    val activity = remember(context) { context as? ComponentActivity }
+    val scope = rememberCoroutineScope()
+
+    val googleCsvLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri == null || activity == null) return@rememberLauncherForActivityResult
+        scope.launch(Dispatchers.IO) {
+            try {
+                val lines = getLinesOfFile(uri, activity)
+                if (lines.isNotEmpty()) {
+                    importContacts(googleCsvToContacts(lines))
+                }
+            } catch (th: IOException) {
+                Log.e("ManagePage", "Unable to read import file", th)
+            }
+        }
+    }
+
+    val sociusJsonLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri == null || activity == null) return@rememberLauncherForActivityResult
+        scope.launch(Dispatchers.IO) {
+            try {
+                val lines = getLinesOfFile(uri, activity)
+                if (lines.isNotEmpty()) {
+                    importContacts(sociusJsonToContacts(lines))
+                }
+            } catch (th: IOException) {
+                Log.e("ManagePage", "Unable to read import file", th)
+            }
+        }
+    }
+
+
+    Dialog(
+        onDismissRequest = onDismiss,
+    ) {
+        Card {
+            Column (
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier
+                    .padding(16.dp),
+            ) {
+                Text(stringResource(R.string.import_dialog_title))
+                ElevatedButton (
+                    onClick = {
+                        googleCsvLauncher.launch(arrayOf("text/csv"))
+                    }
+                ) {
+                    Text(stringResource(R.string.import_export_format_google_csv))
+                }
+                ElevatedButton (
+                    onClick = {
+                        sociusJsonLauncher.launch(arrayOf("text/json"))
+                    }
+                ) {
+                    Text(stringResource(R.string.import_export_format_socius_json))
+                }
+                ElevatedButton (
+                    onClick = onDismiss
+                ) {
+                    Text(stringResource(R.string.cancel))
+                }
             }
         }
     }
