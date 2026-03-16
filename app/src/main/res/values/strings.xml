@@ -140,4 +140,5 @@
     <string name="export_dialog_title">Select, how you would like to export your contacts:</string>
     <string name="import_export_format_socius_json" translatable="false">Socius JSON</string>
     <string name="import_export_format_google_csv" translatable="false">Google CSV</string>
+    <string name="next">Next</string>
 </resources>

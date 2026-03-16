@@ -6,21 +6,26 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForward
 import androidx.compose.material.icons.automirrored.outlined.Input
 import androidx.compose.material.icons.outlined.ImportExport
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -202,6 +207,8 @@ fun ExportDialog (
     onDismiss: () -> Unit = {},
     context: Context = LocalContext.current,
 ) {
+    var selectedOption: ImportExportOption by remember { mutableStateOf(ImportExportOption.SociusJson) }
+
     Dialog(
         onDismissRequest = onDismiss,
     ) {
@@ -212,34 +219,76 @@ fun ExportDialog (
                     .padding(16.dp),
             ) {
                 Text(stringResource(R.string.export_dialog_title))
-                ElevatedButton (
-                    onClick = {
-                        exportContacts(
-                            context = context,
-                            fileLines = contactsToGoogleCsv(contacts),
-                            fileType = "text/csv",
-                            fileName = "socius-google-csv-export.csv",
-                        )
-                    }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            selectedOption = ImportExportOption.SociusJson
+                        },
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(stringResource(R.string.import_export_format_google_csv))
-                }
-                ElevatedButton (
-                    onClick = {
-                        exportContacts(
-                            context = context,
-                            fileLines = contactsToSociusJson(contacts),
-                            fileType = "text/json",
-                            fileName = "socius-export.json",
-                        )
-                    }
-                ) {
+                    RadioButton(
+                        selected = selectedOption == ImportExportOption.SociusJson,
+                        onClick = {
+                            selectedOption = ImportExportOption.SociusJson
+                        }
+                    )
                     Text(stringResource(R.string.import_export_format_socius_json))
                 }
-                ElevatedButton (
-                    onClick = onDismiss
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            selectedOption = ImportExportOption.GoogleCsv
+                        },
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(stringResource(R.string.cancel))
+                    RadioButton(
+                        selected = selectedOption == ImportExportOption.GoogleCsv,
+                        onClick = {
+                            selectedOption = ImportExportOption.GoogleCsv
+                        }
+                    )
+                    Text(stringResource(R.string.import_export_format_google_csv))
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                ) {
+                    ElevatedButton (
+                        onClick = onDismiss
+                    ) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                    Spacer(Modifier.weight(1f))
+                    if (selectedOption != ImportExportOption.None) {
+                        Button (
+                            onClick = {
+                                when (selectedOption) {
+                                    ImportExportOption.None -> {}
+                                    ImportExportOption.SociusJson -> {
+                                        exportContacts(
+                                            context = context,
+                                            fileLines = contactsToSociusJson(contacts),
+                                            fileType = "text/json",
+                                            fileName = "socius-export.json",
+                                        )
+                                    }
+                                    ImportExportOption.GoogleCsv -> {
+                                        exportContacts(
+                                            context = context,
+                                            fileLines = contactsToGoogleCsv(contacts),
+                                            fileType = "text/csv",
+                                            fileName = "socius-google-csv-export.csv",
+                                        )
+                                    }
+                                }
+                            }
+                        ) {
+                            Text(stringResource(R.string.next))
+                        }
+                    }
                 }
             }
         }
@@ -286,6 +335,7 @@ fun ImportDialog (
         }
     }
 
+    var selectedOption: ImportExportOption by remember { mutableStateOf(ImportExportOption.None) }
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -297,26 +347,70 @@ fun ImportDialog (
                     .padding(16.dp),
             ) {
                 Text(stringResource(R.string.import_dialog_title))
-                ElevatedButton (
-                    onClick = {
-                        googleCsvLauncher.launch(arrayOf("text/csv"))
-                    }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            selectedOption = ImportExportOption.SociusJson
+                        },
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(stringResource(R.string.import_export_format_google_csv))
-                }
-                ElevatedButton (
-                    onClick = {
-                        sociusJsonLauncher.launch(arrayOf("text/json"))
-                    }
-                ) {
+                    RadioButton(
+                        selected = selectedOption == ImportExportOption.SociusJson,
+                        onClick = {
+                            selectedOption = ImportExportOption.SociusJson
+                        }
+                    )
                     Text(stringResource(R.string.import_export_format_socius_json))
                 }
-                ElevatedButton (
-                    onClick = onDismiss
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            selectedOption = ImportExportOption.GoogleCsv
+                        },
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(stringResource(R.string.cancel))
+                    RadioButton(
+                        selected = selectedOption == ImportExportOption.GoogleCsv,
+                        onClick = {
+                            selectedOption = ImportExportOption.GoogleCsv
+                        }
+                    )
+                    Text(stringResource(R.string.import_export_format_google_csv))
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                ) {
+                    ElevatedButton (
+                        onClick = onDismiss
+                    ) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                    Spacer(Modifier.weight(1f))
+                    if (selectedOption != ImportExportOption.None) {
+                        Button (
+                            onClick = {
+                                when (selectedOption) {
+                                    ImportExportOption.None -> {}
+                                    ImportExportOption.GoogleCsv -> googleCsvLauncher.launch(arrayOf("text/csv"))
+                                    ImportExportOption.SociusJson -> sociusJsonLauncher.launch(arrayOf("text/json"))
+                                }
+                            }
+                        ) {
+                            Text(stringResource(R.string.next))
+                        }
+                    }
                 }
             }
         }
     }
+}
+
+enum class ImportExportOption {
+    None,
+    GoogleCsv,
+    SociusJson,
 }

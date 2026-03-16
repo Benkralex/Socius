@@ -133,4 +133,5 @@
     <string name="export_contacts">Export</string>
     <string name="import_dialog_title">Select, how you would like to import your contacts:</string>
     <string name="export_dialog_title">Select, how you would like to export your contacts:</string>
+    <string name="next">Next</string>
 </resources>
