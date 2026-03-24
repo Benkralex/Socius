@@ -47,13 +47,14 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
-import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.contacts.deleteContact
 import de.benkralex.socius.data.contacts.editStarredStatus
+import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.settings.getFormattedName
 import de.benkralex.socius.ui.components.displayContact.CustomFieldsWidget
 import de.benkralex.socius.ui.components.displayContact.EmailsWidget
@@ -85,6 +86,8 @@ fun ContactDetailPage(
     val scrollState = rememberScrollState()
     var showDeletionConfirmationDialog by remember { mutableStateOf(false) }
 
+    val profilePicture = contact.getProfileBitmap(LocalContext.current)
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -103,7 +106,7 @@ fun ContactDetailPage(
                         modifier = Modifier
                             .alpha(alpha),
                         contact = contact,
-                        onProfileClick = if (contact.photoBitmap != null) {
+                        onProfileClick = if (profilePicture != null) {
                             {showProfileFullscreen = true}
                         } else null
                     )
@@ -257,17 +260,16 @@ fun ContactDetailPage(
                 .padding(paddingValues)
                 .fillMaxWidth()
         ) {
+            val onClickFunc = {showProfileFullscreen = true}
             ProfilePicture(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(top = 16.dp, bottom = 8.dp)
-                    .clickable (
-                        enabled = contact.photoBitmap != null,
-                    ) {
-                        showProfileFullscreen = true
-                    },
+                    .padding(top = 16.dp, bottom = 8.dp),
                 contact = contact,
                 size = 150.dp,
+                onClick = if (profilePicture != null) {
+                    onClickFunc
+                } else null,
             )
             NameWidget(contact)
             NoteWidget(contact.note)
@@ -282,7 +284,7 @@ fun ContactDetailPage(
             CustomFieldsWidget(contact.customFields)
         }
     }
-    if (contact.photoBitmap != null && showProfileFullscreen) {
+    if (profilePicture != null && showProfileFullscreen) {
         BackHandler {
             showProfileFullscreen = false
         }
@@ -296,7 +298,7 @@ fun ContactDetailPage(
             contentAlignment = Alignment.Center,
         ) {
             Image(
-                bitmap = contact.photoBitmap!!.asImageBitmap(),
+                bitmap = profilePicture.asImageBitmap(),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()

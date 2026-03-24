@@ -1,6 +1,10 @@
 package de.benkralex.socius.data.model
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
@@ -120,5 +124,29 @@ data class Contact(
         result = 31 * result + groups.hashCode()
         result = 31 * result + customFields.hashCode()
         return result
+    }
+
+    fun getProfileBitmap(context: Context): Bitmap? {
+        if (photoBitmap != null) {
+            return photoBitmap
+        }
+        if (thumbnailBitmap != null) {
+            return thumbnailBitmap
+        }
+        if (photoUri != null) {
+            try {
+                context.contentResolver.openInputStream(photoUri!!.toUri())?.use { inputStream ->
+                    return BitmapFactory.decodeStream(inputStream)
+                }
+            } catch (_: Exception) {}
+        }
+        if (thumbnailUri != null) {
+            try {
+                context.contentResolver.openInputStream(thumbnailUri!!.toUri())?.use { inputStream ->
+                    return BitmapFactory.decodeStream(inputStream)
+                }
+            } catch (_: Exception) {}
+        }
+        return null
     }
 }

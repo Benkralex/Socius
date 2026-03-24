@@ -1,6 +1,7 @@
 package de.benkralex.socius.ui.components.displayContact
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -27,8 +28,10 @@ import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import de.benkralex.socius.data.model.Contact
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -38,14 +41,9 @@ fun ProfilePicture(
     contact: Contact,
     size: Dp,
     isSelected: Boolean = false,
-    onClick: () -> Unit = {},
+    onClick: (() -> Unit)? = null,
 ) {
-    var bitmap: Bitmap? = null
-    if (size > 100.dp && contact.photoBitmap != null) {
-        bitmap = contact.photoBitmap
-    } else if (contact.thumbnailBitmap != null) {
-        bitmap = contact.thumbnailBitmap
-    }
+    val bitmap: Bitmap? = contact.getProfileBitmap(LocalContext.current)
 
     val rotation by animateFloatAsState(
         targetValue = if (isSelected) 180f else 0f,
@@ -58,8 +56,10 @@ fun ProfilePicture(
                 rotationY = rotation
                 cameraDistance = 12f * density
             }
-            .clickable {
-                onClick()
+            .clickable (
+                enabled = onClick != null
+            ) {
+                if (onClick != null) onClick()
             },
     ) {
         if (rotation <= 90f) {

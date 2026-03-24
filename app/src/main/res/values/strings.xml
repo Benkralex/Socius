@@ -141,4 +141,6 @@
     <string name="import_export_format_socius_json" translatable="false">Socius JSON</string>
     <string name="import_export_format_google_csv" translatable="false">Google CSV</string>
     <string name="next">Next</string>
+    <string name="select_image">Select image</string>
+    <string name="remove_profile_picture">Remove profile picture</string>
 </resources>

@@ -52,12 +52,13 @@ import de.benkralex.socius.data.settings.dateFormat
 import de.benkralex.socius.data.settings.dateFormats
 import de.benkralex.socius.data.settings.getFormattedDate
 import de.benkralex.socius.ui.components.displayContact.helpers.translateType
+import de.benkralex.socius.ui.pages.NewContactPageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditEvents(
     modifier: Modifier = Modifier,
-    viewModel: NewContactViewModel,
+    viewModel: NewContactPageViewModel,
 ) {
     Card (
         modifier = modifier

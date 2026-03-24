@@ -1,4 +1,4 @@
-package de.benkralex.socius.ui.components.editContact
+package de.benkralex.socius.ui.pages
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -13,12 +13,20 @@ import de.benkralex.socius.data.contacts.loadAllContacts
 import de.benkralex.socius.data.contacts.local.database.LocalContactsEntity
 import de.benkralex.socius.data.settings.getFormattedName
 import de.benkralex.socius.data.syncadapter.SyncManager
+import de.benkralex.socius.ui.components.editContact.EditEmailsState
+import de.benkralex.socius.ui.components.editContact.EditEventsState
+import de.benkralex.socius.ui.components.editContact.EditPhoneNumbersState
+import de.benkralex.socius.ui.components.editContact.EditPostalAddressesState
+import de.benkralex.socius.ui.components.editContact.EditProfilePictureState
+import de.benkralex.socius.ui.components.editContact.EditStructuredNameState
+import de.benkralex.socius.ui.components.editContact.EditWorkInformationState
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class NewContactViewModel : ViewModel() {
+class NewContactPageViewModel : ViewModel() {
     var showAddFieldBottomModal by mutableStateOf(false)
 
+    val profilePictureState: EditProfilePictureState = EditProfilePictureState()
     val structuredNameState: EditStructuredNameState = EditStructuredNameState()
     val workInformationState: EditWorkInformationState = EditWorkInformationState()
     val emailsState: EditEmailsState = EditEmailsState()
@@ -37,6 +45,7 @@ class NewContactViewModel : ViewModel() {
         Log.d("DEBUG EDIT CONTACT", "Load from Contact aufgerufen: ${getFormattedName(contact)}")
         isInitialized = true
         loadedContact = contact
+        profilePictureState.loadFromContact(contact)
         if (contact.id == "new") return
         structuredNameState.loadFromContact(contact)
         workInformationState.loadFromContact(contact)
@@ -49,7 +58,8 @@ class NewContactViewModel : ViewModel() {
 
     fun hasNoChanges(): Boolean {
         return if (loadedContact?.id == "new")
-            !structuredNameState.hasRelevantData()
+            !profilePictureState.hasRelevantData()
+                    && !structuredNameState.hasRelevantData()
                     && !workInformationState.hasRelevantData()
                     && !emailsState.hasRelevantData()
                     && !phoneNumbersState.hasRelevantData()
@@ -98,6 +108,8 @@ class NewContactViewModel : ViewModel() {
                                 events = eventsState.getRelevantData(),
                                 addresses = postalAddressesState.getRelevantData(),
 
+                                photoUri = profilePictureState.pictureUri?.toString(),
+
                                 isStarred = isStarred,
                             )
                         )
@@ -136,6 +148,9 @@ class NewContactViewModel : ViewModel() {
             events = eventsState.getRelevantData(),
             addresses = postalAddressesState.getRelevantData(),
 
+            photoUri = profilePictureState.pictureUri?.toString(),
+            photoBitmap = profilePictureState.picture,
+
             isStarred = isStarred,
         )
     }
@@ -144,6 +159,7 @@ class NewContactViewModel : ViewModel() {
         Log.d("DEBUG EDIT CONTACT", "Reset aufgerufen")
         showAddFieldBottomModal = false
 
+        profilePictureState.reset()
         structuredNameState.reset()
         workInformationState.reset()
         emailsState.reset()

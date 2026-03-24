@@ -31,12 +31,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
 import de.benkralex.socius.ui.components.displayContact.helpers.translateType
+import de.benkralex.socius.ui.pages.NewContactPageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditPhone(
     modifier: Modifier = Modifier,
-    viewModel: NewContactViewModel,
+    viewModel: NewContactPageViewModel,
 ) {
     Card (
         modifier = modifier

@@ -1,4 +1,4 @@
-package de.benkralex.socius.ui.components.editContact
+package de.benkralex.socius.ui.pages
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
@@ -55,6 +55,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.benkralex.socius.R
 import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.model.ContactOrigin
+import de.benkralex.socius.ui.components.editContact.AddFieldBottomModal
+import de.benkralex.socius.ui.components.editContact.EditEmails
+import de.benkralex.socius.ui.components.editContact.EditEvents
+import de.benkralex.socius.ui.components.editContact.EditPhone
+import de.benkralex.socius.ui.components.editContact.EditPostalAddresses
+import de.benkralex.socius.ui.components.editContact.EditProfilePicture
+import de.benkralex.socius.ui.components.editContact.EditStructuredName
+import de.benkralex.socius.ui.components.editContact.EditWorkInformation
 import de.benkralex.socius.ui.theme.DarkColorScheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -63,7 +71,7 @@ fun NewContactPage(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
     //openContact: (Int) -> Unit = {},
-    viewModel: NewContactViewModel = viewModel<NewContactViewModel>(),
+    viewModel: NewContactPageViewModel = viewModel<NewContactPageViewModel>(),
     contact: Contact = Contact(id = "new", ContactOrigin.LOCAL),
 ) {
     if (!viewModel.isInitialized) viewModel.loadFromContact(contact)
@@ -214,6 +222,7 @@ fun NewContactPage(
                 .imePadding(),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
+            EditProfilePicture(viewModel = viewModel)
             EditStructuredName(viewModel = viewModel)
             AnimatedVisibility(viewModel.workInformationState.showFields) {
                 EditWorkInformation(viewModel = viewModel)

@@ -49,9 +49,9 @@ import de.benkralex.socius.ui.pages.ContactDetailPage
 import de.benkralex.socius.ui.pages.ContactListPage
 import de.benkralex.socius.ui.pages.HighlightsPage
 import de.benkralex.socius.ui.pages.ManagePage
-import de.benkralex.socius.ui.components.editContact.NewContactPage
+import de.benkralex.socius.ui.pages.NewContactPage
 import de.benkralex.socius.ui.pages.SettingsPage
-import de.benkralex.socius.ui.components.editContact.NewContactViewModel
+import de.benkralex.socius.ui.pages.NewContactPageViewModel
 import de.benkralex.socius.ui.components.CustomNavigationBar
 import kotlinx.serialization.Serializable
 
@@ -347,7 +347,7 @@ fun NavigationRoot(
                     NavEntry(
                         key = key
                     ) {
-                        val viewModel: NewContactViewModel = viewModel<NewContactViewModel>()
+                        val viewModel: NewContactPageViewModel = viewModel<NewContactPageViewModel>()
                         LaunchedEffect(Unit) {
                             viewModel.reset()
                         }
@@ -364,7 +364,7 @@ fun NavigationRoot(
                     NavEntry(
                         key = key
                     ) {
-                        val viewModel: NewContactViewModel = viewModel<NewContactViewModel>()
+                        val viewModel: NewContactPageViewModel = viewModel<NewContactPageViewModel>()
                         LaunchedEffect(Unit) {
                             viewModel.reset()
                         }
