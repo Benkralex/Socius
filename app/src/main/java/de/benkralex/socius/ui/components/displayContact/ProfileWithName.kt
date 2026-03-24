@@ -1,6 +1,5 @@
 package de.benkralex.socius.ui.components.displayContact
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,22 +26,13 @@ fun ProfileWithName(
             .padding(16.dp)
     )
     {
-        if (onProfileClick != null) {
-            ProfilePicture(
-                contact = contact,
-                size = 40.dp,
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .clickable { onProfileClick() }
-            )
-        } else {
-            ProfilePicture(
-                contact = contact,
-                size = 40.dp,
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-            )
-        }
+        ProfilePicture(
+            contact = contact,
+            size = 40.dp,
+            modifier = Modifier
+                .align(Alignment.CenterVertically),
+            onClick = onProfileClick,
+        )
         Text(
             text = getFormattedName(contact),
             modifier = Modifier

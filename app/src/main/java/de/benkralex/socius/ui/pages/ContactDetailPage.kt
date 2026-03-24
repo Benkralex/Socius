@@ -1,6 +1,13 @@
 package de.benkralex.socius.ui.pages
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -284,7 +291,23 @@ fun ContactDetailPage(
             CustomFieldsWidget(contact.customFields)
         }
     }
-    if (profilePicture != null && showProfileFullscreen) {
+    AnimatedVisibility(
+        visible = showProfileFullscreen,
+        enter = scaleIn(
+            initialScale = 0.3f,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessMedium,
+            )
+        ) + fadeIn(),
+        exit = scaleOut(
+            targetScale = 0.3f,
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessMedium,
+            )
+        ) + fadeOut(),
+    ) {
         BackHandler {
             showProfileFullscreen = false
         }
@@ -298,7 +321,7 @@ fun ContactDetailPage(
             contentAlignment = Alignment.Center,
         ) {
             Image(
-                bitmap = profilePicture.asImageBitmap(),
+                bitmap = profilePicture!!.asImageBitmap(),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()

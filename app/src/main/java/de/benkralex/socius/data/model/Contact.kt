@@ -3,7 +3,6 @@ package de.benkralex.socius.data.model
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable

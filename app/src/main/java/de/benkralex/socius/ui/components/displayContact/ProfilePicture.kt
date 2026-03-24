@@ -1,7 +1,6 @@
 package de.benkralex.socius.ui.components.displayContact
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -31,7 +30,6 @@ import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import de.benkralex.socius.data.model.Contact
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
