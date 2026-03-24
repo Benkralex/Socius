@@ -9,14 +9,9 @@ This is an open-source Android contact app, local at the moment. In the future i
 [<img src="readme_content/obtainium-badge.png" alt="Get it on Obtainium" width="190">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Benkralex/Socius)
 
 # Screenshots
-<img src="readme_content/screenshots/overview/list.png" width="190">
-<img src="readme_content/screenshots/detailView/franzi.png" width="190">
-<img src="readme_content/screenshots/detailView/lukas.png" width="190">
-<img src="readme_content/screenshots/editOrNew/new_empty.png" width="190">
-<img src="readme_content/screenshots/editOrNew/new_address_mail.png" width="190">
-<img src="readme_content/screenshots/editOrNew/new_bottom_modal.png" width="190">
-<img src="readme_content/screenshots/manage/manage.png" width="190">
-<img src="readme_content/screenshots/manage/settings.png" width="190">
+| <img src="readme_content/screenshots/overview/list.png" width="190"> | <img src="readme_content/screenshots/detailView/franzi.png" width="190"> | <img src="readme_content/screenshots/detailView/lukas.png" width="190"> |<img src="readme_content/screenshots/editOrNew/new_empty.png" width="190"> |
+| - | - | - | - |
+| <img src="readme_content/screenshots/editOrNew/new_address_mail.png" width="190"> | <img src="readme_content/screenshots/editOrNew/new_bottom_modal.png" width="190"> | <img src="readme_content/screenshots/manage/manage.png" width="190"> | <img src="readme_content/screenshots/manage/settings.png" width="190">|
 
 # Features (finished)
 - Read Android-system-contacts and display them as read only
