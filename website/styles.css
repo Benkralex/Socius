@@ -1,5 +1,6 @@
-/* Material You Color Palette */
-:root {
+/* Material You Color Palette - Light Mode */
+:root,
+:root[data-theme="light"] {
     /* Primary Colors - From banner inspiration */
     --primary: #D94977;
     --primary-light: #F8BBD0;
@@ -10,18 +11,78 @@
     --secondary-light: #F3C9DC;
     --secondary-dark: #C47F9F;
     
-    /* Neutral Colors */
+    /* Neutral Colors - Light Mode */
     --background: #FFFBFE;
     --surface: #FFF7FC;
     --surface-variant: #F3EEF5;
     --on-surface: #1F1A20;
     --on-surface-variant: #49454E;
+    --navbar-bg: rgba(255, 251, 254, 0.95);
+    --border-color: #F3EEF5;
     
     /* Additional Colors */
     --error: #B3261E;
     --success: #4CAF50;
     --warning: #FFC107;
+}
+
+/* Dark Mode Color Palette */
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Primary Colors - Adjusted for dark mode */
+        --primary: #F0A0C8;
+        --primary-light: #4D2B3B;
+        --primary-dark: #FFB3D9;
+        
+        /* Secondary Colors - Dark Mode */
+        --secondary: #E8A5C0;
+        --secondary-light: #5C3D4F;
+        --secondary-dark: #F0B8D4;
+        
+        /* Neutral Colors - Dark Mode */
+        --background: #1F1A20;
+        --surface: #2A252C;
+        --surface-variant: #49454E;
+        --on-surface: #F4EFF4;
+        --on-surface-variant: #CAC4CF;
+        --navbar-bg: rgba(31, 26, 32, 0.95);
+        --border-color: #49454E;
+        
+        /* Additional Colors - Dark Mode */
+        --error: #F2B8B5;
+        --success: #81C784;
+        --warning: #FFD54F;
+    }
+}
+
+:root[data-theme="dark"] {
+    /* Primary Colors - Adjusted for dark mode */
+    --primary: #F0A0C8;
+    --primary-light: #4D2B3B;
+    --primary-dark: #FFB3D9;
     
+    /* Secondary Colors - Dark Mode */
+    --secondary: #E8A5C0;
+    --secondary-light: #5C3D4F;
+    --secondary-dark: #F0B8D4;
+    
+    /* Neutral Colors - Dark Mode */
+    --background: #1F1A20;
+    --surface: #2A252C;
+    --surface-variant: #49454E;
+    --on-surface: #F4EFF4;
+    --on-surface-variant: #CAC4CF;
+    --navbar-bg: rgba(31, 26, 32, 0.95);
+    --border-color: #49454E;
+    
+    /* Additional Colors - Dark Mode */
+    --error: #F2B8B5;
+    --success: #81C784;
+    --warning: #FFD54F;
+}
+
+/* Spacing and Typography - Same for both modes */
+:root {
     /* Spacing */
     --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
@@ -73,9 +134,12 @@
 
 html {
     scroll-behavior: smooth;
+    color-scheme: light dark;
 }
 
 body {
+    transition: background-color var(--transition-base), color var(--transition-base);
+}
     font-family: var(--font-family);
     background-color: var(--background);
     color: var(--on-surface);
@@ -119,9 +183,9 @@ a:hover {
 .navbar {
     position: sticky;
     top: 0;
-    background: rgba(255, 251, 254, 0.95);
+    background: var(--navbar-bg);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--surface-variant);
+    border-bottom: 1px solid var(--border-color);
     z-index: 100;
     box-shadow: var(--elevation-1);
 }

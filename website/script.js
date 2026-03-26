@@ -3,7 +3,9 @@
  * Handles smooth scrolling, animations, and interactivity
  */
 
+// Initialize theme on page load
 document.addEventListener('DOMContentLoaded', () => {
+    initializeTheme();
     initializeNavigation();
     observeElements();
     setupIntersectionObserver();
@@ -181,20 +183,60 @@ document.querySelectorAll('.btn').forEach(button => {
 });
 
 /**
- * Detect dark mode preference and adjust theme if needed
+ * Initialize theme on page load
+ * Respects system preference and localStorage
  */
-function checkDarkMode() {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+function initializeTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    if (prefersDark.matches) {
-        // You could add dark mode CSS variables here
-        document.documentElement.style.setProperty('--background', '#1F1A20');
-        document.documentElement.style.setProperty('--surface', '#211E24');
-        document.documentElement.style.setProperty('--on-surface', '#FFFBFE');
-        document.documentElement.style.setProperty('--on-surface-variant', '#CAC4CF');
+    let theme = 'light';
+    
+    // Priority: saved preference > system preference
+    if (savedTheme) {
+        theme = savedTheme;
+    } else if (prefersDark) {
+        theme = 'dark';
+    }
+    
+    applyTheme(theme);
+    setupThemeListener();
+}
+
+/**
+ * Apply theme to the document
+ */
+function applyTheme(theme) {
+    if (theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
     }
 }
 
-// Check dark mode on load and when it changes
-checkDarkMode();
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', checkDarkMode);
+/**
+ * Setup listener for system theme changes
+ */
+function setupThemeListener() {
+    const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    darkModeQuery.addEventListener('change', (e) => {
+        // Only update if user hasn't explicitly set a preference
+        const savedTheme = localStorage.getItem('theme');
+        if (!savedTheme) {
+            applyTheme(e.matches ? 'dark' : 'light');
+        }
+    });
+}
+
+/**
+ * Toggle theme between light and dark
+ * Overrides system preference
+ */
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    applyTheme(newTheme);
+}
