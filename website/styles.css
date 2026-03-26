@@ -222,7 +222,6 @@ html {
 
 body {
     transition: background-color var(--transition-base), color var(--transition-base);
-}
     font-family: var(--font-family);
     background-color: var(--background);
     color: var(--on-surface);
