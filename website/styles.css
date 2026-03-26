@@ -1,7 +1,43 @@
+/* Font Face Definitions - Baloo 2 Family */
+@font-face {
+    font-family: 'Baloo 2';
+    src: url('res/font/baloo_2_regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baloo 2';
+    src: url('res/font/baloo_2_medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baloo 2';
+    src: url('res/font/baloo_2_semi_bold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baloo 2';
+    src: url('res/font/baloo_2_bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baloo 2';
+    src: url('res/font/baloo_2_extra_bold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
 /* Material You Color Palette - Light Mode */
 :root,
 :root[data-theme="light"] {
-    /* Primary Colors - From banner inspiration */
+    /* Primary Colors - From app design */
     --primary: #D94977;
     --primary-light: #F8BBD0;
     --primary-dark: #A1295E;
@@ -26,10 +62,10 @@
     --warning: #FFC107;
 }
 
-/* Dark Mode Color Palette */
+/* Dark Mode Color Palette - Matches app design */
 @media (prefers-color-scheme: dark) {
     :root {
-        /* Primary Colors - Adjusted for dark mode */
+        /* Primary Colors - From app screenshots */
         --primary: #F0A0C8;
         --primary-light: #4D2B3B;
         --primary-dark: #FFB3D9;
@@ -39,13 +75,13 @@
         --secondary-light: #5C3D4F;
         --secondary-dark: #F0B8D4;
         
-        /* Neutral Colors - Dark Mode */
-        --background: #1F1A20;
-        --surface: #2A252C;
+        /* Neutral Colors - Dark Mode matching app */
+        --background: #0F0F0F;
+        --surface: #2A2527;
         --surface-variant: #49454E;
-        --on-surface: #F4EFF4;
+        --on-surface: #F5F5F5;
         --on-surface-variant: #CAC4CF;
-        --navbar-bg: rgba(31, 26, 32, 0.95);
+        --navbar-bg: rgba(15, 15, 15, 0.95);
         --border-color: #49454E;
         
         /* Additional Colors - Dark Mode */
@@ -56,7 +92,7 @@
 }
 
 :root[data-theme="dark"] {
-    /* Primary Colors - Adjusted for dark mode */
+    /* Primary Colors - From app screenshots */
     --primary: #F0A0C8;
     --primary-light: #4D2B3B;
     --primary-dark: #FFB3D9;
@@ -66,13 +102,13 @@
     --secondary-light: #5C3D4F;
     --secondary-dark: #F0B8D4;
     
-    /* Neutral Colors - Dark Mode */
-    --background: #1F1A20;
-    --surface: #2A252C;
+    /* Neutral Colors - Dark Mode matching app */
+    --background: #0F0F0F;
+    --surface: #2A2527;
     --surface-variant: #49454E;
-    --on-surface: #F4EFF4;
+    --on-surface: #F5F5F5;
     --on-surface-variant: #CAC4CF;
-    --navbar-bg: rgba(31, 26, 32, 0.95);
+    --navbar-bg: rgba(15, 15, 15, 0.95);
     --border-color: #49454E;
     
     /* Additional Colors - Dark Mode */
@@ -91,8 +127,8 @@
     --spacing-xl: 2rem;
     --spacing-2xl: 3rem;
     
-    /* Typography */
-    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    /* Typography - Using Baloo 2 */
+    --font-family: 'Baloo 2', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     --font-display-lg: 3.5rem;
     --font-display-md: 2.8rem;
     --font-display-sm: 2.2rem;
@@ -296,6 +332,23 @@ a:hover {
     color: var(--on-surface);
 }
 
+.app-icon-hero {
+    margin-bottom: var(--spacing-lg);
+    animation: float-icon var(--transition-slow) ease-in-out infinite;
+}
+
+.app-icon {
+    width: 120px;
+    height: 120px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--elevation-3);
+}
+
+@keyframes float-icon {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+}
+
 .hero-content h2 {
     font-size: var(--font-display-md);
     margin-bottom: var(--spacing-md);
@@ -423,99 +476,46 @@ a:hover {
     font-size: var(--font-body-md);
 }
 
-/* Design Section */
+/* Design Section - Gallery */
 .design {
-    background: linear-gradient(135deg, var(--primary-light) 0%, var(--background) 100%);
+    background-color: var(--background);
 }
 
-.design-content {
+.gallery-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-2xl);
-    align-items: center;
-}
-
-.design-text h2 {
-    color: var(--on-surface);
-    text-align: left;
-    margin-bottom: var(--spacing-lg);
-}
-
-.design-text h2::after {
-    left: 0;
-    transform: translateX(0);
-}
-
-.design-text p {
-    margin-bottom: var(--spacing-lg);
-    line-height: 1.8;
-}
-
-.design-list {
-    list-style: none;
-    margin-top: var(--spacing-xl);
-}
-
-.design-list li {
-    padding: var(--spacing-md) 0;
-    padding-left: var(--spacing-xl);
-    position: relative;
-    color: var(--on-surface);
-    font-weight: 500;
-}
-
-.design-list li::before {
-    content: '✓';
-    position: absolute;
-    left: 0;
-    color: var(--primary);
-    font-weight: bold;
-    font-size: 1.2em;
-}
-
-.phone-frame {
-    background: var(--surface);
-    border-radius: var(--radius-xl);
-    box-shadow: var(--elevation-3);
-    overflow: hidden;
-    aspect-ratio: 9 / 20;
-    max-width: 280px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+    max-width: 1200px;
     margin: 0 auto;
-    border: 8px solid var(--on-surface);
 }
 
-.status-bar {
-    height: 24px;
-    background: linear-gradient(90deg, var(--primary), var(--secondary));
+.gallery-item {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--elevation-2);
+    transition: all var(--transition-base);
+    background: var(--surface);
 }
 
-.app-content {
-    padding: var(--spacing-lg);
-    height: calc(100% - 24px);
+.gallery-item:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--elevation-3);
 }
 
-.app-content p {
-    font-weight: 600;
+.screenshot {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--radius-lg);
+}
+
+.gallery-caption {
+    padding: var(--spacing-md);
+    text-align: center;
     color: var(--on-surface);
-    margin-bottom: var(--spacing-md);
-}
-
-.contact-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
-}
-
-.contact-item {
-    height: 48px;
-    background: linear-gradient(90deg, var(--primary-light), var(--secondary-light));
-    border-radius: var(--radius-md);
-    animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+    font-weight: 600;
+    background: var(--surface);
 }
 
 /* Download Section */
@@ -641,12 +641,8 @@ a:hover {
         font-size: var(--font-title-md);
     }
 
-    .design-content {
+    .gallery-grid {
         grid-template-columns: 1fr;
-    }
-
-    .design-text h2::after {
-        left: 0;
     }
 
     .blob {
