@@ -52,30 +52,30 @@
 /* Material You Color Palette - Light Mode */
 :root,
 :root[data-theme="light"] {
-    /* Primary Colors - From app design */
+    /* Primary Colors - Vibrant pink from app */
     --primary: #D94977;
     --primary-rgb: 217, 73, 119;
-    --primary-light: #F0BCC6;
+    --primary-light: #FFE5EB;
     --primary-dark: #A1295E;
     
     /* Secondary Colors */
     --secondary: #E8A5C0;
-    --secondary-light: #F3C9DC;
+    --secondary-light: #FFE5EB;
     --secondary-dark: #C47F9F;
     
-    /* Neutral Colors - Light Mode - Improved */
-    --background: #FFFAF8;
-    --surface: #FFF8F5;
-    --surface-variant: #F0E7ED;
-    --on-surface: #1F1810;
-    --on-surface-variant: #524841;
-    --navbar-bg: rgba(255, 250, 248, 0.95);
-    --border-color: #E8DCD5;
+    /* Neutral Colors - Light Mode - REDESIGNED */
+    --background: #FFFFFF;
+    --surface: #F8F3F6;
+    --surface-variant: #EDE4EB;
+    --on-surface: #1F1A20;
+    --on-surface-variant: #54474D;
+    --navbar-bg: rgba(255, 255, 255, 0.95);
+    --border-color: #E0D9E1;
     
     /* Additional Colors */
     --error: #B3261E;
-    --success: #4CAF50;
-    --warning: #FFC107;
+    --success: #52B788;
+    --warning: #FF9800;
 }
 
 /* Dark Mode Color Palette - Matches app design */
@@ -237,19 +237,18 @@ a:hover {
 .navbar {
     position: sticky;
     top: 0;
-    background: transparent;
-    backdrop-filter: none;
-    border-bottom: none;
+    background: linear-gradient(180deg, rgba(var(--primary-rgb), 0.15), rgba(var(--primary-rgb), 0.05));
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
     z-index: 100;
-    box-shadow: none;
+    box-shadow: var(--elevation-1);
     transition: all var(--transition-base);
 }
 
 .navbar.scrolled {
-    background: linear-gradient(180deg, rgba(var(--primary-rgb), 0.1), transparent);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border-color);
-    box-shadow: var(--elevation-1);
+    background: linear-gradient(180deg, rgba(var(--primary-rgb), 0.2), rgba(var(--primary-rgb), 0.08));
+    backdrop-filter: blur(12px);
+    box-shadow: var(--elevation-2);
 }
 
 .navbar .container {
