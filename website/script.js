@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeTheme();
     initializeNavigation();
     initializeNavbarScroll();
+    initializeExternalLinks();
     observeElements();
     setupIntersectionObserver();
 });
@@ -22,6 +23,20 @@ function initializeNavigation() {
         link.addEventListener('click', (e) => {
             // Allow default link behavior for hash navigation
             // Smooth scroll is handled by CSS scroll-behavior
+        });
+    });
+}
+
+/**
+ * Initialize external links with security attributes
+ */
+function initializeExternalLinks() {
+    const externalButtons = document.querySelectorAll('[data-external]');
+    
+    externalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const url = button.getAttribute('data-external');
+            window.open(url, '_blank', 'noopener,noreferrer');
         });
     });
 }
@@ -158,36 +173,10 @@ document.querySelectorAll('.btn').forEach(button => {
         ripple.style.top = y + 'px';
         ripple.classList.add('ripple');
         
-        // Add ripple CSS if not already present
-        if (!document.querySelector('style[data-ripple]')) {
-            const style = document.createElement('style');
-            style.setAttribute('data-ripple', 'true');
-            style.textContent = `
-                .btn {
-                    position: relative;
-                    overflow: hidden;
-                }
-                
-                .btn .ripple {
-                    position: absolute;
-                    border-radius: 50%;
-                    background: rgba(255, 255, 255, 0.6);
-                    transform: scale(0);
-                    animation: ripple-animation 0.6s ease-out;
-                    pointer-events: none;
-                }
-                
-                @keyframes ripple-animation {
-                    to {
-                        transform: scale(4);
-                        opacity: 0;
-                    }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-        
         this.appendChild(ripple);
+        
+        // Remove ripple element after animation completes
+        setTimeout(() => ripple.remove(), 600);
     });
 });
 
