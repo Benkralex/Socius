@@ -7,6 +7,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     initializeTheme();
     initializeNavigation();
+    initializeNavbarScroll();
     observeElements();
     setupIntersectionObserver();
 });
@@ -120,18 +121,26 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 /**
- * Update navbar on scroll
+ * Initialize navbar scroll effects
  */
-window.addEventListener('scroll', () => {
+function initializeNavbarScroll() {
+    window.addEventListener('scroll', updateNavbarStyle);
+    updateNavbarStyle(); // Call once on load
+}
+
+/**
+ * Update navbar styling based on scroll position
+ */
+function updateNavbarStyle() {
     const navbar = document.querySelector('.navbar');
-    const scrolled = window.scrollY > 50;
+    const scrolled = window.scrollY > 10;
     
     if (scrolled) {
-        navbar.style.boxShadow = 'var(--elevation-2)';
+        navbar.classList.add('scrolled');
     } else {
-        navbar.style.boxShadow = 'var(--elevation-1)';
+        navbar.classList.remove('scrolled');
     }
-});
+}
 
 /**
  * Add ripple effect to buttons

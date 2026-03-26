@@ -46,32 +46,47 @@
             <h2>Features</h2>
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">📱</div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="6" y="2" width="12" height="20" rx="2" ry="2"/>
+                            <path d="M12 18h.01"/>
+                        </svg>
+                    </div>
                     <h3>Material You</h3>
                     <p>Dynamic color system that adapts to your device's wallpaper and preferences</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🎨</div>
+                    <div class="feature-icon">
+                        <img src="res/icons/palette_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="Design icon">
+                    </div>
                     <h3>Material 3 Design</h3>
                     <p>Modern, clean interface following Google's latest design guidelines</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
+                    <div class="feature-icon">
+                        <img src="res/icons/lock_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="Privacy icon">
+                    </div>
                     <h3>Privacy First</h3>
                     <p>Open source code means transparency and full control over your data</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
+                    <div class="feature-icon">
+                        <img src="res/icons/bolt_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="Performance icon">
+                    </div>
                     <h3>Fast & Responsive</h3>
                     <p>Optimized performance for smooth interactions and quick loading</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <h3>Sync Support</h3>
-                    <p>Compatible with standard contact sync protocols and services</p>
+                    <div class="feature-icon">
+                        <img src="res/icons/contacts_product_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="Contacts icon">
+                    </div>
+                    <h3>Contact Management</h3>
+                    <p>Create, edit, and manage all your contacts in one beautiful app</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🛠️</div>
+                    <div class="feature-icon">
+                        <img src="res/icons/build_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24.svg" alt="Development icon">
+                    </div>
                     <h3>Community Driven</h3>
                     <p>Developed by the community, for the community. Contributions welcome!</p>
                 </div>
@@ -130,15 +145,28 @@
     <section id="about" class="about section">
         <div class="container">
             <h2>About Socius</h2>
-            <p>Socius is an open source Android application built by passionate developers who believe in privacy, beautiful design, and community-driven development. We use modern Android technologies and follow Google's Material Design guidelines to create an app that's both powerful and beautiful.</p>
-            <p>Whether you're managing hundreds of contacts or just a few close friends, Socius provides a smooth, responsive experience that respects your data and your device's design language.</p>
+            <p>A modern looking, open-source Material 3 contacts app for Android. I wanted a great contacts app and didn't find a good one, so I made my own.</p>
+            <p>Socius is currently a local contact manager that works seamlessly with your Android device. In the future, it will support syncing with self-hosted servers like Nextcloud or a dedicated Socius Server to keep your contacts synchronized across devices.</p>
+            
+            <div class="features-list">
+                <h3>Current Features</h3>
+                <ul>
+                    <li>Read and display Android system contacts (read-only)</li>
+                    <li>Create and manage local contacts</li>
+                    <li>View contact details and information</li>
+                    <li>Sync local contacts with Android system via SyncAdapter</li>
+                    <li>Import and export contacts as Google CSV and Socius JSON</li>
+                    <li>Track important events like birthdays and anniversaries</li>
+                    <li>Beautiful Material 3 design with Material You support</li>
+                </ul>
+            </div>
             
             <div class="tech-stack">
                 <h3>Built With</h3>
                 <div class="tech-badges">
                     <span class="badge">Kotlin</span>
                     <span class="badge">Android</span>
-                    <span class="badge">Material Design</span>
+                    <span class="badge">Material 3</span>
                     <span class="badge">Material You</span>
                 </div>
             </div>
