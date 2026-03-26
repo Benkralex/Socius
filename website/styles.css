@@ -54,7 +54,8 @@
 :root[data-theme="light"] {
     /* Primary Colors - From app design */
     --primary: #D94977;
-    --primary-light: #F8BBD0;
+    --primary-rgb: 217, 73, 119;
+    --primary-light: #F0BCC6;
     --primary-dark: #A1295E;
     
     /* Secondary Colors */
@@ -62,14 +63,14 @@
     --secondary-light: #F3C9DC;
     --secondary-dark: #C47F9F;
     
-    /* Neutral Colors - Light Mode */
-    --background: #FFFBFE;
-    --surface: #FFF7FC;
-    --surface-variant: #F3EEF5;
-    --on-surface: #1F1A20;
-    --on-surface-variant: #49454E;
-    --navbar-bg: rgba(255, 251, 254, 0.95);
-    --border-color: #F3EEF5;
+    /* Neutral Colors - Light Mode - Improved */
+    --background: #FFFAF8;
+    --surface: #FFF8F5;
+    --surface-variant: #F0E7ED;
+    --on-surface: #1F1810;
+    --on-surface-variant: #524841;
+    --navbar-bg: rgba(255, 250, 248, 0.95);
+    --border-color: #E8DCD5;
     
     /* Additional Colors */
     --error: #B3261E;
@@ -82,6 +83,7 @@
     :root {
         /* Primary Colors - From app screenshots */
         --primary: #F0A0C8;
+        --primary-rgb: 240, 160, 200;
         --primary-light: #4D2B3B;
         --primary-dark: #FFB3D9;
         
@@ -109,6 +111,7 @@
 :root[data-theme="dark"] {
     /* Primary Colors - From app screenshots */
     --primary: #F0A0C8;
+    --primary-rgb: 240, 160, 200;
     --primary-light: #4D2B3B;
     --primary-dark: #FFB3D9;
     
@@ -243,7 +246,7 @@ a:hover {
 }
 
 .navbar.scrolled {
-    background: var(--navbar-bg);
+    background: linear-gradient(180deg, rgba(var(--primary-rgb), 0.1), transparent);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-color);
     box-shadow: var(--elevation-1);
