@@ -34,7 +34,7 @@
     font-style: normal;
 }
 
-/* Font Face Definitions - Baloo Bhaijaan 2 Family */
+/* Font Face Definitions - Baloo Bhaijaan 2 Family (for internationalization) */
 @font-face {
     font-family: 'Baloo Bhaijaan 2';
     src: url('res/font/baloo_bhaijaan_2_regular.ttf') format('truetype');
@@ -44,8 +44,37 @@
 
 @font-face {
     font-family: 'Baloo Bhaijaan 2';
+    src: url('res/font/baloo_bhaijaan_2_medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baloo Bhaijaan 2';
+    src: url('res/font/baloo_bhaijaan_2_semi_bold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baloo Bhaijaan 2';
     src: url('res/font/baloo_bhaijaan_2_bold.ttf') format('truetype');
     font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baloo Bhaijaan 2';
+    src: url('res/font/baloo_bhaijaan_2_extra_bold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+/* Font Face Definitions - Bangers (for fun headings) */
+@font-face {
+    font-family: 'Bangers';
+    src: url('res/font/bangers_regular.ttf') format('truetype');
+    font-weight: 400;
     font-style: normal;
 }
 
