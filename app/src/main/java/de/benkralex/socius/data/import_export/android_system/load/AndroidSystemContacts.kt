@@ -1,4 +1,4 @@
-package de.benkralex.socius.data.contacts.system.load
+package de.benkralex.socius.data.import_export.android_system.load
 
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -70,7 +70,7 @@ suspend fun getAndroidSystemContacts(context: Context): List<Contact> =
                 contacts.add(
                     Contact(
                         id = contactId,
-                        origin = ContactOrigin.SYSTEM,
+                        origin = ContactOrigin.IMPORT,
                         displayName = displayName,
                         photoUri = photoUri,
                         photoBitmap = photoBitmap,

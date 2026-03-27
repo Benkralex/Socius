@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -112,6 +111,10 @@ fun ExportDialog (
                                         fileType = "text/comma-separated-values",
                                         fileName = "socius-google-csv-export.csv",
                                     )
+                                    onDismiss()
+                                }
+
+                                else -> {
                                     onDismiss()
                                 }
                             }

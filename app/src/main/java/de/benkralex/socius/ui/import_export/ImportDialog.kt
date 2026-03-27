@@ -9,7 +9,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -31,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import de.benkralex.socius.R
+import de.benkralex.socius.data.import_export.android_system.importAndroidSystemContacts
 import de.benkralex.socius.data.import_export.common.importContacts
 import de.benkralex.socius.data.import_export.google_csv.googleCsvToContacts
 import de.benkralex.socius.data.import_export.socius_json.sociusJsonToContacts
@@ -134,6 +134,22 @@ fun ImportDialog (
                         )
                         Text(stringResource(R.string.import_export_format_google_csv))
                     }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                selectedOption = ImportExportOption.AndroidSystem
+                            },
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        RadioButton(
+                            selected = selectedOption == ImportExportOption.AndroidSystem,
+                            onClick = {
+                                selectedOption = ImportExportOption.AndroidSystem
+                            }
+                        )
+                        Text(stringResource(R.string.import_android_system_contacts))
+                    }
                     ElevatedButton(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -159,6 +175,17 @@ fun ImportDialog (
                                     ImportExportOption.GoogleCsv -> {
                                         googleCsvLauncher.launch(arrayOf("text/comma-separated-values"))
                                         isImporting = true
+                                    }
+
+                                    ImportExportOption.AndroidSystem -> {
+                                        isImporting = true
+                                        scope.launch(Dispatchers.IO) {
+                                            try {
+                                                importAndroidSystemContacts(context)
+                                            } catch (_: Exception) {}
+                                            isImporting = false
+                                            onDismiss()
+                                        }
                                     }
                                 }
                             },

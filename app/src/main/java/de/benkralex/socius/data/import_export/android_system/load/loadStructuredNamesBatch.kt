@@ -1,8 +1,8 @@
-package de.benkralex.socius.data.contacts.system.load
+package de.benkralex.socius.data.import_export.android_system.load
 
 import android.content.ContentResolver
 import android.provider.ContactsContract
-import de.benkralex.socius.data.contacts.system.data.StructuredNameData
+import de.benkralex.socius.data.import_export.android_system.data.StructuredNameData
 
 fun loadStructuredNamesBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, StructuredNameData> {
     val result = mutableMapOf<String, StructuredNameData>()

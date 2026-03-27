@@ -13,7 +13,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.outlined.FormatPaint
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -35,8 +34,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
-import de.benkralex.socius.data.contacts.reloadSystemContacts
-import de.benkralex.socius.data.settings.loadAndroidSystemContacts
 import de.benkralex.socius.data.settings.preferNickname
 import de.benkralex.socius.data.settings.saveSettings
 import de.benkralex.socius.ui.components.settings.BooleanSetting
@@ -74,24 +71,13 @@ fun SettingsPage(
     ) { paddingValues ->
         var selectedTabIndex by remember { mutableIntStateOf(0) }
         val tabsList = listOf(
-            TabData(
+            /*TabData(
                 title = stringResource(R.string.settings_general),
                 icon = Icons.Outlined.Settings,
                 content = {
-                    val context = LocalContext.current
-                    BooleanSetting(
-                        title = stringResource(R.string.settings_load_android_system_contacts),
-                        state = BooleanSettingState(
-                            onChangeCallback = {
-                                loadAndroidSystemContacts = it
-                                saveSettings(context)
-                                if (it) reloadSystemContacts()
-                            },
-                            initialValue = loadAndroidSystemContacts,
-                        ),
-                    )
+
                 },
-            ),
+            ),*/
             TabData(
                 title = stringResource(R.string.settings_formatting),
                 icon = Icons.Outlined.FormatPaint,

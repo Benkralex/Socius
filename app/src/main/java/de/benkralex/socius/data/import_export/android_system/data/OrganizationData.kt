@@ -1,4 +1,4 @@
-package de.benkralex.socius.data.contacts.system.data
+package de.benkralex.socius.data.import_export.android_system.data
 
 data class OrganizationData(
     val organization: String? = null,

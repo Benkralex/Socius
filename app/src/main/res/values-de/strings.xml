@@ -136,4 +136,5 @@
     <string name="next">Weiter</string>
     <string name="select_image">Bild auswählen</string>
     <string name="remove_profile_picture">Profilbild entfernen</string>
+    <string name="import_android_system_contacts">Android System</string>
 </resources>

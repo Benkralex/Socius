@@ -4,4 +4,5 @@ enum class ImportExportOption {
     None,
     GoogleCsv,
     SociusJson,
+    AndroidSystem,
 }

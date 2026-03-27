@@ -84,11 +84,6 @@ class NewContactPageViewModel : ViewModel() {
                         isSaving = false
                         return@launch
                     }
-                    if (loadedContact!!.origin == ContactOrigin.SYSTEM) {
-                        error = true
-                        isSaving = false
-                        return@launch
-                    }
                     if (loadedContact!!.origin == ContactOrigin.LOCAL && loadedContact!!.id == "new") {
                         MainActivity.localContactsDao.insert(
                             LocalContactsEntity(

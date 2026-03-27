@@ -16,7 +16,6 @@ var nameFormat: Int = 0
 var fullNameFormat: Int = 0
 var preferNickname by mutableStateOf(true)
 var dateFormat: Int = 0
-var loadAndroidSystemContacts by mutableStateOf(true)
 
 val charsToTrim: CharArray = charArrayOf(',', ' ', '/', '\\', '.', '-', '_', ' ')
 
@@ -27,7 +26,6 @@ fun saveSettings(context: Context) {
         putInt("fullNameFormat", fullNameFormat)
         putBoolean("preferNickname", preferNickname)
         putInt("dateFormat", dateFormat)
-        putBoolean("loadAndroidSystemContacts", loadAndroidSystemContacts)
     }
 }
 
@@ -37,5 +35,4 @@ fun loadSettings(context: Context) {
     fullNameFormat = sharedPreferences.getInt("fullNameFormat", 0)
     preferNickname = sharedPreferences.getBoolean("preferNickname", true)
     dateFormat = sharedPreferences.getInt("dateFormat", 0)
-    loadAndroidSystemContacts = sharedPreferences.getBoolean("loadAndroidSystemContacts", true)
 }

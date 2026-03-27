@@ -16,9 +16,6 @@ suspend fun editStarredStatus(contact: Contact, isStarred: Boolean): Boolean {
                 isStarred = isStarred
             )
         }
-        ContactOrigin.SYSTEM -> return false
-        ContactOrigin.REMOTE -> return false
-        ContactOrigin.URI -> return false
         ContactOrigin.IMPORT -> return false
     }
     loadAllContacts()
@@ -33,9 +30,6 @@ suspend fun deleteContact(contact: Contact): Boolean {
         ContactOrigin.LOCAL -> {
             mainActivity.localContactsDao.deleteById(id)
         }
-        ContactOrigin.SYSTEM -> return false
-        ContactOrigin.REMOTE -> return false
-        ContactOrigin.URI -> return false
         ContactOrigin.IMPORT -> return false
     }
     loadAllContacts()
@@ -57,9 +51,6 @@ suspend fun deleteContacts(contacts: List<Contact>): Map<Contact, Boolean> {
                 mainActivity.localContactsDao.deleteById(id)
                 returnMap[contact] = true
             }
-            ContactOrigin.SYSTEM -> returnMap[contact] = false
-            ContactOrigin.REMOTE -> returnMap[contact] = false
-            ContactOrigin.URI -> returnMap[contact] = false
             ContactOrigin.IMPORT -> returnMap[contact] = false
         }
     }
@@ -103,9 +94,6 @@ suspend fun editContact(contact: Contact): Boolean {
             )
             mainActivity.localContactsDao.update(entity)
         }
-        ContactOrigin.SYSTEM -> return false
-        ContactOrigin.REMOTE -> return false
-        ContactOrigin.URI -> return false
         ContactOrigin.IMPORT -> return false
     }
     loadAllContacts()

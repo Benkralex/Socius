@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.core.net.toUri
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -34,10 +33,10 @@ data class Contact(
     var anniversary: String? = null, // Format: YYYY-MM-DD
 
     var photoUri: String? = null,
-    @Contextual
+    @Serializable(with = BitmapSerializer::class)
     var photoBitmap: Bitmap? = null,
     var thumbnailUri: String? = null,
-    @Contextual
+    @Serializable(with = BitmapSerializer::class)
     var thumbnailBitmap: Bitmap? = null,
 
     var phoneNumbers: List<PhoneNumber> = emptyList(),
@@ -51,8 +50,7 @@ data class Contact(
     var customFields: Map<String, String> = emptyMap()
 ) {
     fun isReadOnly(): Boolean {
-        return origin == ContactOrigin.SYSTEM
-                || origin == ContactOrigin.URI
+        return false
     }
 
     override fun equals(other: Any?): Boolean {

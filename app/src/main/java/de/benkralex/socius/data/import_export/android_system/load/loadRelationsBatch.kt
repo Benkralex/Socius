@@ -1,4 +1,4 @@
-package de.benkralex.socius.data.contacts.system.load
+package de.benkralex.socius.data.import_export.android_system.load
 
 import android.content.ContentResolver
 import android.provider.ContactsContract

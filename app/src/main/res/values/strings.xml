@@ -143,4 +143,5 @@
     <string name="next">Next</string>
     <string name="select_image">Select image</string>
     <string name="remove_profile_picture">Remove profile picture</string>
+    <string name="import_android_system_contacts">Android System</string>
 </resources>

@@ -1,8 +1,8 @@
-package de.benkralex.socius.data.contacts.system.load
+package de.benkralex.socius.data.import_export.android_system.load
 
 import android.content.ContentResolver
 import android.provider.ContactsContract
-import de.benkralex.socius.data.contacts.system.data.OrganizationData
+import de.benkralex.socius.data.import_export.android_system.data.OrganizationData
 
 fun loadOrganizationsBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, OrganizationData> {
     val result = mutableMapOf<String, OrganizationData>()
