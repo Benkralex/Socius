@@ -1,10 +1,12 @@
 package de.benkralex.socius.data.contacts.local.database
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.core.net.toUri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
 import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.model.ContactEvent
 import de.benkralex.socius.data.model.ContactOrigin
@@ -39,7 +41,11 @@ data class LocalContactsEntity (
     var isStarred: Boolean = false,
 
     var photoUri: String? = null,
+    @field:TypeConverters(BitmapTypeConverter::class)
+    var photoBitmap: Bitmap? = null,
     var thumbnailUri: String? = null,
+    @field:TypeConverters(BitmapTypeConverter::class)
+    var thumbnailBitmap: Bitmap? = null,
 
     var phoneNumbers: List<PhoneNumber> = emptyList(),
     var emails: List<Email> = emptyList(),
@@ -69,7 +75,9 @@ data class LocalContactsEntity (
             note = contact.note,
             isStarred = contact.isStarred,
             photoUri = contact.photoUri,
+            photoBitmap = contact.photoBitmap,
             thumbnailUri = contact.thumbnailUri,
+            thumbnailBitmap = contact.thumbnailBitmap,
             phoneNumbers = contact.phoneNumbers,
             emails = contact.emails,
             addresses = contact.addresses,
@@ -83,7 +91,7 @@ data class LocalContactsEntity (
 
     fun toContact(context: Context): Contact {
         val contentResolver = context.contentResolver
-        val photoBitmap = if (photoUri != null) {
+        val photoBitmap = photoBitmap ?: if (photoUri != null) {
             try {
                 contentResolver.openInputStream(photoUri!!.toUri())?.use { inputStream ->
                     BitmapFactory.decodeStream(inputStream)
@@ -93,7 +101,7 @@ data class LocalContactsEntity (
             }
         } else null
 
-        val thumbnailBitmap = if (thumbnailUri != null) {
+        val thumbnailBitmap = thumbnailBitmap ?: if (thumbnailUri != null) {
             try {
                 contentResolver.openInputStream(thumbnailUri!!.toUri())?.use { inputStream ->
                     BitmapFactory.decodeStream(inputStream)

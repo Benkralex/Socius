@@ -16,6 +16,10 @@ import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.collections.iterator
 import kotlin.math.min
+import androidx.core.graphics.createBitmap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 fun parseCSVLine(line: String): List<String> {
     val result = mutableListOf<String>()
@@ -56,16 +60,30 @@ fun checkIfLabelIsType(label: String): Boolean {
     }
 }
 
-fun loadPicture(link: String): Bitmap {
-    val url = URL(link)
-    val connection = url.openConnection() as HttpURLConnection
-    connection.doInput = true
-    connection.connect()
-    val input = connection.inputStream
-    return BitmapFactory.decodeStream(input)
+suspend fun loadPicture(link: String): Bitmap = withContext(Dispatchers.IO) {
+    try {
+        val connection = (URL(link).openConnection() as HttpURLConnection).apply {
+            connectTimeout = 10_000
+            readTimeout = 10_000
+            requestMethod = "GET"
+            doInput = true
+            connect()
+        }
+
+        try {
+            connection.inputStream.use { input ->
+                BitmapFactory.decodeStream(input) ?: createBitmap(1, 1)
+            }
+        } finally {
+            connection.disconnect()
+        }
+    } catch (e: Exception) {
+        Log.e("GoogleCsvImport", "Bild konnte nicht geladen werden: $link", e)
+        createBitmap(1, 1)
+    }
 }
 
-fun googleCsvToContacts(file: List<String>): List<Contact> {
+suspend fun googleCsvToContacts(file: List<String>): List<Contact> {
     val contacts: MutableList<Contact> = mutableListOf()
     val cols: List<String> = file[0].split(",")
     for (i in 1..<file.size) {
@@ -191,7 +209,12 @@ fun googleCsvToContacts(file: List<String>): List<Contact> {
                 }
                 col == "Photo" -> {
                     if (value.isEmpty()) continue
-                    contact.photoBitmap = loadPicture(value)
+                    val bitmap: Bitmap = loadPicture(value)
+                    Log.d("GoogleCsvImport", "Bild geladen: $value, Bitmap: $bitmap")
+                    contact.photoBitmap = bitmap
+                    contact.thumbnailBitmap = bitmap
+                    Log.d("GoogleCsvImport", "Bild gespeichert: $value, Bitmap: ${contact.photoBitmap}")
+                    Log.d("GoogleCsvImport", "Bild gespeichert2: $value, Bitmap: ${contact.thumbnailBitmap}")
                 }
                 col == "Labels" -> {
                     if (value.isEmpty()) continue
