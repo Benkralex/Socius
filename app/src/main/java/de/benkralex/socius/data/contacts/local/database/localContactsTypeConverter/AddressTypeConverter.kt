@@ -16,7 +16,7 @@ class AddressTypeConverter {
     fun toAddress(string: String): List<Address>? {
         return try {
             json.decodeFromString<List<Address>>(string)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

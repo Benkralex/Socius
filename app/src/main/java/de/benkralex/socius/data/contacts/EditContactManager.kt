@@ -64,7 +64,7 @@ suspend fun deleteContacts(contacts: List<Contact>): Map<Contact, Boolean> {
 
 suspend fun editContact(contact: Contact): Boolean {
     val mainActivity = MainActivity
-    val id = contact.id ?: return false
+    contact.id ?: return false
     when (contact.origin) {
         ContactOrigin.LOCAL -> {
             val entity = LocalContactsEntity.fromContact(contact)

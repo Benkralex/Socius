@@ -15,7 +15,7 @@ class StringMapTypeConverter {
     fun toStringMap(string: String): Map<String, String>? {
         return try {
             json.decodeFromString<Map<String, String>>(string)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

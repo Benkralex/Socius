@@ -16,7 +16,7 @@ class EventTypeConverter {
     fun toEvent(string: String): List<Event>? {
         return try {
             json.decodeFromString<List<Event>>(string)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

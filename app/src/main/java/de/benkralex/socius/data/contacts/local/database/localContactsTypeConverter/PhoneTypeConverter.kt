@@ -16,7 +16,7 @@ class PhoneTypeConverter {
     fun toPhone(string: String): List<Phone>? {
         return try {
             json.decodeFromString<List<Phone>>(string)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

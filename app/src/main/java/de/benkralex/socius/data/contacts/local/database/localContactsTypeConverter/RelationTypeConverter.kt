@@ -16,7 +16,7 @@ class RelationTypeConverter {
     fun toRelation(string: String): List<Relation>? {
         return try {
             json.decodeFromString<List<Relation>>(string)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

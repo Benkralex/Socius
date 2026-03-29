@@ -15,7 +15,7 @@ class StringListTypeConverter {
     fun toStringList(string: String): List<String>? {
         return try {
             json.decodeFromString<List<String>>(string)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

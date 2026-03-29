@@ -16,7 +16,7 @@ class JobTypeConverter {
     fun toJob(string: String): Job? {
         return try {
             json.decodeFromString<Job>(string)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

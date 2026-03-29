@@ -16,7 +16,7 @@ class EmailTypeConverter {
     fun toEmail(string: String): List<Email>? {
         return try {
             json.decodeFromString<List<Email>>(string)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

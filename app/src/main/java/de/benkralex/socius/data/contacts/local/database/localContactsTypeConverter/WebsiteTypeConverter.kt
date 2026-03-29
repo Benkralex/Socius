@@ -16,7 +16,7 @@ class WebsiteTypeConverter {
     fun toWebsite(string: String): List<Website>? {
         return try {
             json.decodeFromString<List<Website>>(string)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

@@ -1,8 +1,5 @@
 package de.benkralex.socius.data.model
 
-import androidx.annotation.StringRes
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import de.benkralex.socius.R
 import kotlinx.serialization.Serializable
 

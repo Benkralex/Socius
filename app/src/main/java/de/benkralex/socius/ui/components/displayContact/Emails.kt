@@ -23,7 +23,6 @@ import androidx.core.net.toUri
 import de.benkralex.socius.R
 import de.benkralex.socius.data.model.Email
 import de.benkralex.socius.data.model.Type
-import de.benkralex.socius.ui.components.displayContact.helpers.translateType
 
 @Composable
 fun EmailsWidget(

@@ -12,9 +12,6 @@ import de.benkralex.socius.data.model.Phone
 import de.benkralex.socius.data.model.ProfilePicture
 import de.benkralex.socius.data.model.Type
 import kotlinx.serialization.Serializable
-import kotlin.collections.last
-import kotlin.text.isDigit
-import kotlin.text.split
 
 @Serializable
 data class Contact(
@@ -59,10 +56,6 @@ data class Contact(
 
     var customFields: Map<String, String> = emptyMap()
 ) {
-    fun isReadOnly(): Boolean {
-        return false
-    }
-
     fun toNewContact(context: Context? = null): de.benkralex.socius.data.model.Contact {
         return de.benkralex.socius.data.model.Contact(
             id = id.toIntOrNull(),

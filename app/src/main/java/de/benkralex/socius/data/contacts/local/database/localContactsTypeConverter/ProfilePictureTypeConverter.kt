@@ -16,7 +16,7 @@ class ProfilePictureTypeConverter {
     fun toProfilePicture(string: String): ProfilePicture? {
         return try {
             json.decodeFromString<ProfilePicture>(string)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }

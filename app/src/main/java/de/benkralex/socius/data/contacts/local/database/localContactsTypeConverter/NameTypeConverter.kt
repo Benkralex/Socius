@@ -16,7 +16,7 @@ class NameTypeConverter {
     fun toName(string: String): Name? {
         return try {
             json.decodeFromString<Name>(string)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             null
         }
     }
