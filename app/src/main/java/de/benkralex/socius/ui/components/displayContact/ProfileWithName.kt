@@ -26,7 +26,7 @@ fun ProfileWithName(
             .padding(16.dp)
     )
     {
-        ProfilePicture(
+        ProfilePictureWidget(
             contact = contact,
             size = 40.dp,
             modifier = Modifier

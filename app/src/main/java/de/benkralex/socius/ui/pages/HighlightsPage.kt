@@ -15,11 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
-import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.contacts.contacts
+import de.benkralex.socius.data.model.Contact
+import de.benkralex.socius.data.model.Type
 import de.benkralex.socius.data.settings.getFormattedDate
 import de.benkralex.socius.data.settings.getFormattedName
-import de.benkralex.socius.ui.components.displayContact.helpers.translateType
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,8 +71,6 @@ fun getEventWidgets(): ArrayList<@Composable () -> Unit> {
     val events: ArrayList<@Composable () -> Unit> = ArrayList<@Composable () -> Unit>()
     for (c: Contact in contacts) {
         for (e in c.events) {
-            if (e.day == null) continue
-            if (e.month == null) continue
             if (e.day == LocalDate.now().dayOfMonth && e.month == LocalDate.now().monthValue) {
                 events.add {
                     Card(
@@ -81,10 +79,7 @@ fun getEventWidgets(): ArrayList<@Composable () -> Unit> {
                             .fillMaxWidth(),
                     ) {
                         Text(
-                            text = translateType(
-                                e.type,
-                                e.label
-                            ) + " " + getFormattedName(c),
+                            text = stringResource(Type.translateType(e.type)) + " " + getFormattedName(c),
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier
                                 .padding(8.dp)
@@ -92,7 +87,7 @@ fun getEventWidgets(): ArrayList<@Composable () -> Unit> {
                                 .padding(top = 12.dp),
                         )
                         Text(
-                            text = getFormattedDate(e.day!!, e.month!!, e.year ?: 0),
+                            text = getFormattedDate(e.day, e.month, e.year ?: 0),
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier
                                 .padding(8.dp)

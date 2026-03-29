@@ -48,17 +48,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import de.benkralex.socius.R
+import de.benkralex.socius.data.model.Type
 import de.benkralex.socius.data.settings.dateFormat
 import de.benkralex.socius.data.settings.dateFormats
 import de.benkralex.socius.data.settings.getFormattedDate
-import de.benkralex.socius.ui.components.displayContact.helpers.translateType
-import de.benkralex.socius.ui.pages.NewContactPageViewModel
+import de.benkralex.socius.ui.pages.EditContactPageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditEvents(
     modifier: Modifier = Modifier,
-    viewModel: NewContactPageViewModel,
+    viewModel: EditContactPageViewModel,
 ) {
     Card (
         modifier = modifier
@@ -165,10 +165,7 @@ fun EditEvents(
                                     stringResource(R.string.event)
                                 else
                                     stringResource(R.string.event) + " (" +
-                                        translateType(
-                                            type = viewModel.eventsState.types[i].value,
-                                            label = viewModel.eventsState.labels[i].value.ifBlank { null }
-                                        ) + ")"
+                                            stringResource(Type.translateType(viewModel.eventsState.types[i].value)) + ")"
                             )
                         },
                         placeholder = {
@@ -196,7 +193,6 @@ fun EditEvents(
                                     onClick = {
                                         viewModel.eventsState.dates.removeAt(i)
                                         viewModel.eventsState.types.removeAt(i)
-                                        viewModel.eventsState.labels.removeAt(i)
                                         viewModel.eventsState.count--
                                     }
                                 ) {
@@ -227,7 +223,7 @@ fun EditEvents(
                                         .onFocusChanged {
                                             typeFocused = it.isFocused
                                         },
-                                    value = translateType(viewModel.eventsState.types[i].value),
+                                    value = stringResource(Type.translateType(viewModel.eventsState.types[i].value)),
                                     onValueChange = { },
                                     readOnly = true,
                                     label = { Text(stringResource(R.string.event_type)) },
@@ -244,11 +240,11 @@ fun EditEvents(
                                         dropdownExpanded = false
                                     }
                                 ) {
-                                    listOf("birthday", "anniversary", "other", "custom").forEach { o ->
+                                    Type.Event.entries.forEach { selectedType ->
                                         DropdownMenuItem(
-                                            text = { Text(translateType(o)) },
+                                            text = { Text(stringResource(Type.translateType(selectedType))) },
                                             onClick = {
-                                                viewModel.eventsState.types[i].value = o
+                                                viewModel.eventsState.types[i].value = selectedType
                                                 dropdownExpanded = false
                                             },
                                             contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
@@ -256,15 +252,15 @@ fun EditEvents(
                                     }
                                 }
                             }
-                            AnimatedVisibility(viewModel.eventsState.types[i].value == "custom") {
+                            AnimatedVisibility(viewModel.eventsState.types[i].value == Type.Event.CUSTOM) {
                                 OutlinedTextField(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .onFocusChanged {
                                             labelFocused = it.isFocused
                                         },
-                                    value = viewModel.eventsState.labels[i].value,
-                                    onValueChange = { viewModel.eventsState.labels[i].value = it },
+                                    value = viewModel.eventsState.types[i].value.label ?: "",
+                                    onValueChange = { viewModel.eventsState.types[i].value.label = it },
                                     label = { Text(stringResource(R.string.event_label)) },
                                 )
                             }

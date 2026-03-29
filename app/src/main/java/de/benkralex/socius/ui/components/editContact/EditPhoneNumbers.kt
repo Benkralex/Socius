@@ -30,14 +30,15 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
+import de.benkralex.socius.data.model.Type
 import de.benkralex.socius.ui.components.displayContact.helpers.translateType
-import de.benkralex.socius.ui.pages.NewContactPageViewModel
+import de.benkralex.socius.ui.pages.EditContactPageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditPhone(
     modifier: Modifier = Modifier,
-    viewModel: NewContactPageViewModel,
+    viewModel: EditContactPageViewModel,
 ) {
     Card (
         modifier = modifier
@@ -61,7 +62,7 @@ fun EditPhone(
                     .padding(horizontal = 8.dp)
                     .padding(bottom = 8.dp),
             ) {
-                for (i in 0..<viewModel.phoneNumbersState.count) {
+                for (i in 0..<viewModel.phonesState.count) {
                     var numberFocused by remember { mutableStateOf(false) }
                     var typeFocused by remember { mutableStateOf(false) }
                     var labelFocused by remember { mutableStateOf(false) }
@@ -72,27 +73,23 @@ fun EditPhone(
                             .onFocusChanged {
                                 numberFocused = it.isFocused
                             },
-                        value = viewModel.phoneNumbersState.numbers[i].value,
-                        onValueChange = { viewModel.phoneNumbersState.numbers[i].value = it },
+                        value = viewModel.phonesState.values[i].value,
+                        onValueChange = { viewModel.phonesState.values[i].value = it },
                         label = {
                             Text(
                                 text = if (expanded)
                                     stringResource(R.string.phone)
                                 else
                                     stringResource(R.string.phone) + " (" +
-                                            translateType(
-                                                type = viewModel.phoneNumbersState.types[i].value,
-                                                label = viewModel.phoneNumbersState.labels[i].value.ifBlank { null }
-                                            ) + ")"
+                                            stringResource(Type.translateType(viewModel.phonesState.types[i].value)) + ")"
                             )
                         },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    viewModel.phoneNumbersState.numbers.removeAt(i)
-                                    viewModel.phoneNumbersState.types.removeAt(i)
-                                    viewModel.phoneNumbersState.labels.removeAt(i)
-                                    viewModel.phoneNumbersState.count--
+                                    viewModel.phonesState.values.removeAt(i)
+                                    viewModel.phonesState.types.removeAt(i)
+                                    viewModel.phonesState.count--
                                 }
                             ) {
                                 Icon(
@@ -121,7 +118,7 @@ fun EditPhone(
                                         .onFocusChanged {
                                             typeFocused = it.isFocused
                                         },
-                                    value = translateType(viewModel.phoneNumbersState.types[i].value),
+                                    value = stringResource(Type.translateType(viewModel.phonesState.types[i].value)),
                                     onValueChange = { },
                                     readOnly = true,
                                     label = { Text(stringResource(R.string.phone_type)) },
@@ -138,11 +135,11 @@ fun EditPhone(
                                         dropdownExpanded = false
                                     }
                                 ) {
-                                    listOf("home", "mobile", "work_mobile", "work", "fax_home", "fax_work", "pager", "work_pager", "other", "custom").forEach { o ->
+                                    Type.Phone.entries.forEach { selectedType ->
                                         DropdownMenuItem(
-                                            text = { Text(translateType(o)) },
+                                            text = { Text(translateType(stringResource(Type.translateType(selectedType)))) },
                                             onClick = {
-                                                viewModel.phoneNumbersState.types[i].value = o
+                                                viewModel.phonesState.types[i].value = selectedType
                                                 dropdownExpanded = false
                                             },
                                             contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
@@ -150,15 +147,15 @@ fun EditPhone(
                                     }
                                 }
                             }
-                            AnimatedVisibility(viewModel.phoneNumbersState.types[i].value == "custom") {
+                            AnimatedVisibility(viewModel.phonesState.types[i].value == Type.Phone.CUSTOM) {
                                 OutlinedTextField(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .onFocusChanged {
                                             labelFocused = it.isFocused
                                         },
-                                    value = viewModel.phoneNumbersState.labels[i].value,
-                                    onValueChange = { viewModel.phoneNumbersState.labels[i].value = it },
+                                    value = viewModel.phonesState.types[i].value.label ?: "",
+                                    onValueChange = { viewModel.phonesState.types[i].value.label = it },
                                     label = { Text(stringResource(R.string.phone_label)) },
                                 )
                             }

@@ -24,14 +24,15 @@ import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
 import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.model.ContactOrigin
-import de.benkralex.socius.ui.components.displayContact.ProfilePicture
-import de.benkralex.socius.ui.pages.NewContactPageViewModel
+import de.benkralex.socius.data.model.ProfilePicture
+import de.benkralex.socius.ui.components.displayContact.ProfilePictureWidget
+import de.benkralex.socius.ui.pages.EditContactPageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfilePicture(
     modifier: Modifier = Modifier,
-    viewModel: NewContactPageViewModel,
+    viewModel: EditContactPageViewModel,
 ) {
     val context = LocalContext.current
     var showMediaSelectionModal by remember { mutableStateOf(false) }
@@ -58,7 +59,7 @@ fun EditProfilePicture(
             null
         }
 
-        viewModel.profilePictureState.setPicture(uri = uri, bitmap = bitmap)
+        viewModel.profilePictureState.picture = bitmap
     }
 
     Box(
@@ -66,11 +67,11 @@ fun EditProfilePicture(
             .fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
-        ProfilePicture(
+        ProfilePictureWidget(
             contact = Contact(
-                id = "-1",
-                origin = ContactOrigin.LOCAL,
-                photoBitmap = viewModel.profilePictureState.picture,
+                id = null,
+                origin = ContactOrigin.TEMPORARY,
+                profilePicture = ProfilePicture(viewModel.profilePictureState.picture),
             ),
             size = 150.dp,
             onClick = {

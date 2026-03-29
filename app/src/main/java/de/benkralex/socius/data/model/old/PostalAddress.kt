@@ -1,4 +1,4 @@
-package de.benkralex.socius.data.model
+package de.benkralex.socius.data.model.old
 
 import kotlinx.serialization.Serializable
 

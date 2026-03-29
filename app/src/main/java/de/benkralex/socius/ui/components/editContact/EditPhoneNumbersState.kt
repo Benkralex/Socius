@@ -7,32 +7,31 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import de.benkralex.socius.data.model.Contact
-import de.benkralex.socius.data.model.PhoneNumber
+import de.benkralex.socius.data.model.Phone
+import de.benkralex.socius.data.model.Type
 
-class EditPhoneNumbersState {
+class EditPhonesState {
     val showFields by derivedStateOf { count > 0 }
     var count: Int by mutableIntStateOf(0)
-    var numbers: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
-    var types: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
-    var labels: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
+    var values: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
+    var types: MutableList<MutableState<Type.Phone>> by mutableStateOf(mutableListOf())
 
     fun hasRelevantData(): Boolean {
-        return numbers.any { it.value.isNotBlank() }
+        return values.any { it.value.isNotBlank() }
     }
 
     fun isRelevant(i: Int): Boolean {
-        return numbers[i].value.isNotBlank()
+        return values[i].value.isNotBlank()
     }
     
-    fun getRelevantData(): List<PhoneNumber> {
-        val phoneNumbers: MutableList<PhoneNumber> = mutableListOf()
+    fun getRelevantData(): List<Phone> {
+        val phoneNumbers: MutableList<Phone> = mutableListOf()
         for (i in 0..<count) {
             if (isRelevant(i)) {
                 phoneNumbers.add(
-                    PhoneNumber(
-                        number = numbers[i].value.trim(),
-                        type = types[i].value.trim().ifBlank { "home" },
-                        label = labels[i].value.trim().ifBlank { null },
+                    Phone(
+                        value = values[i].value.trim(),
+                        type = types[i].value,
                     )
                 )
             }
@@ -41,25 +40,22 @@ class EditPhoneNumbersState {
     }
 
     fun addNew() {
-        numbers.add(mutableStateOf(""))
-        types.add(mutableStateOf("home"))
-        labels.add(mutableStateOf(""))
+        values.add(mutableStateOf(""))
+        types.add(mutableStateOf(Type.Phone.HOME))
         count++
     }
 
     fun loadFromContact(contact: Contact) {
-        for (num: PhoneNumber in contact.phoneNumbers) {
+        for (num: Phone in contact.phoneNumbers) {
             count++
-            numbers.add(mutableStateOf(num.number))
+            values.add(mutableStateOf(num.value))
             types.add(mutableStateOf(num.type))
-            labels.add(mutableStateOf(num.label ?: ""))
         }
     }
 
     fun reset() {
         count = 0
-        numbers.clear()
+        values.clear()
         types.clear()
-        labels.clear()
     }
 }

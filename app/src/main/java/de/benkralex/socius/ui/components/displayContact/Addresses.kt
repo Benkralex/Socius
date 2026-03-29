@@ -19,16 +19,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.data.model.PostalAddress
+import de.benkralex.socius.data.model.Address
 import androidx.core.net.toUri
 import de.benkralex.socius.R
-import de.benkralex.socius.ui.components.displayContact.helpers.translateType
+import de.benkralex.socius.data.model.Type
 
 @Composable
 fun PostalAddressesWidget(
-    postalAddresses: List<PostalAddress>
+    addresses: List<Address>
 ) {
-    if (postalAddresses.isEmpty()) {
+    if (addresses.isEmpty()) {
         return
     }
     val context = LocalContext.current
@@ -38,7 +38,7 @@ fun PostalAddressesWidget(
             .fillMaxWidth(),
     ) {
         Column {
-            postalAddresses.forEach { postalAddress ->
+            addresses.forEach { address ->
                 Row {
                     Icon(
                         imageVector = Icons.Outlined.LocationOn,
@@ -47,37 +47,36 @@ fun PostalAddressesWidget(
                             .align(Alignment.CenterVertically)
                             .padding(8.dp)
                             .padding(start = 16.dp)
-                            .clickable(
-                                onClick = {
+                            .clickable {
+                                if (address.street != null || address.city != null) {
                                     val intent = Intent(
                                         Intent.ACTION_VIEW,
-                                        "geo:0,0?q=${postalAddress.street},${postalAddress.city}".toUri()
+                                        "geo:0,0?q=${
+                                            listOfNotNull(
+                                                address.street,
+                                                if (address.street == null) null else address.streetNumber,
+                                            ).joinToString(" ")
+                                        },${address.city}".toUri()
                                     )
                                     context.startActivity(intent)
                                 }
-                            )
+                            },
                     )
                     Column (
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
                             .padding(8.dp),
                     ) {
-                        if (postalAddress.street != null) Text(
-                            text = listOfNotNull(postalAddress.street).joinToString(" "),
-                        )
-                        if (postalAddress.postcode != null || postalAddress.city != null) Text(
-                            text = listOfNotNull(postalAddress.postcode, postalAddress.city).joinToString(" "),
-                        )
-                        if (postalAddress.region != null || postalAddress.country != null) Text(
-                            text = listOfNotNull(postalAddress.region, postalAddress.country).joinToString(" "),
+                        Text(
+                            text = address.format(),
                         )
                         Text(
-                            text = translateType(postalAddress.type, postalAddress.label),
+                            text = stringResource(Type.translateType(address.type)),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }
                 }
-                if (postalAddresses.indexOf(postalAddress) != (postalAddresses.size - 1)) HorizontalDivider(
+                if (addresses.indexOf(address) != (addresses.size - 1)) HorizontalDivider(
                     thickness = 2.dp,
                 )
             }

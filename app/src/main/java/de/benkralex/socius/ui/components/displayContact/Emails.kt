@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import de.benkralex.socius.R
 import de.benkralex.socius.data.model.Email
+import de.benkralex.socius.data.model.Type
 import de.benkralex.socius.ui.components.displayContact.helpers.translateType
 
 @Composable
@@ -49,7 +50,7 @@ fun EmailsWidget(
                             .padding(start = 16.dp)
                             .clickable {
                                 val intent = Intent(Intent.ACTION_SENDTO).apply {
-                                    data = "mailto:${email.address}".toUri()
+                                    data = "mailto:${email.value}".toUri()
                                 }
                                 context.startActivity(intent)
                             },
@@ -60,10 +61,10 @@ fun EmailsWidget(
                             .padding(8.dp),
                     ) {
                         Text(
-                            text = email.address,
+                            text = email.value,
                         )
                         Text(
-                            text = translateType(email.type, email.label),
+                            text = stringResource(Type.translateType(email.type)),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }

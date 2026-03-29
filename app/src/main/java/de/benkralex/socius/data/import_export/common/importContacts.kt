@@ -14,7 +14,7 @@ fun importContacts(contacts: List<Contact>) {
             launch {
                 for (c in contacts) {
                     MainActivity.localContactsDao.insert(
-                        LocalContactsEntity().fromContact(c)
+                        LocalContactsEntity.fromContact(c)
                     )
                 }
                 loadAllContacts()

@@ -14,14 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
-import de.benkralex.socius.ui.pages.NewContactPageViewModel
+import de.benkralex.socius.ui.pages.EditContactPageViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddFieldBottomModal(
     modifier: Modifier = Modifier,
-    viewModel: NewContactPageViewModel,
+    viewModel: EditContactPageViewModel,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
@@ -53,13 +53,13 @@ fun AddFieldBottomModal(
                 text = stringResource(R.string.name_prefix),
             )
         }
-        AnimatedVisibility (!viewModel.structuredNameState.showMiddleNameTextField) {
+        AnimatedVisibility (!viewModel.structuredNameState.showSecondNameTextField) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp)
                     .clickable {
-                        hideSheet { viewModel.structuredNameState.showMiddleNameTextField = true }
+                        hideSheet { viewModel.structuredNameState.showSecondNameTextField = true }
                     },
                 text = stringResource(R.string.name_middle_name),
             )

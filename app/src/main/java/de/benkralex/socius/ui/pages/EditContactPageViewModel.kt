@@ -1,38 +1,39 @@
 package de.benkralex.socius.ui.pages
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import de.benkralex.socius.MainActivity
-import de.benkralex.socius.data.model.Contact
-import de.benkralex.socius.data.model.ContactOrigin
 import de.benkralex.socius.data.contacts.editContact
 import de.benkralex.socius.data.contacts.loadAllContacts
 import de.benkralex.socius.data.contacts.local.database.LocalContactsEntity
-import de.benkralex.socius.data.settings.getFormattedName
+import de.benkralex.socius.data.model.Contact
+import de.benkralex.socius.data.model.ContactOrigin
+import de.benkralex.socius.data.model.Job
+import de.benkralex.socius.data.model.Name
+import de.benkralex.socius.data.model.ProfilePicture
 import de.benkralex.socius.data.syncadapter.SyncManager
+import de.benkralex.socius.ui.components.editContact.EditAddressesState
 import de.benkralex.socius.ui.components.editContact.EditEmailsState
 import de.benkralex.socius.ui.components.editContact.EditEventsState
-import de.benkralex.socius.ui.components.editContact.EditPhoneNumbersState
-import de.benkralex.socius.ui.components.editContact.EditPostalAddressesState
+import de.benkralex.socius.ui.components.editContact.EditPhonesState
 import de.benkralex.socius.ui.components.editContact.EditProfilePictureState
 import de.benkralex.socius.ui.components.editContact.EditStructuredNameState
 import de.benkralex.socius.ui.components.editContact.EditWorkInformationState
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class NewContactPageViewModel : ViewModel() {
+class EditContactPageViewModel : ViewModel() {
     var showAddFieldBottomModal by mutableStateOf(false)
 
     val profilePictureState: EditProfilePictureState = EditProfilePictureState()
     val structuredNameState: EditStructuredNameState = EditStructuredNameState()
     val workInformationState: EditWorkInformationState = EditWorkInformationState()
     val emailsState: EditEmailsState = EditEmailsState()
-    val phoneNumbersState: EditPhoneNumbersState = EditPhoneNumbersState()
+    val phonesState: EditPhonesState = EditPhonesState()
     val eventsState: EditEventsState = EditEventsState()
-    val postalAddressesState: EditPostalAddressesState = EditPostalAddressesState()
+    val addressesState: EditAddressesState = EditAddressesState()
     var isStarred by mutableStateOf(false)
 
     var isSaving by mutableStateOf(false)
@@ -42,29 +43,28 @@ class NewContactPageViewModel : ViewModel() {
     var loadedContact: Contact? = null
 
     fun loadFromContact(contact: Contact) {
-        Log.d("DEBUG EDIT CONTACT", "Load from Contact aufgerufen: ${getFormattedName(contact)}")
         isInitialized = true
         loadedContact = contact
         profilePictureState.loadFromContact(contact)
-        if (contact.id == "new") return
+        if (contact.origin == ContactOrigin.NEW) return
         structuredNameState.loadFromContact(contact)
         workInformationState.loadFromContact(contact)
         emailsState.loadFromContact(contact)
-        phoneNumbersState.loadFromContact(contact)
+        phonesState.loadFromContact(contact)
         eventsState.loadFromContact(contact)
-        postalAddressesState.loadFromContact(contact)
+        addressesState.loadFromContact(contact)
         isStarred = contact.isStarred
     }
 
     fun hasNoChanges(): Boolean {
-        return if (loadedContact?.id == "new")
+        return if (loadedContact?.origin == ContactOrigin.NEW)
             !profilePictureState.hasRelevantData()
                     && !structuredNameState.hasRelevantData()
                     && !workInformationState.hasRelevantData()
                     && !emailsState.hasRelevantData()
-                    && !phoneNumbersState.hasRelevantData()
+                    && !phonesState.hasRelevantData()
                     && !eventsState.hasRelevantData()
-                    && !postalAddressesState.hasRelevantData()
+                    && !addressesState.hasRelevantData()
         else
             loadedContact == getNewContact()
     }
@@ -84,26 +84,30 @@ class NewContactPageViewModel : ViewModel() {
                         isSaving = false
                         return@launch
                     }
-                    if (loadedContact!!.origin == ContactOrigin.LOCAL && loadedContact!!.id == "new") {
+                    if (loadedContact!!.origin == ContactOrigin.LOCAL && loadedContact!!.origin == ContactOrigin.NEW) {
                         MainActivity.localContactsDao.insert(
                             LocalContactsEntity(
-                                prefix = structuredNameState.prefix.trim().ifBlank { null },
-                                givenName = structuredNameState.givenName.trim().ifBlank { null },
-                                middleName = structuredNameState.middleName.trim().ifBlank { null },
-                                familyName = structuredNameState.familyName.trim().ifBlank { null },
-                                suffix = structuredNameState.suffix.trim().ifBlank { null },
-                                nickname = structuredNameState.nickname.trim().ifBlank { null },
-
-                                jobTitle = workInformationState.jobTitle.trim().ifBlank { null },
-                                department = workInformationState.department.trim().ifBlank { null },
-                                organization = workInformationState.organization.trim().ifBlank { null },
-
+                                name = Name(
+                                    prefix = structuredNameState.prefix.trim().ifBlank { null },
+                                    firstname = structuredNameState.firstname.trim().ifBlank { null },
+                                    secondName = structuredNameState.secondName.trim().ifBlank { null },
+                                    lastname = structuredNameState.lastname.trim().ifBlank { null },
+                                    suffix = structuredNameState.suffix.trim().ifBlank { null },
+                                    nickname = structuredNameState.nickname.trim().ifBlank { null },
+                                ),
+                                job = Job(
+                                    jobTitle = workInformationState.jobTitle.trim()
+                                        .ifBlank { null },
+                                    department = workInformationState.department.trim()
+                                        .ifBlank { null },
+                                    organization = workInformationState.organization.trim()
+                                        .ifBlank { null },
+                                ),
                                 emails = emailsState.getRelevantData(),
-                                phoneNumbers = phoneNumbersState.getRelevantData(),
+                                phoneNumbers = phonesState.getRelevantData(),
                                 events = eventsState.getRelevantData(),
-                                addresses = postalAddressesState.getRelevantData(),
-
-                                photoUri = profilePictureState.pictureUri?.toString(),
+                                addresses = addressesState.getRelevantData(),
+                                profilePicture = ProfilePicture(profilePictureState.picture),
 
                                 isStarred = isStarred,
                             )
@@ -113,7 +117,7 @@ class NewContactPageViewModel : ViewModel() {
                         isSaving = false
                         return@launch
                     }
-                    if (loadedContact!!.origin == ContactOrigin.LOCAL && loadedContact!!.id != "new") {
+                    if (loadedContact!!.origin == ContactOrigin.LOCAL && loadedContact!!.origin != ContactOrigin.NEW) {
                         error = !editContact(getNewContact())
                         isSaving = false
                         return@launch
@@ -127,40 +131,41 @@ class NewContactPageViewModel : ViewModel() {
 
     private fun getNewContact(): Contact {
         return loadedContact!!.copy(
-            prefix = structuredNameState.prefix.trim().ifBlank { null },
-            givenName = structuredNameState.givenName.trim().ifBlank { null },
-            middleName = structuredNameState.middleName.trim().ifBlank { null },
-            familyName = structuredNameState.familyName.trim().ifBlank { null },
-            suffix = structuredNameState.suffix.trim().ifBlank { null },
-            nickname = structuredNameState.nickname.trim().ifBlank { null },
-
-            jobTitle = workInformationState.jobTitle.trim().ifBlank { null },
-            department = workInformationState.department.trim().ifBlank { null },
-            organization = workInformationState.organization.trim().ifBlank { null },
+            name = Name(
+                prefix = structuredNameState.prefix.trim().ifBlank { null },
+                firstname = structuredNameState.firstname.trim().ifBlank { null },
+                secondName = structuredNameState.secondName.trim().ifBlank { null },
+                lastname = structuredNameState.lastname.trim().ifBlank { null },
+                suffix = structuredNameState.suffix.trim().ifBlank { null },
+                nickname = structuredNameState.nickname.trim().ifBlank { null },
+            ),
+            job = Job(
+                jobTitle = workInformationState.jobTitle.trim().ifBlank { null },
+                department = workInformationState.department.trim().ifBlank { null },
+                organization = workInformationState.organization.trim().ifBlank { null },
+            ),
 
             emails = emailsState.getRelevantData(),
-            phoneNumbers = phoneNumbersState.getRelevantData(),
+            phoneNumbers = phonesState.getRelevantData(),
             events = eventsState.getRelevantData(),
-            addresses = postalAddressesState.getRelevantData(),
+            addresses = addressesState.getRelevantData(),
 
-            photoUri = profilePictureState.pictureUri?.toString(),
-            photoBitmap = profilePictureState.picture,
+            profilePicture = ProfilePicture(profilePictureState.picture),
 
             isStarred = isStarred,
         )
     }
 
     fun reset() {
-        Log.d("DEBUG EDIT CONTACT", "Reset aufgerufen")
         showAddFieldBottomModal = false
 
         profilePictureState.reset()
         structuredNameState.reset()
         workInformationState.reset()
         emailsState.reset()
-        phoneNumbersState.reset()
+        phonesState.reset()
         eventsState.reset()
-        postalAddressesState.reset()
+        addressesState.reset()
         isStarred = false
 
         isSaving = false

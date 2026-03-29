@@ -67,12 +67,11 @@ import de.benkralex.socius.ui.theme.DarkColorScheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun NewContactPage(
+fun EditContactPage(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
-    //openContact: (Int) -> Unit = {},
-    viewModel: NewContactPageViewModel = viewModel<NewContactPageViewModel>(),
-    contact: Contact = Contact(id = "new", ContactOrigin.LOCAL),
+    viewModel: EditContactPageViewModel = viewModel<EditContactPageViewModel>(),
+    contact: Contact = Contact(id = null, ContactOrigin.NEW),
 ) {
     if (!viewModel.isInitialized) viewModel.loadFromContact(contact)
     val scrollState = rememberScrollState()
@@ -230,13 +229,13 @@ fun NewContactPage(
             AnimatedVisibility(viewModel.emailsState.showFields) {
                 EditEmails(viewModel = viewModel)
             }
-            AnimatedVisibility(viewModel.phoneNumbersState.showFields) {
+            AnimatedVisibility(viewModel.phonesState.showFields) {
                 EditPhone(viewModel = viewModel)
             }
             AnimatedVisibility(viewModel.eventsState.showFields) {
                 EditEvents(viewModel = viewModel)
             }
-            AnimatedVisibility(viewModel.postalAddressesState.showFields) {
+            AnimatedVisibility(viewModel.addressesState.showFields) {
                 EditPostalAddresses(viewModel = viewModel)
             }
             Row (
@@ -265,7 +264,7 @@ fun NewContactPage(
                 Button(
                     modifier = Modifier
                         .weight(1f),
-                    onClick = { viewModel.phoneNumbersState.addNew() },
+                    onClick = { viewModel.phonesState.addNew() },
                 ) {
                     Row (
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -306,7 +305,7 @@ fun NewContactPage(
                 Button(
                     modifier = Modifier
                         .weight(1f),
-                    onClick = { viewModel.postalAddressesState.addNew() },
+                    onClick = { viewModel.addressesState.addNew() },
                 ) {
                     Row (
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -357,10 +356,10 @@ fun NewContactPage(
 
 @Preview
 @Composable
-private fun NewContactPagePreview() {
+private fun EditContactPagePreview() {
     MaterialTheme (
         colorScheme = DarkColorScheme,
     ) {
-        NewContactPage()
+        EditContactPage()
     }
 }

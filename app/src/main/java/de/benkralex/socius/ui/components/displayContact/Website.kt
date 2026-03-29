@@ -21,8 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import de.benkralex.socius.R
+import de.benkralex.socius.data.model.Type
 import de.benkralex.socius.data.model.Website
-import de.benkralex.socius.ui.components.displayContact.helpers.translateType
 
 @Composable
 fun WebsitesWidget(
@@ -50,7 +50,7 @@ fun WebsitesWidget(
                             .clickable(
                                 onClick = {
                                     val intent = Intent(Intent.ACTION_VIEW).apply {
-                                       data = website.url.toUri()
+                                       data = website.value.toUri()
                                     }
                                     context.startActivity(intent)
                                 }
@@ -62,13 +62,10 @@ fun WebsitesWidget(
                             .padding(8.dp),
                     ) {
                         Text(
-                            text = website.url,
+                            text = website.value,
                         )
                         Text(
-                            text = translateType(
-                                website.type,
-                                website.label ?: stringResource(R.string.type_homepage)
-                            ),
+                            stringResource(Type.translateType(website.type)),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }

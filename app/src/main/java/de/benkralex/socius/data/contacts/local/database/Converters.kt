@@ -1,13 +1,13 @@
 package de.benkralex.socius.data.contacts.local.database
 
 import androidx.room.TypeConverter
-import de.benkralex.socius.data.model.ContactEvent
-import de.benkralex.socius.data.model.Email
-import de.benkralex.socius.data.model.Group
-import de.benkralex.socius.data.model.PhoneNumber
-import de.benkralex.socius.data.model.PostalAddress
-import de.benkralex.socius.data.model.Relation
-import de.benkralex.socius.data.model.Website
+import de.benkralex.socius.data.model.old.ContactEvent
+import de.benkralex.socius.data.model.old.Email
+import de.benkralex.socius.data.model.old.Group
+import de.benkralex.socius.data.model.old.PhoneNumber
+import de.benkralex.socius.data.model.old.PostalAddress
+import de.benkralex.socius.data.model.old.Relation
+import de.benkralex.socius.data.model.old.Website
 import kotlinx.serialization.json.Json
 
 

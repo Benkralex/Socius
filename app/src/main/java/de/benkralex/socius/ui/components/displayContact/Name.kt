@@ -17,9 +17,10 @@ import de.benkralex.socius.data.settings.preferNickname
 @Composable
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 fun NameWidget(contact: Contact) {
-    val name = getFormattedName(contact)
-    val formattedName = buildString {
-        val words = name.split("\\s+".toRegex()).filter { it.isNotBlank() }
+    var formattedName = getFormattedName(contact)
+    //Add linebreaks
+    formattedName = buildString {
+        val words = formattedName.split("\\s+".toRegex()).filter { it.isNotBlank() }
         words.forEachIndexed { index, word ->
             append(word)
             if (word.length > 3) {
@@ -39,15 +40,15 @@ fun NameWidget(contact: Contact) {
     )
 
     val phoneticName: String = listOfNotNull(
-        contact.phoneticGivenName?.trim(),
-        contact.phoneticMiddleName?.trim(),
-        contact.phoneticFamilyName?.trim(),
+        contact.name.phoneticFirstname?.trim(),
+        contact.name.phoneticSecondName?.trim(),
+        contact.name.phoneticLastname?.trim(),
     ).joinToString(" ").trim()
     val nameOrNickname: String =
         if (getFormattedFullName(contact).trim() != getFormattedName(contact).trim())
             getFormattedFullName(contact).trim()
         else if (!preferNickname)
-            contact.nickname?.trim() ?: ""
+            contact.name.nickname?.trim() ?: ""
         else
             ""
     if (phoneticName.isNotBlank() || nameOrNickname.isNotBlank()) {

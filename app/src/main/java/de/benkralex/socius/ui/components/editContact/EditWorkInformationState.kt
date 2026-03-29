@@ -26,14 +26,14 @@ class EditWorkInformationState {
     }
 
     fun loadFromContact(contact: Contact) {
-        jobTitle = contact.jobTitle ?: ""
-        showJobTitleTextField = !contact.jobTitle.isNullOrBlank()
+        jobTitle = contact.job.jobTitle ?: ""
+        showJobTitleTextField = !contact.job.jobTitle.isNullOrBlank()
 
-        department = contact.department ?: ""
-        showDepartmentTextField = !contact.department.isNullOrBlank()
+        department = contact.job.department ?: ""
+        showDepartmentTextField = !contact.job.department.isNullOrBlank()
 
-        organization = contact.organization ?: ""
-        showOrganizationTextField = !contact.organization.isNullOrBlank()
+        organization = contact.job.organization ?: ""
+        showOrganizationTextField = !contact.job.organization.isNullOrBlank()
     }
 
     fun reset() {

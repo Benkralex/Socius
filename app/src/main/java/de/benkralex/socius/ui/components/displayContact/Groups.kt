@@ -13,24 +13,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.data.model.Group
+import de.benkralex.socius.data.model.old.Group
 
 @Composable
 fun GroupsWidget(
-    groups: List<Group>
+    groups: List<String>
 ) {
     if (groups.isEmpty()) {
         return
     }
     var text = ""
     groups.forEach { group ->
-        if (group.name != "My Contacts") {
-            //if (group.name != "Starred in Android") {
-                if (text.isNotEmpty()) {
-                    text += " • "
-                }
-                text += group.name
-            //}
+        if (group !in listOf("My Contacts", "starred", "Starred in Android")) {
+            if (text.isNotEmpty()) {
+                text += " • "
+            }
+            text += group
         }
     }
     if (text.isEmpty()) {

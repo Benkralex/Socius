@@ -21,13 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
-import de.benkralex.socius.ui.pages.NewContactPageViewModel
+import de.benkralex.socius.ui.pages.EditContactPageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditStructuredName(
     modifier: Modifier = Modifier,
-    viewModel: NewContactPageViewModel,
+    viewModel: EditContactPageViewModel,
 ) {
     Card (
         modifier = modifier
@@ -79,22 +79,22 @@ fun EditStructuredName(
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    value = viewModel.structuredNameState.givenName,
-                    onValueChange = { viewModel.structuredNameState.givenName = it },
+                    value = viewModel.structuredNameState.firstname,
+                    onValueChange = { viewModel.structuredNameState.firstname = it },
                     label = { Text(stringResource(R.string.name_given_name)) },
                 )
-                AnimatedVisibility(viewModel.structuredNameState.showMiddleNameTextField) {
+                AnimatedVisibility(viewModel.structuredNameState.showSecondNameTextField) {
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        value = viewModel.structuredNameState.middleName,
-                        onValueChange = { viewModel.structuredNameState.middleName = it },
+                        value = viewModel.structuredNameState.secondName,
+                        onValueChange = { viewModel.structuredNameState.secondName = it },
                         label = { Text(stringResource(R.string.name_middle_name)) },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    viewModel.structuredNameState.middleName = ""
-                                    viewModel.structuredNameState.showMiddleNameTextField = false
+                                    viewModel.structuredNameState.secondName = ""
+                                    viewModel.structuredNameState.showSecondNameTextField = false
                                 }
                             ) {
                                 Icon(
@@ -111,8 +111,8 @@ fun EditStructuredName(
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    value = viewModel.structuredNameState.familyName,
-                    onValueChange = { viewModel.structuredNameState.familyName = it },
+                    value = viewModel.structuredNameState.lastname,
+                    onValueChange = { viewModel.structuredNameState.lastname = it },
                     label = { Text(stringResource(R.string.name_family_name)) },
                 )
                 AnimatedVisibility(viewModel.structuredNameState.showSuffixTextField) {

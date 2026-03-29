@@ -8,31 +8,30 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.model.Email
+import de.benkralex.socius.data.model.Type
 
 class EditEmailsState {
     val showFields by derivedStateOf { count > 0 }
     var count: Int by mutableIntStateOf(0)
-    var addresses: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
-    var types: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
-    var labels: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
+    var values: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
+    var types: MutableList<MutableState<Type.Email>> by mutableStateOf(mutableListOf())
 
     fun hasRelevantData(): Boolean {
-        return addresses.any { it.value.isNotBlank() }
+        return values.any { it.value.isNotBlank() }
     }
 
     fun isRelevant(i: Int): Boolean {
-        return addresses[i].value.isNotBlank()
+        return values[i].value.isNotBlank()
     }
     
     fun getRelevantData(): List<Email> {
         val phoneNumbers: MutableList<Email> = mutableListOf()
-        for (i in 0..<count) {
+        for (i in 0..< count) {
             if (isRelevant(i)) {
                 phoneNumbers.add(
                     Email(
-                        address = addresses[i].value.trim(),
-                        type = types[i].value.trim().ifBlank { "home" },
-                        label = labels[i].value.trim().ifBlank { null },
+                        value = values[i].value.trim(),
+                        type = types[i].value,
                     )
                 )
             }
@@ -41,25 +40,22 @@ class EditEmailsState {
     }
 
     fun addNew() {
-        addresses.add(mutableStateOf(""))
-        types.add(mutableStateOf("home"))
-        labels.add(mutableStateOf(""))
+        values.add(mutableStateOf(""))
+        types.add(mutableStateOf(Type.Email.HOME))
         count++
     }
 
     fun loadFromContact(contact: Contact) {
         for (email: Email in contact.emails) {
             count++
-            addresses.add(mutableStateOf(email.address))
+            values.add(mutableStateOf(email.value))
             types.add(mutableStateOf(email.type))
-            labels.add(mutableStateOf(email.label ?: ""))
         }
     }
 
     fun reset() {
         count = 0
-        addresses.clear()
+        values.clear()
         types.clear()
-        labels.clear()
     }
 }

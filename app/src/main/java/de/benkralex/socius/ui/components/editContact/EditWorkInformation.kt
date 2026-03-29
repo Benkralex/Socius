@@ -21,13 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
-import de.benkralex.socius.ui.pages.NewContactPageViewModel
+import de.benkralex.socius.ui.pages.EditContactPageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditWorkInformation(
     modifier: Modifier = Modifier,
-    viewModel: NewContactPageViewModel,
+    viewModel: EditContactPageViewModel,
 ) {
     Card (
         modifier = modifier

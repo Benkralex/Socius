@@ -71,7 +71,7 @@ import de.benkralex.socius.ui.components.displayContact.NameWidget
 import de.benkralex.socius.ui.components.displayContact.NoteWidget
 import de.benkralex.socius.ui.components.displayContact.PhoneNumbersWidget
 import de.benkralex.socius.ui.components.displayContact.PostalAddressesWidget
-import de.benkralex.socius.ui.components.displayContact.ProfilePicture
+import de.benkralex.socius.ui.components.displayContact.ProfilePictureWidget
 import de.benkralex.socius.ui.components.displayContact.ProfileWithName
 import de.benkralex.socius.ui.components.displayContact.RelationsWidget
 import de.benkralex.socius.ui.components.displayContact.WebsitesWidget
@@ -93,7 +93,7 @@ fun ContactDetailPage(
     val scrollState = rememberScrollState()
     var showDeletionConfirmationDialog by remember { mutableStateOf(false) }
 
-    val profilePicture = contact.getProfileBitmap(LocalContext.current)
+    val profilePicture = contact.profilePicture.bitmap
 
     Scaffold(
         modifier = modifier,
@@ -145,7 +145,6 @@ fun ContactDetailPage(
                     }
                     IconButton(
                         onClick = {
-                            if (contact.isReadOnly()) return@IconButton
                             isStarred = !isStarred
                             Thread {
                                 runBlocking {
@@ -166,30 +165,27 @@ fun ContactDetailPage(
                                 .padding(8.dp),
                         )
                     }
-
-                    if (!contact.isReadOnly()) {
-                        IconButton(
-                            onClick = onEditClick
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Edit,
-                                contentDescription = stringResource(R.string.content_desc_edit),
-                                modifier = Modifier
-                                    .padding(8.dp),
-                            )
+                    IconButton(
+                        onClick = onEditClick
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Edit,
+                            contentDescription = stringResource(R.string.content_desc_edit),
+                            modifier = Modifier
+                                .padding(8.dp),
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+                            showDeletionConfirmationDialog = true
                         }
-                        IconButton(
-                            onClick = {
-                                showDeletionConfirmationDialog = true
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.Delete,
-                                contentDescription = stringResource(R.string.content_desc_edit),
-                                modifier = Modifier
-                                    .padding(8.dp),
-                            )
-                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = stringResource(R.string.content_desc_edit),
+                            modifier = Modifier
+                                .padding(8.dp),
+                        )
                     }
                 }
             )
@@ -222,7 +218,6 @@ fun ContactDetailPage(
                             modifier = Modifier
                                 .fillMaxWidth(),
                             onClick = {
-                                if (contact.isReadOnly()) return@Button
                                 onBackClick()
                                 Thread {
                                     runBlocking {
@@ -268,7 +263,7 @@ fun ContactDetailPage(
                 .fillMaxWidth()
         ) {
             val onClickFunc = {showProfileFullscreen = true}
-            ProfilePicture(
+            ProfilePictureWidget(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 16.dp, bottom = 8.dp),
@@ -281,7 +276,7 @@ fun ContactDetailPage(
             NameWidget(contact)
             NoteWidget(contact.note)
             WorkInformationWidget(contact)
-            GroupsWidget(groups = contact.groups)
+            GroupsWidget(contact.groups)
             EmailsWidget(contact.emails)
             PhoneNumbersWidget(contact.phoneNumbers)
             PostalAddressesWidget(contact.addresses)

@@ -10,19 +10,19 @@ interface LocalContactsDao {
     @Insert
     suspend fun insert(entity: LocalContactsEntity): Long
 
-    @Query("SELECT * FROM local_contacts")
+    @Query("SELECT * FROM LocalContacts")
     suspend fun getAll(): List<LocalContactsEntity>
 
-    @Query("SELECT * FROM local_contacts WHERE id = :id")
+    @Query("SELECT * FROM LocalContacts WHERE id = :id")
     suspend fun getById(id: Int): LocalContactsEntity?
 
-    @Query("DELETE FROM local_contacts WHERE id = :id")
+    @Query("DELETE FROM LocalContacts WHERE id = :id")
     suspend fun deleteById(id: Int)
 
-    @Query("DELETE FROM local_contacts")
+    @Query("DELETE FROM LocalContacts")
     suspend fun deleteAll()
 
-    @Query("UPDATE local_contacts SET isStarred = :isStarred WHERE id = :id")
+    @Query("UPDATE LocalContacts SET isStarred = :isStarred WHERE id = :id")
     suspend fun updateStarredStatus(id: Int, isStarred: Boolean)
 
     @Update

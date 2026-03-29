@@ -11,6 +11,7 @@ import android.provider.ContactsContract
 import android.util.Log
 import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.contacts.local.database.LocalContactsDatabase
+import de.benkralex.socius.data.model.Type
 import de.benkralex.socius.data.settings.getFormattedName
 import de.benkralex.socius.data.settings.noName
 import kotlinx.coroutines.runBlocking
@@ -49,7 +50,7 @@ class ContactsSyncAdapter(
             val localContacts = runBlocking {
                 val database = LocalContactsDatabase.getDatabase(context)
                 val dao = database.localContactsDao()
-                dao.getAll().map { it.toContact(context) }
+                dao.getAll().map { it.toContact() }
             }
 
             Log.d(TAG, "Found ${localContacts.size} local contacts to sync")
@@ -96,7 +97,7 @@ class ContactsSyncAdapter(
         )
 
         // Insert display name
-        val displayName = contact.displayName ?: buildDisplayName(contact)
+        val displayName = contact.name.displayName ?: buildDisplayName(contact)
         if (!displayName.isNullOrBlank()) {
             operations.add(
                 ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
@@ -106,20 +107,20 @@ class ContactsSyncAdapter(
                         ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE
                     )
                     .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, displayName)
-                    .withValue(ContactsContract.CommonDataKinds.StructuredName.PREFIX, contact.prefix)
-                    .withValue(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME, contact.givenName)
-                    .withValue(ContactsContract.CommonDataKinds.StructuredName.MIDDLE_NAME, contact.middleName)
-                    .withValue(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME, contact.familyName)
-                    .withValue(ContactsContract.CommonDataKinds.StructuredName.SUFFIX, contact.suffix)
-                    .withValue(ContactsContract.CommonDataKinds.StructuredName.PHONETIC_GIVEN_NAME, contact.phoneticGivenName)
-                    .withValue(ContactsContract.CommonDataKinds.StructuredName.PHONETIC_MIDDLE_NAME, contact.phoneticMiddleName)
-                    .withValue(ContactsContract.CommonDataKinds.StructuredName.PHONETIC_FAMILY_NAME, contact.phoneticFamilyName)
+                    .withValue(ContactsContract.CommonDataKinds.StructuredName.PREFIX, contact.name.prefix)
+                    .withValue(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME, contact.name.firstname)
+                    .withValue(ContactsContract.CommonDataKinds.StructuredName.MIDDLE_NAME, contact.name.secondName)
+                    .withValue(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME, contact.name.lastname)
+                    .withValue(ContactsContract.CommonDataKinds.StructuredName.SUFFIX, contact.name.suffix)
+                    .withValue(ContactsContract.CommonDataKinds.StructuredName.PHONETIC_GIVEN_NAME, contact.name.phoneticFirstname)
+                    .withValue(ContactsContract.CommonDataKinds.StructuredName.PHONETIC_MIDDLE_NAME, contact.name.phoneticSecondName)
+                    .withValue(ContactsContract.CommonDataKinds.StructuredName.PHONETIC_FAMILY_NAME, contact.name.phoneticLastname)
                     .build()
             )
         }
 
         // Insert nickname
-        if (!contact.nickname.isNullOrBlank()) {
+        if (!contact.name.nickname.isNullOrBlank()) {
             operations.add(
                 ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                     .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
@@ -127,7 +128,7 @@ class ContactsSyncAdapter(
                         ContactsContract.Data.MIMETYPE,
                         ContactsContract.CommonDataKinds.Nickname.CONTENT_ITEM_TYPE
                     )
-                    .withValue(ContactsContract.CommonDataKinds.Nickname.NAME, contact.nickname)
+                    .withValue(ContactsContract.CommonDataKinds.Nickname.NAME, contact.name.nickname)
                     .build()
             )
         }
@@ -142,9 +143,9 @@ class ContactsSyncAdapter(
                         ContactsContract.Data.MIMETYPE,
                         ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
                     )
-                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone.number)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, phone.value)
                     .withValue(ContactsContract.CommonDataKinds.Phone.TYPE, phoneType)
-                    .withValue(ContactsContract.CommonDataKinds.Phone.LABEL, phone.label)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.LABEL, phone.type.label)
                     .build()
             )
         }
@@ -159,9 +160,9 @@ class ContactsSyncAdapter(
                         ContactsContract.Data.MIMETYPE,
                         ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
                     )
-                    .withValue(ContactsContract.CommonDataKinds.Email.ADDRESS, email.address)
+                    .withValue(ContactsContract.CommonDataKinds.Email.ADDRESS, email.value)
                     .withValue(ContactsContract.CommonDataKinds.Email.TYPE, emailType)
-                    .withValue(ContactsContract.CommonDataKinds.Email.LABEL, email.label)
+                    .withValue(ContactsContract.CommonDataKinds.Email.LABEL, email.type.label)
                     .build()
             )
         }
@@ -182,13 +183,13 @@ class ContactsSyncAdapter(
                     .withValue(ContactsContract.CommonDataKinds.StructuredPostal.POSTCODE, address.postcode)
                     .withValue(ContactsContract.CommonDataKinds.StructuredPostal.COUNTRY, address.country)
                     .withValue(ContactsContract.CommonDataKinds.StructuredPostal.TYPE, addressType)
-                    .withValue(ContactsContract.CommonDataKinds.StructuredPostal.LABEL, address.label)
+                    .withValue(ContactsContract.CommonDataKinds.StructuredPostal.LABEL, address.type.label)
                     .build()
             )
         }
 
         // Insert organization
-        if (!contact.organization.isNullOrBlank() || !contact.jobTitle.isNullOrBlank()) {
+        if (!contact.job.organization.isNullOrBlank() || !contact.job.jobTitle.isNullOrBlank()) {
             operations.add(
                 ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                     .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
@@ -196,9 +197,9 @@ class ContactsSyncAdapter(
                         ContactsContract.Data.MIMETYPE,
                         ContactsContract.CommonDataKinds.Organization.CONTENT_ITEM_TYPE
                     )
-                    .withValue(ContactsContract.CommonDataKinds.Organization.COMPANY, contact.organization)
-                    .withValue(ContactsContract.CommonDataKinds.Organization.DEPARTMENT, contact.department)
-                    .withValue(ContactsContract.CommonDataKinds.Organization.TITLE, contact.jobTitle)
+                    .withValue(ContactsContract.CommonDataKinds.Organization.COMPANY, contact.job.organization)
+                    .withValue(ContactsContract.CommonDataKinds.Organization.DEPARTMENT, contact.job.department)
+                    .withValue(ContactsContract.CommonDataKinds.Organization.TITLE, contact.job.jobTitle)
                     .build()
             )
         }
@@ -213,9 +214,9 @@ class ContactsSyncAdapter(
                         ContactsContract.Data.MIMETYPE,
                         ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE
                     )
-                    .withValue(ContactsContract.CommonDataKinds.Website.URL, website.url)
+                    .withValue(ContactsContract.CommonDataKinds.Website.URL, website.value)
                     .withValue(ContactsContract.CommonDataKinds.Website.TYPE, websiteType)
-                    .withValue(ContactsContract.CommonDataKinds.Website.LABEL, website.label)
+                    .withValue(ContactsContract.CommonDataKinds.Website.LABEL, website.type.label)
                     .build()
             )
         }
@@ -244,9 +245,9 @@ class ContactsSyncAdapter(
                         ContactsContract.Data.MIMETYPE,
                         ContactsContract.CommonDataKinds.Relation.CONTENT_ITEM_TYPE
                     )
-                    .withValue(ContactsContract.CommonDataKinds.Relation.NAME, relation.name)
+                    .withValue(ContactsContract.CommonDataKinds.Relation.NAME, relation.value)
                     .withValue(ContactsContract.CommonDataKinds.Relation.TYPE, relationType)
-                    .withValue(ContactsContract.CommonDataKinds.Relation.LABEL, relation.label)
+                    .withValue(ContactsContract.CommonDataKinds.Relation.LABEL, relation.type.label)
                     .build()
             )
         }
@@ -265,7 +266,7 @@ class ContactsSyncAdapter(
                         )
                         .withValue(ContactsContract.CommonDataKinds.Event.START_DATE, dateString)
                         .withValue(ContactsContract.CommonDataKinds.Event.TYPE, eventType)
-                        .withValue(ContactsContract.CommonDataKinds.Event.LABEL, event.label)
+                        .withValue(ContactsContract.CommonDataKinds.Event.LABEL, event.type.label)
                         .build()
                 )
             }
@@ -294,14 +295,9 @@ class ContactsSyncAdapter(
         }
     }
 
-    private fun mapPhoneType(type: String): Int {
-        return when (type.lowercase()) {
-            "mobile" -> ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE
-            "home" -> ContactsContract.CommonDataKinds.Phone.TYPE_HOME
-            "work" -> ContactsContract.CommonDataKinds.Phone.TYPE_WORK
-            "fax_home" -> ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME
-            "fax_work" -> ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK
-            "pager" -> ContactsContract.CommonDataKinds.Phone.TYPE_PAGER
+    private fun mapPhoneType(type: Type.Phone): Int {
+        return when (type) {
+            /*
             "callback" -> ContactsContract.CommonDataKinds.Phone.TYPE_CALLBACK
             "car" -> ContactsContract.CommonDataKinds.Phone.TYPE_CAR
             "company_main" -> ContactsContract.CommonDataKinds.Phone.TYPE_COMPANY_MAIN
@@ -312,73 +308,82 @@ class ContactsSyncAdapter(
             "radio" -> ContactsContract.CommonDataKinds.Phone.TYPE_RADIO
             "telex" -> ContactsContract.CommonDataKinds.Phone.TYPE_TELEX
             "tty_tdd" -> ContactsContract.CommonDataKinds.Phone.TYPE_TTY_TDD
-            "work_mobile" -> ContactsContract.CommonDataKinds.Phone.TYPE_WORK_MOBILE
-            "work_pager" -> ContactsContract.CommonDataKinds.Phone.TYPE_WORK_PAGER
             "assistant" -> ContactsContract.CommonDataKinds.Phone.TYPE_ASSISTANT
-            "custom" -> ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM
-            else -> ContactsContract.CommonDataKinds.Phone.TYPE_OTHER
+            */
+            Type.Phone.MOBILE_HOME -> ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE
+            Type.Phone.HOME -> ContactsContract.CommonDataKinds.Phone.TYPE_HOME
+            Type.Phone.WORK -> ContactsContract.CommonDataKinds.Phone.TYPE_WORK
+            Type.Phone.MOBILE_WORK -> ContactsContract.CommonDataKinds.Phone.TYPE_WORK_MOBILE
+            Type.Phone.FAX_HOME -> ContactsContract.CommonDataKinds.Phone.TYPE_FAX_HOME
+            Type.Phone.FAX_WORK -> ContactsContract.CommonDataKinds.Phone.TYPE_FAX_WORK
+            Type.Phone.PAGER_HOME -> ContactsContract.CommonDataKinds.Phone.TYPE_PAGER
+            Type.Phone.PAGER_WORK -> ContactsContract.CommonDataKinds.Phone.TYPE_WORK_PAGER
+            Type.Phone.OTHER -> ContactsContract.CommonDataKinds.Phone.TYPE_OTHER
+            Type.Phone.CUSTOM -> ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM
         }
     }
 
-    private fun mapEmailType(type: String): Int {
-        return when (type.lowercase()) {
-            "home" -> ContactsContract.CommonDataKinds.Email.TYPE_HOME
-            "work" -> ContactsContract.CommonDataKinds.Email.TYPE_WORK
-            "mobile" -> ContactsContract.CommonDataKinds.Email.TYPE_MOBILE
-            "custom" -> ContactsContract.CommonDataKinds.Email.TYPE_CUSTOM
-            else -> ContactsContract.CommonDataKinds.Email.TYPE_OTHER
+    private fun mapEmailType(type: Type.Email): Int {
+        return when (type) {
+            Type.Email.HOME -> ContactsContract.CommonDataKinds.Email.TYPE_HOME
+            Type.Email.WORK -> ContactsContract.CommonDataKinds.Email.TYPE_WORK
+            Type.Email.OTHER -> ContactsContract.CommonDataKinds.Email.TYPE_OTHER
+            Type.Email.CUSTOM -> ContactsContract.CommonDataKinds.Email.TYPE_CUSTOM
         }
     }
 
-    private fun mapAddressType(type: String): Int {
-        return when (type.lowercase()) {
-            "home" -> ContactsContract.CommonDataKinds.StructuredPostal.TYPE_HOME
-            "work" -> ContactsContract.CommonDataKinds.StructuredPostal.TYPE_WORK
-            "custom" -> ContactsContract.CommonDataKinds.StructuredPostal.TYPE_CUSTOM
-            else -> ContactsContract.CommonDataKinds.StructuredPostal.TYPE_OTHER
+    private fun mapAddressType(type: Type.Address): Int {
+        return when (type) {
+            Type.Address.HOME -> ContactsContract.CommonDataKinds.StructuredPostal.TYPE_HOME
+            Type.Address.WORK -> ContactsContract.CommonDataKinds.StructuredPostal.TYPE_WORK
+            Type.Address.OTHER -> ContactsContract.CommonDataKinds.StructuredPostal.TYPE_OTHER
+            Type.Address.CUSTOM -> ContactsContract.CommonDataKinds.StructuredPostal.TYPE_CUSTOM
         }
     }
 
-    private fun mapWebsiteType(type: String): Int {
-        return when (type.lowercase()) {
-            "homepage" -> ContactsContract.CommonDataKinds.Website.TYPE_HOMEPAGE
-            "blog" -> ContactsContract.CommonDataKinds.Website.TYPE_BLOG
+    private fun mapWebsiteType(type: Type.Website): Int {
+        return when (type) {
+            /*
             "profile" -> ContactsContract.CommonDataKinds.Website.TYPE_PROFILE
             "home" -> ContactsContract.CommonDataKinds.Website.TYPE_HOME
             "work" -> ContactsContract.CommonDataKinds.Website.TYPE_WORK
             "ftp" -> ContactsContract.CommonDataKinds.Website.TYPE_FTP
-            "custom" -> ContactsContract.CommonDataKinds.Website.TYPE_CUSTOM
-            else -> ContactsContract.CommonDataKinds.Website.TYPE_OTHER
+            */
+            Type.Website.HOMEPAGE -> ContactsContract.CommonDataKinds.Website.TYPE_HOMEPAGE
+            Type.Website.BLOG -> ContactsContract.CommonDataKinds.Website.TYPE_BLOG
+            Type.Website.OTHER -> ContactsContract.CommonDataKinds.Website.TYPE_OTHER
+            Type.Website.CUSTOM -> ContactsContract.CommonDataKinds.Website.TYPE_CUSTOM
+
         }
     }
 
-    private fun mapRelationType(type: String): Int {
-        return when (type.lowercase()) {
-            "spouse" -> ContactsContract.CommonDataKinds.Relation.TYPE_SPOUSE
-            "child" -> ContactsContract.CommonDataKinds.Relation.TYPE_CHILD
-            "mother" -> ContactsContract.CommonDataKinds.Relation.TYPE_MOTHER
-            "father" -> ContactsContract.CommonDataKinds.Relation.TYPE_FATHER
-            "parent" -> ContactsContract.CommonDataKinds.Relation.TYPE_PARENT
-            "brother" -> ContactsContract.CommonDataKinds.Relation.TYPE_BROTHER
-            "sister" -> ContactsContract.CommonDataKinds.Relation.TYPE_SISTER
-            "friend" -> ContactsContract.CommonDataKinds.Relation.TYPE_FRIEND
-            "relative" -> ContactsContract.CommonDataKinds.Relation.TYPE_RELATIVE
-            "domestic_partner" -> ContactsContract.CommonDataKinds.Relation.TYPE_DOMESTIC_PARTNER
-            "manager" -> ContactsContract.CommonDataKinds.Relation.TYPE_MANAGER
-            "assistant" -> ContactsContract.CommonDataKinds.Relation.TYPE_ASSISTANT
-            "referred_by" -> ContactsContract.CommonDataKinds.Relation.TYPE_REFERRED_BY
-            "partner" -> ContactsContract.CommonDataKinds.Relation.TYPE_PARTNER
-            "custom" -> ContactsContract.CommonDataKinds.Relation.TYPE_CUSTOM
-            else -> ContactsContract.CommonDataKinds.Relation.TYPE_CUSTOM
+    private fun mapRelationType(type: Type.Relation): Int {
+        return when (type) {
+            Type.Relation.SPOUSE -> ContactsContract.CommonDataKinds.Relation.TYPE_SPOUSE
+            Type.Relation.CHILD -> ContactsContract.CommonDataKinds.Relation.TYPE_CHILD
+            Type.Relation.MOTHER -> ContactsContract.CommonDataKinds.Relation.TYPE_MOTHER
+            Type.Relation.FATHER -> ContactsContract.CommonDataKinds.Relation.TYPE_FATHER
+            Type.Relation.PARENT -> ContactsContract.CommonDataKinds.Relation.TYPE_PARENT
+            Type.Relation.BROTHER -> ContactsContract.CommonDataKinds.Relation.TYPE_BROTHER
+            Type.Relation.SISTER -> ContactsContract.CommonDataKinds.Relation.TYPE_SISTER
+            Type.Relation.FRIEND -> ContactsContract.CommonDataKinds.Relation.TYPE_FRIEND
+            Type.Relation.RELATIVE -> ContactsContract.CommonDataKinds.Relation.TYPE_RELATIVE
+            Type.Relation.DOMESTIC_PARTNER -> ContactsContract.CommonDataKinds.Relation.TYPE_DOMESTIC_PARTNER
+            Type.Relation.MANAGER -> ContactsContract.CommonDataKinds.Relation.TYPE_MANAGER
+            Type.Relation.ASSISTANT -> ContactsContract.CommonDataKinds.Relation.TYPE_ASSISTANT
+            Type.Relation.REFERRED_BY -> ContactsContract.CommonDataKinds.Relation.TYPE_REFERRED_BY
+            Type.Relation.PARTNER -> ContactsContract.CommonDataKinds.Relation.TYPE_PARTNER
+            Type.Relation.OTHER -> ContactsContract.CommonDataKinds.Relation.TYPE_CUSTOM
+            Type.Relation.CUSTOM -> ContactsContract.CommonDataKinds.Relation.TYPE_CUSTOM
         }
     }
 
-    private fun mapEventType(type: String): Int {
-        return when (type.lowercase()) {
-            "birthday" -> ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY
-            "anniversary" -> ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY
-            "custom" -> ContactsContract.CommonDataKinds.Event.TYPE_CUSTOM
-            else -> ContactsContract.CommonDataKinds.Event.TYPE_OTHER
+    private fun mapEventType(type: Type.Event): Int {
+        return when (type) {
+            Type.Event.BIRTHDAY -> ContactsContract.CommonDataKinds.Event.TYPE_BIRTHDAY
+            Type.Event.ANNIVERSARY -> ContactsContract.CommonDataKinds.Event.TYPE_ANNIVERSARY
+            Type.Event.OTHER -> ContactsContract.CommonDataKinds.Event.TYPE_OTHER
+            Type.Event.CUSTOM -> ContactsContract.CommonDataKinds.Event.TYPE_CUSTOM
         }
     }
 }

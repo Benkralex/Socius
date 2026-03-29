@@ -1,138 +1,60 @@
 package de.benkralex.socius.data.contacts.local.database
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import androidx.core.net.toUri
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
+import de.benkralex.socius.data.contacts.local.database.localContactsTypeConverter.*
+import de.benkralex.socius.data.model.Address
 import de.benkralex.socius.data.model.Contact
-import de.benkralex.socius.data.model.ContactEvent
 import de.benkralex.socius.data.model.ContactOrigin
 import de.benkralex.socius.data.model.Email
-import de.benkralex.socius.data.model.Group
-import de.benkralex.socius.data.model.PhoneNumber
-import de.benkralex.socius.data.model.PostalAddress
+import de.benkralex.socius.data.model.Event
+import de.benkralex.socius.data.model.Job
+import de.benkralex.socius.data.model.Name
+import de.benkralex.socius.data.model.Phone
+import de.benkralex.socius.data.model.ProfilePicture
 import de.benkralex.socius.data.model.Relation
 import de.benkralex.socius.data.model.Website
 
-@Entity(tableName = "local_contacts")
-data class LocalContactsEntity (
+@Entity(tableName = "LocalContacts")
+data class LocalContactsEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    var origin: ContactOrigin = ContactOrigin.LOCAL,
 
-    var displayName: String? = null,
+    @field:TypeConverters(NameTypeConverter::class)
+    var name: Name = Name(),
+    @field:TypeConverters(JobTypeConverter::class)
+    var job: Job = Job(),
+    @field:TypeConverters(ProfilePictureTypeConverter::class)
+    var profilePicture: ProfilePicture = ProfilePicture(),
 
-    var prefix: String? = null,
-    var givenName: String? = null,
-    var middleName: String? = null,
-    var familyName: String? = null,
-    var suffix: String? = null,
-    var nickname: String? = null,
-    var phoneticGivenName: String? = null,
-    var phoneticMiddleName: String? = null,
-    var phoneticFamilyName: String? = null,
-
-    var organization: String? = null,
-    var department: String? = null,
-    var jobTitle: String? = null,
+    @field:TypeConverters(PhoneTypeConverter::class)
+    var phoneNumbers: List<Phone> = emptyList(),
+    @field:TypeConverters(EmailTypeConverter::class)
+    var emails: List<Email> = emptyList(),
+    @field:TypeConverters(AddressTypeConverter::class)
+    var addresses: List<Address> = emptyList(),
+    @field:TypeConverters(WebsiteTypeConverter::class)
+    var websites: List<Website> = emptyList(),
+    @field:TypeConverters(RelationTypeConverter::class)
+    var relations: List<Relation> = emptyList(),
+    @field:TypeConverters(EventTypeConverter::class)
+    var events: List<Event> = emptyList(),
+    @field:TypeConverters(StringListTypeConverter::class)
+    var groups: List<String> = emptyList(),
 
     var note: String? = null,
     var isStarred: Boolean = false,
-
-    var photoUri: String? = null,
-    @field:TypeConverters(BitmapTypeConverter::class)
-    var photoBitmap: Bitmap? = null,
-    var thumbnailUri: String? = null,
-    @field:TypeConverters(BitmapTypeConverter::class)
-    var thumbnailBitmap: Bitmap? = null,
-
-    var phoneNumbers: List<PhoneNumber> = emptyList(),
-    var emails: List<Email> = emptyList(),
-    var addresses: List<PostalAddress> = emptyList(),
-    var websites: List<Website> = emptyList(),
-    var relations: List<Relation> = emptyList(),
-    var events: List<ContactEvent> = emptyList(),
-    var groups: List<Group> = emptyList(),
-
+    @field:TypeConverters(StringMapTypeConverter::class)
     var customFields: Map<String, String> = emptyMap()
 ) {
-    fun fromContact(contact: Contact): LocalContactsEntity {
-        return LocalContactsEntity(
-            displayName = contact.displayName,
-            prefix = contact.prefix,
-            givenName = contact.givenName,
-            middleName = contact.middleName,
-            familyName = contact.familyName,
-            suffix = contact.suffix,
-            nickname = contact.nickname,
-            phoneticGivenName = contact.phoneticGivenName,
-            phoneticMiddleName = contact.phoneticMiddleName,
-            phoneticFamilyName = contact.phoneticFamilyName,
-            organization = contact.organization,
-            department = contact.department,
-            jobTitle = contact.jobTitle,
-            note = contact.note,
-            isStarred = contact.isStarred,
-            photoUri = contact.photoUri,
-            photoBitmap = contact.photoBitmap,
-            thumbnailUri = contact.thumbnailUri,
-            thumbnailBitmap = contact.thumbnailBitmap,
-            phoneNumbers = contact.phoneNumbers,
-            emails = contact.emails,
-            addresses = contact.addresses,
-            websites = contact.websites,
-            relations = contact.relations,
-            events = contact.events,
-            groups = contact.groups,
-            customFields = contact.customFields,
-        )
-    }
-
-    fun toContact(context: Context): Contact {
-        val contentResolver = context.contentResolver
-        val photoBitmap = photoBitmap ?: if (photoUri != null) {
-            try {
-                contentResolver.openInputStream(photoUri!!.toUri())?.use { inputStream ->
-                    BitmapFactory.decodeStream(inputStream)
-                }
-            } catch (_: Exception) {
-                null
-            }
-        } else null
-
-        val thumbnailBitmap = thumbnailBitmap ?: if (thumbnailUri != null) {
-            try {
-                contentResolver.openInputStream(thumbnailUri!!.toUri())?.use { inputStream ->
-                    BitmapFactory.decodeStream(inputStream)
-                }
-            } catch (_: Exception) {
-                null
-            }
-        } else null
-
+    fun toContact(): Contact {
         return Contact(
-            id = this.id.toString(),
-            origin = ContactOrigin.LOCAL,
-            displayName = displayName,
-            prefix = prefix,
-            givenName = givenName,
-            middleName = middleName,
-            familyName = familyName,
-            suffix = suffix,
-            nickname = nickname,
-            phoneticGivenName = phoneticGivenName,
-            phoneticMiddleName = phoneticMiddleName,
-            phoneticFamilyName = phoneticFamilyName,
-            organization = organization,
-            department = department,
-            jobTitle = jobTitle,
-            note = note,
-            isStarred = isStarred,
-            photoUri = photoUri,
-            photoBitmap = photoBitmap,
-            thumbnailUri = thumbnailUri,
-            thumbnailBitmap = thumbnailBitmap,
+            id = id,
+            origin = origin,
+            name = name,
+            job = job,
+            profilePicture = profilePicture,
             phoneNumbers = phoneNumbers,
             emails = emails,
             addresses = addresses,
@@ -140,10 +62,50 @@ data class LocalContactsEntity (
             relations = relations,
             events = events,
             groups = groups,
-            customFields = customFields,
-
-            birthday = null,
-            anniversary = null,
+            note = note,
+            isStarred = isStarred,
+            customFields = customFields
         )
+    }
+
+    companion object {
+        fun fromContact(contact: Contact): LocalContactsEntity {
+            return if (contact.id == null) {
+                LocalContactsEntity(
+                    origin = contact.origin,
+                    name = contact.name,
+                    job = contact.job,
+                    profilePicture = contact.profilePicture,
+                    phoneNumbers = contact.phoneNumbers,
+                    emails = contact.emails,
+                    addresses = contact.addresses,
+                    websites = contact.websites,
+                    relations = contact.relations,
+                    events = contact.events,
+                    groups = contact.groups,
+                    note = contact.note,
+                    isStarred = contact.isStarred,
+                    customFields = contact.customFields
+                )
+            } else {
+                LocalContactsEntity(
+                    id = contact.id!!,
+                    origin = contact.origin,
+                    name = contact.name,
+                    job = contact.job,
+                    profilePicture = contact.profilePicture,
+                    phoneNumbers = contact.phoneNumbers,
+                    emails = contact.emails,
+                    addresses = contact.addresses,
+                    websites = contact.websites,
+                    relations = contact.relations,
+                    events = contact.events,
+                    groups = contact.groups,
+                    note = contact.note,
+                    isStarred = contact.isStarred,
+                    customFields = contact.customFields
+                )
+            }
+        }
     }
 }

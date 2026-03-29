@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.data.model.Contact
 import de.benkralex.socius.data.settings.getFormattedName
-import de.benkralex.socius.ui.components.displayContact.ProfilePicture
+import de.benkralex.socius.ui.components.displayContact.ProfilePictureWidget
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -38,7 +38,7 @@ fun ContactCard(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp)
         ) {
-            ProfilePicture(
+            ProfilePictureWidget(
                 contact = contact,
                 size = 40.dp,
                 modifier = Modifier

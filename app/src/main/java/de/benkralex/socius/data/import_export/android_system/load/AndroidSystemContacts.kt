@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.provider.ContactsContract
 import androidx.core.net.toUri
-import de.benkralex.socius.data.model.Contact
-import de.benkralex.socius.data.model.ContactOrigin
+import de.benkralex.socius.data.model.old.Contact
+import de.benkralex.socius.data.model.old.ContactOrigin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

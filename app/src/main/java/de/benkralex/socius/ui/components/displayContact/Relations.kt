@@ -14,9 +14,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.data.model.Relation
-import de.benkralex.socius.ui.components.displayContact.helpers.translateType
+import de.benkralex.socius.data.model.Type
 
 @Composable
 fun RelationsWidget(
@@ -47,10 +48,10 @@ fun RelationsWidget(
                             .padding(8.dp),
                     ) {
                         Text(
-                            text = relation.name,
+                            text = relation.value,
                         )
                         Text(
-                            text = translateType(relation.type, relation.label),
+                            text = stringResource(Type.translateType(relation.type)),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }

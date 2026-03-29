@@ -9,12 +9,12 @@ class EditStructuredNameState {
     var prefix by mutableStateOf("")
     var showPrefixTextField by mutableStateOf(false)
 
-    var givenName by mutableStateOf("")
+    var firstname by mutableStateOf("")
 
-    var middleName by mutableStateOf("")
-    var showMiddleNameTextField by mutableStateOf(false)
+    var secondName by mutableStateOf("")
+    var showSecondNameTextField by mutableStateOf(false)
 
-    var familyName by mutableStateOf("")
+    var lastname by mutableStateOf("")
 
     var suffix by mutableStateOf("")
     var showSuffixTextField by mutableStateOf(false)
@@ -23,36 +23,36 @@ class EditStructuredNameState {
     var showNicknameTextField by mutableStateOf(false)
 
     fun hasRelevantData(): Boolean {
-        return prefix.isNotBlank() || givenName.isNotBlank() || middleName.isNotBlank() || familyName.isNotBlank() || suffix.isNotBlank() || nickname.isNotBlank()
+        return prefix.isNotBlank() || firstname.isNotBlank() || secondName.isNotBlank() || lastname.isNotBlank() || suffix.isNotBlank() || nickname.isNotBlank()
     }
 
     fun loadFromContact(contact: Contact) {
-        prefix = contact.prefix ?: ""
-        showPrefixTextField = !contact.prefix.isNullOrBlank()
+        prefix = contact.name.prefix ?: ""
+        showPrefixTextField = !contact.name.prefix.isNullOrBlank()
 
-        givenName = contact.givenName ?: ""
+        firstname = contact.name.firstname ?: ""
 
-        middleName = contact.middleName ?: ""
-        showMiddleNameTextField = !contact.middleName.isNullOrBlank()
+        secondName = contact.name.secondName ?: ""
+        showSecondNameTextField = !contact.name.secondName.isNullOrBlank()
 
-        familyName = contact.familyName ?: ""
+        lastname = contact.name.lastname ?: ""
 
-        suffix = contact.suffix ?: ""
-        showSuffixTextField = !contact.suffix.isNullOrBlank()
+        suffix = contact.name.suffix ?: ""
+        showSuffixTextField = !contact.name.suffix.isNullOrBlank()
 
-        nickname = contact.nickname ?: ""
-        showNicknameTextField = !contact.nickname.isNullOrBlank()
+        nickname = contact.name.nickname ?: ""
+        showNicknameTextField = !contact.name.nickname.isNullOrBlank()
     }
 
     fun reset() {
         prefix = ""
-        givenName = ""
-        middleName = ""
-        familyName = ""
+        firstname = ""
+        secondName = ""
+        lastname = ""
         suffix = ""
         nickname = ""
         showPrefixTextField = false
-        showMiddleNameTextField = false
+        showSecondNameTextField = false
         showSuffixTextField = false
         showNicknameTextField = false
     }

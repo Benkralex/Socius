@@ -1,6 +1,5 @@
 package de.benkralex.socius.ui.components.editContact
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -8,15 +7,15 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import de.benkralex.socius.data.model.Contact
-import de.benkralex.socius.data.model.ContactEvent
+import de.benkralex.socius.data.model.Event
+import de.benkralex.socius.data.model.Type
 import java.util.Calendar
 
 class EditEventsState {
     val showFields by derivedStateOf { count > 0 }
     var count: Int by mutableIntStateOf(0)
     var dates: MutableList<MutableState<Long?>> by mutableStateOf(mutableListOf())
-    var types: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
-    var labels: MutableList<MutableState<String>> by mutableStateOf(mutableListOf())
+    var types: MutableList<MutableState<Type.Event>> by mutableStateOf(mutableListOf())
 
     fun hasRelevantData(): Boolean {
         return dates.any { it.value != null }
@@ -26,19 +25,18 @@ class EditEventsState {
         return dates[i].value != null
     }
     
-    fun getRelevantData(): List<ContactEvent> {
-        val events: MutableList<ContactEvent> = mutableListOf()
+    fun getRelevantData(): List<Event> {
+        val events: MutableList<Event> = mutableListOf()
         for (i in 0..<count) {
             if (isRelevant(i)) {
                 val calendar = Calendar.getInstance().apply { timeInMillis = dates[i].value!! }
 
                 events.add(
-                    ContactEvent(
+                    Event(
                         day = calendar.get(Calendar.DAY_OF_MONTH),
                         month = calendar.get(Calendar.MONTH) + 1,
                         year = calendar.get(Calendar.YEAR),
-                        type = types[i].value.trim().ifBlank { "anniversary" },
-                        label = labels[i].value.trim().ifBlank { null },
+                        type = types[i].value,
                     )
                 )
             }
@@ -48,22 +46,18 @@ class EditEventsState {
 
     fun addNew() {
         dates.add(mutableStateOf(null))
-        if (types.none { it.value == "birthday" })
-            types.add(mutableStateOf("birthday"))
+        if (types.none { it.value == Type.Event.BIRTHDAY })
+            types.add(mutableStateOf(Type.Event.BIRTHDAY))
         else
-            types.add(mutableStateOf("anniversary"))
-        labels.add(mutableStateOf(""))
+            types.add(mutableStateOf(Type.Event.ANNIVERSARY))
         count++
     }
 
     fun loadFromContact(contact: Contact) {
-        for (event: ContactEvent in contact.events) {
-            if (event.day == null || event.month == null) {
-                Log.e("EditEventsState loadFromContact Error", "day or month is null")
-            }
+        for (event: Event in contact.events) {
             val calendar = Calendar.getInstance().apply {
-                set(Calendar.DAY_OF_MONTH, event.day!!)
-                set(Calendar.MONTH, event.month!! - 1)
+                set(Calendar.DAY_OF_MONTH, event.day)
+                set(Calendar.MONTH, event.month - 1)
                 set(Calendar.YEAR, event.year ?: Calendar.getInstance().get(Calendar.YEAR))
                 set(Calendar.HOUR_OF_DAY, 0)
                 set(Calendar.MINUTE, 0)
@@ -73,7 +67,6 @@ class EditEventsState {
             count++
             dates.add(mutableStateOf(calendar.timeInMillis))
             types.add(mutableStateOf(event.type))
-            labels.add(mutableStateOf(event.label ?: ""))
         }
     }
 
@@ -81,6 +74,5 @@ class EditEventsState {
         count = 0
         dates.clear()
         types.clear()
-        labels.clear()
     }
 }

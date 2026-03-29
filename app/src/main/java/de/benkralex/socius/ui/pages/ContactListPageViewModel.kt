@@ -27,23 +27,23 @@ class ContactListPageViewModel : ViewModel() {
         private set
 
     val unselectedGroupsFilter by derivedStateOf {
-        groups.filter { !it.name.isNullOrBlank() }.map { it.name!! }.toSet() - selectedGroupsFilter
+        groups.filter { it.isNotBlank() }.toSet() - selectedGroupsFilter
     }
 
     val filteredContacts by derivedStateOf {
         val searchQueryFiltered = if (searchQuery.isNotBlank()) {
             contacts.filter { contact ->
                 getFormattedName(contact).contains(searchQuery, ignoreCase = true) ||
-                        contact.emails.any {it.address.contains(searchQuery, ignoreCase = true)} ||
-                        contact.phoneNumbers.any {it.number.contains(searchQuery, ignoreCase = true)} ||
-                        contact.websites.any {it.url.contains(searchQuery, ignoreCase = true)} ||
+                        contact.emails.any { it.value.contains(searchQuery, ignoreCase = true) } ||
+                        contact.phoneNumbers.any { it.value.contains(searchQuery, ignoreCase = true) } ||
+                        contact.websites.any { it.value.contains(searchQuery, ignoreCase = true) } ||
                         contact.note?.contains(searchQuery, ignoreCase = true) ?: false ||
-                        contact.prefix?.contains(searchQuery, ignoreCase = true) ?: false ||
-                        contact.givenName?.contains(searchQuery, ignoreCase = true) ?: false ||
-                        contact.middleName?.contains(searchQuery, ignoreCase = true) ?: false ||
-                        contact.familyName?.contains(searchQuery, ignoreCase = true) ?: false ||
-                        contact.suffix?.contains(searchQuery, ignoreCase = true) ?: false ||
-                        contact.nickname?.contains(searchQuery, ignoreCase = true) ?: false
+                        contact.name.prefix?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.name.firstname?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.name.secondName?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.name.lastname?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.name.suffix?.contains(searchQuery, ignoreCase = true) ?: false ||
+                        contact.name.nickname?.contains(searchQuery, ignoreCase = true) ?: false
             }
         } else {
             contacts
@@ -52,7 +52,7 @@ class ContactListPageViewModel : ViewModel() {
         val groupsFiltered = if (selectedGroupsFilter.isNotEmpty()) {
             searchQueryFiltered.filter { contact ->
                 selectedGroupsFilter.all { group ->
-                    group in contact.groups.filter { !it.name.isNullOrBlank() }.map { it.name!! }
+                    group in contact.groups.filter { it.isNotBlank() }
                 }
             }
         } else {

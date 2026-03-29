@@ -34,14 +34,14 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.text.isDigitsOnly
 import de.benkralex.socius.R
-import de.benkralex.socius.ui.components.displayContact.helpers.translateType
-import de.benkralex.socius.ui.pages.NewContactPageViewModel
+import de.benkralex.socius.data.model.Type
+import de.benkralex.socius.ui.pages.EditContactPageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditPostalAddresses(
     modifier: Modifier = Modifier,
-    viewModel: NewContactPageViewModel,
+    viewModel: EditContactPageViewModel,
 ) {
     Card (
         modifier = modifier
@@ -65,7 +65,7 @@ fun EditPostalAddresses(
                     .padding(horizontal = 8.dp)
                     .padding(bottom = 8.dp),
             ) {
-                for (i in 0..<viewModel.postalAddressesState.count) {
+                for (i in 0..<viewModel.addressesState.count) {
                     var streetFocused by remember { mutableStateOf(false) }
                     var houseNumberFocused by remember { mutableStateOf(false) }
                     var cityFocused by remember { mutableStateOf(false) }
@@ -82,31 +82,27 @@ fun EditPostalAddresses(
                             .onFocusChanged {
                                 streetFocused = it.isFocused
                             },
-                        value = viewModel.postalAddressesState.streets[i].value,
-                        onValueChange = { viewModel.postalAddressesState.streets[i].value = it },
+                        value = viewModel.addressesState.streets[i].value,
+                        onValueChange = { viewModel.addressesState.streets[i].value = it },
                         label = {
                             Text(
                                 text = if (expanded)
                                     stringResource(R.string.postalAddress_street)
                                 else
                                     stringResource(R.string.postalAddress_street) + " (" +
-                                        translateType(
-                                            type = viewModel.postalAddressesState.types[i].value,
-                                            label = viewModel.postalAddressesState.labels[i].value.ifBlank { null }
-                                        ) + ")"
+                                            stringResource(Type.translateType(viewModel.addressesState.types[i].value)) + ")"
                             )
                         },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    viewModel.postalAddressesState.streets.removeAt(i)
-                                    viewModel.postalAddressesState.cities.removeAt(i)
-                                    viewModel.postalAddressesState.regions.removeAt(i)
-                                    viewModel.postalAddressesState.postcodes.removeAt(i)
-                                    viewModel.postalAddressesState.countries.removeAt(i)
-                                    viewModel.postalAddressesState.types.removeAt(i)
-                                    viewModel.postalAddressesState.labels.removeAt(i)
-                                    viewModel.postalAddressesState.count--
+                                    viewModel.addressesState.streets.removeAt(i)
+                                    viewModel.addressesState.cities.removeAt(i)
+                                    viewModel.addressesState.regions.removeAt(i)
+                                    viewModel.addressesState.postcodes.removeAt(i)
+                                    viewModel.addressesState.countries.removeAt(i)
+                                    viewModel.addressesState.types.removeAt(i)
+                                    viewModel.addressesState.count--
                                 }
                             ) {
                                 Icon(
@@ -125,10 +121,10 @@ fun EditPostalAddresses(
                                 .weight(1f)
                                 .padding(end = 3.dp)
                                 .onFocusChanged { houseNumberFocused = it.isFocused },
-                            value = viewModel.postalAddressesState.houseNumbers[i].value,
+                            value = viewModel.addressesState.houseNumbers[i].value,
                             onValueChange = {
                                 if (!it.isDigitsOnly()) return@OutlinedTextField
-                                viewModel.postalAddressesState.houseNumbers[i].value = it
+                                viewModel.addressesState.houseNumbers[i].value = it
                             },
                             label = { Text(stringResource(R.string.postalAddress_house_number)) },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -138,13 +134,12 @@ fun EditPostalAddresses(
                                 .weight(1f)
                                 .padding(start = 3.dp)
                                 .onFocusChanged { postcodeFocused = it.isFocused },
-                            value = viewModel.postalAddressesState.postcodes[i].value,
+                            value = viewModel.addressesState.postcodes[i].value?.toString() ?: "",
                             onValueChange = {
                                 if (!it.isDigitsOnly()) {
-
                                     return@OutlinedTextField
                                 }
-                                viewModel.postalAddressesState.postcodes[i].value = it
+                                viewModel.addressesState.postcodes[i].value = it.toIntOrNull()
                             },
                             label = { Text(stringResource(R.string.postalAddress_postcode)) },
                             keyboardOptions = KeyboardOptions.Default.copy(
@@ -156,24 +151,24 @@ fun EditPostalAddresses(
                         modifier = Modifier
                             .fillMaxWidth()
                             .onFocusChanged { cityFocused = it.isFocused },
-                        value = viewModel.postalAddressesState.cities[i].value,
-                        onValueChange = { viewModel.postalAddressesState.cities[i].value = it },
+                        value = viewModel.addressesState.cities[i].value,
+                        onValueChange = { viewModel.addressesState.cities[i].value = it },
                         label = { Text(stringResource(R.string.postalAddress_city)) },
                     )
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth()
                             .onFocusChanged { regionFocused = it.isFocused },
-                        value = viewModel.postalAddressesState.regions[i].value,
-                        onValueChange = { viewModel.postalAddressesState.regions[i].value = it },
+                        value = viewModel.addressesState.regions[i].value,
+                        onValueChange = { viewModel.addressesState.regions[i].value = it },
                         label = { Text(stringResource(R.string.postalAddress_region)) },
                     )
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth()
                             .onFocusChanged { countryFocused = it.isFocused },
-                        value = viewModel.postalAddressesState.countries[i].value,
-                        onValueChange = { viewModel.postalAddressesState.countries[i].value = it },
+                        value = viewModel.addressesState.countries[i].value,
+                        onValueChange = { viewModel.addressesState.countries[i].value = it },
                         label = { Text(stringResource(R.string.postalAddress_country)) },
                     )
                     AnimatedVisibility(expanded) {
@@ -192,7 +187,7 @@ fun EditPostalAddresses(
                                         .onFocusChanged {
                                             typeFocused = it.isFocused
                                         },
-                                    value = translateType(viewModel.postalAddressesState.types[i].value),
+                                    value = stringResource(Type.translateType(viewModel.addressesState.types[i].value)),
                                     onValueChange = { },
                                     readOnly = true,
                                     label = { Text(stringResource(R.string.postalAddress_type)) },
@@ -209,11 +204,11 @@ fun EditPostalAddresses(
                                         dropdownExpanded = false
                                     }
                                 ) {
-                                    listOf("home", "work", "other", "custom").forEach { type ->
+                                    Type.Address.entries.forEach { selectedType ->
                                         DropdownMenuItem(
-                                            text = { Text(translateType(type)) },
+                                            text = { Text(stringResource(Type.translateType(selectedType))) },
                                             onClick = {
-                                                viewModel.postalAddressesState.types[i].value = type
+                                                viewModel.addressesState.types[i].value = selectedType
                                                 dropdownExpanded = false
                                             },
                                             contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
@@ -221,15 +216,15 @@ fun EditPostalAddresses(
                                     }
                                 }
                             }
-                            AnimatedVisibility(viewModel.postalAddressesState.types[i].value == "custom") {
+                            AnimatedVisibility(viewModel.addressesState.types[i].value == Type.Address.CUSTOM) {
                                 OutlinedTextField(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .onFocusChanged {
                                             labelFocused = it.isFocused
                                         },
-                                    value = viewModel.postalAddressesState.labels[i].value,
-                                    onValueChange = { viewModel.postalAddressesState.labels[i].value = it },
+                                    value = viewModel.addressesState.types[i].value.label ?: "",
+                                    onValueChange = { viewModel.addressesState.types[i].value.label = it },
                                     label = { Text(stringResource(R.string.postalAddress_label)) },
                                 )
                             }

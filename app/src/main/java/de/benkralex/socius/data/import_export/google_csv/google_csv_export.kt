@@ -1,7 +1,8 @@
 package de.benkralex.socius.data.import_export.google_csv
 
 import de.benkralex.socius.data.model.Contact
-import de.benkralex.socius.data.model.ContactEvent
+import de.benkralex.socius.data.model.Event
+import de.benkralex.socius.data.model.Type
 
 fun prepareStringForCsvValue(s: String): String {
     if (s.contains("\n") || s.contains(",")) {
@@ -16,33 +17,18 @@ fun formatDate(year: Int?, month: Int, day: Int): String {
     return "${year ?: "-"}-${if (month < 10) "0$month" else month}-${if (day < 10) "0$day" else day}"
 }
 
-fun getFilteredEvents(c: Contact): List<ContactEvent> {
-    val events = c.events.filter { it.month != null && it.day != null }
-    if (!events.map { it.type }.contains("birthday")) return events
+fun getFilteredEvents(c: Contact): List<Event> {
+    if (!c.events.map { it.type }.contains(Type.Event.BIRTHDAY)) return c.events
 
-    val firstBirthday = events.first { it.type == "birthday" }
-    if (c.birthday.isNullOrBlank()) {
-        return events.minus(firstBirthday)
-    }
-
-    val formattedBDays = events.filter { it.type == "birthday" }.map { it to formatDate(it.year, it.month!!, it.day!!) }
-    for ((bDay, bDayStr) in formattedBDays) {
-        if (bDayStr == c.birthday) {
-            return events.minus(bDay)
-        }
-    }
-
-    return events
+    val firstBirthday = c.events.first { it.type == Type.Event.BIRTHDAY }
+    return c.events - firstBirthday
 }
 
 fun getBirthdayString(c: Contact): String? {
-    if (!c.birthday.isNullOrBlank()) return c.birthday
+    if (!c.events.map { it.type }.contains(Type.Event.BIRTHDAY)) return null
 
-    val events = c.events.filter { it.month != null && it.day != null }
-    if (!events.map { it.type }.contains("birthday")) return null
-
-    val firstBirthday = events.first { it.type == "birthday" }
-    return formatDate(firstBirthday.year, firstBirthday.month!!, firstBirthday.day!!)
+    val firstBirthday = c.events.first { it.type == Type.Event.BIRTHDAY }
+    return formatDate(firstBirthday.year, firstBirthday.month, firstBirthday.day)
 }
 
 fun contactsToGoogleCsv(contacts: List<Contact>): List<String> {
@@ -113,23 +99,23 @@ fun contactsToGoogleCsv(contacts: List<Contact>): List<String> {
     val bodyLines: MutableList<MutableList<String>> = mutableListOf()
     for (c in contacts) {
         bodyLines.add(mutableListOf(
-            prepareStringForCsvValue(c.givenName ?: ""),
-            prepareStringForCsvValue(c.middleName ?: ""),
-            prepareStringForCsvValue(c.familyName ?: ""),
-            prepareStringForCsvValue(c.phoneticGivenName ?: ""),
-            prepareStringForCsvValue(c.phoneticMiddleName ?: ""),
-            prepareStringForCsvValue(c.phoneticFamilyName ?: ""),
-            prepareStringForCsvValue(c.prefix ?: ""),
-            prepareStringForCsvValue(c.suffix ?: ""),
-            prepareStringForCsvValue(c.nickname ?: ""),
-            prepareStringForCsvValue(c.displayName ?: ""),
-            prepareStringForCsvValue(c.organization ?: ""),
-            prepareStringForCsvValue(c.jobTitle ?: ""),
-            prepareStringForCsvValue(c.department ?: ""),
+            prepareStringForCsvValue(c.name.firstname ?: ""),
+            prepareStringForCsvValue(c.name.secondName ?: ""),
+            prepareStringForCsvValue(c.name.lastname ?: ""),
+            prepareStringForCsvValue(c.name.phoneticFirstname ?: ""),
+            prepareStringForCsvValue(c.name.phoneticSecondName ?: ""),
+            prepareStringForCsvValue(c.name.phoneticLastname ?: ""),
+            prepareStringForCsvValue(c.name.prefix ?: ""),
+            prepareStringForCsvValue(c.name.suffix ?: ""),
+            prepareStringForCsvValue(c.name.nickname ?: ""),
+            prepareStringForCsvValue(c.name.displayName ?: ""),
+            prepareStringForCsvValue(c.job.organization ?: ""),
+            prepareStringForCsvValue(c.job.jobTitle ?: ""),
+            prepareStringForCsvValue(c.job.department ?: ""),
             prepareStringForCsvValue(getBirthdayString(c) ?: ""),
             prepareStringForCsvValue(c.note ?: ""),
             "",
-            prepareStringForCsvValue(c.groups.map { it.name }.plus(if (c.isStarred) "starred" else null).filter { it != null }.joinToString(" ::: ")),
+            prepareStringForCsvValue((c.groups + listOfNotNull(if (c.isStarred) "starred" else null)).joinToString(" ::: ")),
         ))
         for (i in 0..<emailCount) {
             if (i >= c.emails.size) {
@@ -137,15 +123,10 @@ fun contactsToGoogleCsv(contacts: List<Contact>): List<String> {
                 continue
             }
             bodyLines.last().add(
-                prepareStringForCsvValue(
-                    (if (c.emails[i].type == "custom")
-                        c.emails[i].label
-                    else
-                        c.emails[i].type) ?: ""
-                )
+                prepareStringForCsvValue(Type.convertToString(c.emails[i].type))
             )
             bodyLines.last().add(
-                prepareStringForCsvValue(c.emails[i].address)
+                prepareStringForCsvValue(c.emails[i].value)
             )
         }
         for (i in 0..<phoneCount) {
@@ -154,15 +135,10 @@ fun contactsToGoogleCsv(contacts: List<Contact>): List<String> {
                 continue
             }
             bodyLines.last().add(
-                prepareStringForCsvValue(
-                    (if (c.phoneNumbers[i].type == "custom")
-                        c.phoneNumbers[i].label
-                    else
-                        c.phoneNumbers[i].type) ?: ""
-                )
+                prepareStringForCsvValue(Type.convertToString(c.phoneNumbers[i].type))
             )
             bodyLines.last().add(
-                prepareStringForCsvValue(c.phoneNumbers[i].number)
+                prepareStringForCsvValue(c.phoneNumbers[i].value)
             )
         }
         for (i in 0..<addressCount) {
@@ -170,26 +146,21 @@ fun contactsToGoogleCsv(contacts: List<Contact>): List<String> {
                 bodyLines.last().addAll(listOf("", "", "", "", "", "", "", "", ""))
                 continue
             }
-            val street = c.addresses[i].street ?: ""
+            val street = listOfNotNull(c.addresses[i].street, c.addresses[i].streetNumber).joinToString(" ")
             val city = c.addresses[i].city ?: ""
             val region = c.addresses[i].region ?: ""
-            val postcode = c.addresses[i].postcode ?: ""
+            val postcode = c.addresses[i].postcode
             val country = c.addresses[i].country ?: ""
 
             //Label
             bodyLines.last().add(
-                prepareStringForCsvValue(
-                    (if (c.addresses[i].type == "custom")
-                        c.addresses[i].label
-                    else
-                        c.addresses[i].type) ?: ""
-                )
+                prepareStringForCsvValue(Type.convertToString(c.addresses[i].type))
             )
 
             //Formatted
             val addressParts = mutableListOf<String>()
             if (street.isNotBlank()) addressParts.add(street)
-            if (postcode.isNotBlank() || !city.isNotBlank()) {
+            if (postcode != null || !city.isNotBlank()) {
                 addressParts.add(listOfNotNull(postcode, city).joinToString(" "))
             }
             if (region.isNotBlank()) addressParts.add(region)
@@ -205,7 +176,7 @@ fun contactsToGoogleCsv(contacts: List<Contact>): List<String> {
             //Region
             bodyLines.last().add(prepareStringForCsvValue(region))
             //Postal Code
-            bodyLines.last().add(prepareStringForCsvValue(postcode))
+            bodyLines.last().add(prepareStringForCsvValue(postcode?.toString() ?: ""))
             //Country
             bodyLines.last().add(prepareStringForCsvValue(country))
             //Extended Address
@@ -217,15 +188,10 @@ fun contactsToGoogleCsv(contacts: List<Contact>): List<String> {
                 continue
             }
             bodyLines.last().add(
-                prepareStringForCsvValue(
-                    (if (c.relations[i].type == "custom")
-                        c.relations[i].label
-                    else
-                        c.relations[i].type) ?: ""
-                )
+                prepareStringForCsvValue(Type.convertToString(c.relations[i].type))
             )
             bodyLines.last().add(
-                prepareStringForCsvValue(c.relations[i].name)
+                prepareStringForCsvValue(c.relations[i].value)
             )
         }
         for (i in 0..<websiteCount) {
@@ -234,33 +200,23 @@ fun contactsToGoogleCsv(contacts: List<Contact>): List<String> {
                 continue
             }
             bodyLines.last().add(
-                prepareStringForCsvValue(
-                    (if (c.websites[i].type == "custom")
-                        c.websites[i].label
-                    else
-                        c.websites[i].type) ?: ""
-                )
+                prepareStringForCsvValue(Type.convertToString(c.websites[i].type))
             )
             bodyLines.last().add(
-                prepareStringForCsvValue(c.websites[i].url)
+                prepareStringForCsvValue(c.websites[i].value)
             )
         }
-        val events: List<ContactEvent> = getFilteredEvents(c)
+        val events: List<Event> = getFilteredEvents(c)
         for (i in 0..<eventsCount) {
             if (i >= events.size) {
                 bodyLines.last().addAll(listOf("", ""))
                 continue
             }
             bodyLines.last().add(
-                prepareStringForCsvValue(
-                    (if (events[i].type == "custom")
-                        events[i].label
-                    else
-                        events[i].type) ?: ""
-                )
+                prepareStringForCsvValue(Type.convertToString(c.events[i].type))
             )
             bodyLines.last().add(
-                prepareStringForCsvValue(formatDate(events[i].year, events[i].month!!, events[i].day!!))
+                prepareStringForCsvValue(formatDate(events[i].year, events[i].month, events[i].day))
             )
         }
         val customFields: List<Pair<String, String>> = c.customFields.toList()

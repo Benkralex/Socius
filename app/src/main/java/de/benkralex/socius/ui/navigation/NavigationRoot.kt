@@ -49,9 +49,9 @@ import de.benkralex.socius.ui.pages.ContactDetailPage
 import de.benkralex.socius.ui.pages.ContactListPage
 import de.benkralex.socius.ui.pages.HighlightsPage
 import de.benkralex.socius.ui.pages.ManagePage
-import de.benkralex.socius.ui.pages.NewContactPage
+import de.benkralex.socius.ui.pages.EditContactPage
 import de.benkralex.socius.ui.pages.SettingsPage
-import de.benkralex.socius.ui.pages.NewContactPageViewModel
+import de.benkralex.socius.ui.pages.EditContactPageViewModel
 import de.benkralex.socius.ui.components.CustomNavigationBar
 import kotlinx.serialization.Serializable
 
@@ -68,7 +68,7 @@ data object AllowPermissionsPageNavKey: NavKey
 @Serializable
 data object NewContactPageNavKey: NavKey
 @Serializable
-data class ContactDetailIntentNavKey(val contactId: String): NavKey
+data class ContactDetailIntentNavKey(val contactId: Int): NavKey
 @Serializable
 data class ContactDetailPageNavKey(val contactId: Int): NavKey
 @Serializable
@@ -347,11 +347,11 @@ fun NavigationRoot(
                     NavEntry(
                         key = key
                     ) {
-                        val viewModel: NewContactPageViewModel = viewModel<NewContactPageViewModel>()
+                        val viewModel: EditContactPageViewModel = viewModel<EditContactPageViewModel>()
                         LaunchedEffect(Unit) {
                             viewModel.reset()
                         }
-                        NewContactPage(
+                        EditContactPage(
                             viewModel = viewModel,
                             onBackClick = {
                                 backStack.removeAt(backStack.size - 1)
@@ -364,11 +364,11 @@ fun NavigationRoot(
                     NavEntry(
                         key = key
                     ) {
-                        val viewModel: NewContactPageViewModel = viewModel<NewContactPageViewModel>()
+                        val viewModel: EditContactPageViewModel = viewModel<EditContactPageViewModel>()
                         LaunchedEffect(Unit) {
                             viewModel.reset()
                         }
-                        NewContactPage(
+                        EditContactPage(
                             viewModel = viewModel,
                             onBackClick = {
                                 backStack.removeAt(backStack.size - 1)

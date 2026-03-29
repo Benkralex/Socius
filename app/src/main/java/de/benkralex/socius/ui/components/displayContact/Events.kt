@@ -15,16 +15,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import de.benkralex.socius.data.model.ContactEvent
+import de.benkralex.socius.data.model.Event
+import de.benkralex.socius.data.model.Type
 import de.benkralex.socius.data.settings.getFormattedDate
-import de.benkralex.socius.ui.components.displayContact.helpers.translateType
 
 @Composable
 fun EventsWidget(
-    contactEvents: List<ContactEvent>
+    events: List<Event>
 ) {
-    if (contactEvents.isEmpty()) {
+    if (events.isEmpty()) {
         return
     }
     Card (
@@ -33,9 +34,9 @@ fun EventsWidget(
             .fillMaxWidth(),
     ) {
         Column {
-            contactEvents.forEach { contactEvent ->
+            events.forEach { event ->
                 Row {
-                    if (contactEvent.type == "birthday") {
+                    if (event.type == Type.Event.BIRTHDAY) {
                         Icon(
                             imageVector = Icons.Outlined.Cake,
                             contentDescription = "Cake",
@@ -59,17 +60,17 @@ fun EventsWidget(
                             .align(Alignment.CenterVertically)
                             .padding(8.dp),
                     ) {
-                        val formattedDate = getFormattedDate(contactEvent.day ?: 0, contactEvent.month ?: 0, contactEvent.year ?: 0)
+                        val formattedDate = getFormattedDate(event.day, event.month, event.year ?: 0)
                         Text(
                             text = formattedDate,
                         )
                         Text(
-                            text = translateType(contactEvent.type, contactEvent.label),
+                            stringResource(Type.translateType(event.type)),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }
                 }
-                if (contactEvents.indexOf(contactEvent) != (contactEvents.size - 1)) HorizontalDivider(
+                if (events.indexOf(event) != (events.size - 1)) HorizontalDivider(
                     thickness = 2.dp,
                 )
             }

@@ -21,9 +21,9 @@ fun WorkInformationWidget(
     contact: Contact
 ) {
     val smallInfos = listOfNotNull(
-        contact.jobTitle,
-        contact.department,
-        contact.organization,
+        contact.job.jobTitle,
+        contact.job.department,
+        contact.job.organization,
     )
     if (smallInfos.isEmpty()) {
         return

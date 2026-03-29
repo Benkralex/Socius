@@ -21,12 +21,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import de.benkralex.socius.R
-import de.benkralex.socius.data.model.PhoneNumber
-import de.benkralex.socius.ui.components.displayContact.helpers.translateType
+import de.benkralex.socius.data.model.Phone
+import de.benkralex.socius.data.model.Type
 
 @Composable
 fun PhoneNumbersWidget(
-    phoneNumbers: List<PhoneNumber>
+    phoneNumbers: List<Phone>
 ) {
     if (phoneNumbers.isEmpty()) {
         return
@@ -38,7 +38,7 @@ fun PhoneNumbersWidget(
             .fillMaxWidth(),
     ) {
         Column {
-            phoneNumbers.forEach { phoneNumber ->
+            phoneNumbers.forEach { phone ->
                 Row {
                     Icon(
                         imageVector = Icons.Outlined.Phone,
@@ -50,7 +50,7 @@ fun PhoneNumbersWidget(
                             .clickable {
                                 val intent = Intent(Intent.ACTION_DIAL)
                                     .apply {
-                                    data = "tel:${phoneNumber.number}".toUri()
+                                    data = "tel:${phone.value}".toUri()
                                 }
                                 context.startActivity(intent)
                             },
@@ -61,15 +61,15 @@ fun PhoneNumbersWidget(
                             .padding(8.dp),
                     ) {
                         Text(
-                            text = phoneNumber.number,
+                            text = phone.value,
                         )
                         Text(
-                            text = translateType(phoneNumber.type, phoneNumber.label),
+                            stringResource(Type.translateType(phone.type)),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }
                 }
-                if (phoneNumbers.indexOf(phoneNumber) != (phoneNumbers.size - 1)) HorizontalDivider(
+                if (phoneNumbers.indexOf(phone) != (phoneNumbers.size - 1)) HorizontalDivider(
                     thickness = 2.dp,
                 )
             }

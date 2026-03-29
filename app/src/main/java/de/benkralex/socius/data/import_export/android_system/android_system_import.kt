@@ -5,5 +5,5 @@ import de.benkralex.socius.data.import_export.android_system.load.getAndroidSyst
 import de.benkralex.socius.data.import_export.common.importContacts
 
 suspend fun importAndroidSystemContacts(context: Context) {
-    importContacts(getAndroidSystemContacts(context = context))
+    importContacts(getAndroidSystemContacts(context = context).map { it.toNewContact() })
 }

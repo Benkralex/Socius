@@ -31,14 +31,14 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.benkralex.socius.R
-import de.benkralex.socius.ui.components.displayContact.helpers.translateType
-import de.benkralex.socius.ui.pages.NewContactPageViewModel
+import de.benkralex.socius.data.model.Type
+import de.benkralex.socius.ui.pages.EditContactPageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditEmails(
     modifier: Modifier = Modifier,
-    viewModel: NewContactPageViewModel,
+    viewModel: EditContactPageViewModel,
 ) {
     Card (
         modifier = modifier
@@ -73,26 +73,22 @@ fun EditEmails(
                             .onFocusChanged {
                                 addressFocused = it.isFocused
                             },
-                        value = viewModel.emailsState.addresses[i].value,
-                        onValueChange = { viewModel.emailsState.addresses[i].value = it },
+                        value = viewModel.emailsState.values[i].value,
+                        onValueChange = { viewModel.emailsState.values[i].value = it },
                         label = {
                             Text(
                                 text = if (expanded)
                                     stringResource(R.string.email)
                                 else
                                     stringResource(R.string.email) + " (" +
-                                        translateType(
-                                            type = viewModel.emailsState.types[i].value,
-                                            label = viewModel.emailsState.labels[i].value.ifBlank { null }
-                                        ) + ")"
+                                            stringResource(Type.translateType(viewModel.emailsState.types[i].value)) + ")"
                             )
                         },
                         trailingIcon = {
                             IconButton(
                                 onClick = {
-                                    viewModel.emailsState.addresses.removeAt(i)
+                                    viewModel.emailsState.values.removeAt(i)
                                     viewModel.emailsState.types.removeAt(i)
-                                    viewModel.emailsState.labels.removeAt(i)
                                     viewModel.emailsState.count--
                                 }
                             ) {
@@ -122,7 +118,7 @@ fun EditEmails(
                                         .onFocusChanged {
                                             typeFocused = it.isFocused
                                         },
-                                    value = translateType(viewModel.emailsState.types[i].value),
+                                    value = stringResource(Type.translateType(viewModel.emailsState.types[i].value)),
                                     onValueChange = { },
                                     readOnly = true,
                                     label = { Text(stringResource(R.string.email_type)) },
@@ -139,11 +135,11 @@ fun EditEmails(
                                         dropdownExpanded = false
                                     }
                                 ) {
-                                    listOf("home", "work", "other", "custom").forEach { o ->
+                                    Type.Email.entries.forEach { selectedType ->
                                         DropdownMenuItem(
-                                            text = { Text(translateType(o)) },
+                                            text = { stringResource(Type.translateType(selectedType)) },
                                             onClick = {
-                                                viewModel.emailsState.types[i].value = o
+                                                viewModel.emailsState.types[i].value = selectedType
                                                 dropdownExpanded = false
                                             },
                                             contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
@@ -151,15 +147,15 @@ fun EditEmails(
                                     }
                                 }
                             }
-                            AnimatedVisibility(viewModel.emailsState.types[i].value == "custom") {
+                            AnimatedVisibility(viewModel.emailsState.types[i].value == Type.Email.CUSTOM) {
                                 OutlinedTextField(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .onFocusChanged {
                                             labelFocused = it.isFocused
                                         },
-                                    value = viewModel.emailsState.labels[i].value,
-                                    onValueChange = { viewModel.emailsState.labels[i].value = it },
+                                    value = viewModel.emailsState.types[i].value.label ?: "",
+                                    onValueChange = { viewModel.emailsState.types[i].value.label = it },
                                     label = { Text(stringResource(R.string.email_label)) },
                                 )
                             }

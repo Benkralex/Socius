@@ -2,7 +2,7 @@ package de.benkralex.socius.data.import_export.android_system.load
 
 import android.content.ContentResolver
 import android.provider.ContactsContract
-import de.benkralex.socius.data.model.PhoneNumber
+import de.benkralex.socius.data.model.old.PhoneNumber
 
 fun loadPhoneNumbersBatch(contentResolver: ContentResolver, contactIds: List<String>): Map<String, List<PhoneNumber>> {
     val result = mutableMapOf<String, MutableList<PhoneNumber>>()
