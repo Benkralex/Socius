@@ -3,6 +3,7 @@ package de.benkralex.socius.ui.pages
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -29,6 +30,7 @@ class ContactListPageViewModel : ViewModel() {
     val unselectedGroupsFilter by derivedStateOf {
         groups.filter { it.isNotBlank() }.toSet() - selectedGroupsFilter
     }
+    var showJumpToLetterDialog by mutableStateOf(false)
 
     val filteredContacts by derivedStateOf {
         val searchQueryFiltered = if (searchQuery.isNotBlank()) {
@@ -98,6 +100,12 @@ class ContactListPageViewModel : ViewModel() {
 
     var pullToRefreshState: PullToRefreshState? = null
 
+    var pendingScrollTarget by mutableStateOf<String?>(null)
+        private set
+
+    var scrollRequestToken by mutableLongStateOf(0L)
+        private set
+
     val displaySearch by derivedStateOf {
         !displaySelectionActions
     }
@@ -157,5 +165,15 @@ class ContactListPageViewModel : ViewModel() {
 
     fun refreshContacts() {
         loadAllContacts()
+    }
+
+    fun scrollToLetter(letter: String) {
+        if (letter !in grouped.keys) return
+        pendingScrollTarget = letter
+        scrollRequestToken++
+    }
+
+    fun consumeScrollRequest() {
+        pendingScrollTarget = null
     }
 }

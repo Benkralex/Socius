@@ -10,7 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import de.benkralex.socius.ui.components.ContactsList
+import de.benkralex.socius.ui.components.contactsList.ContactsList
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable

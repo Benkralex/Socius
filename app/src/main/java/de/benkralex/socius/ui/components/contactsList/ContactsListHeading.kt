@@ -1,4 +1,4 @@
-package de.benkralex.socius.ui.components
+package de.benkralex.socius.ui.components.contactsList
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

@@ -1,4 +1,4 @@
-package de.benkralex.socius.ui.components
+package de.benkralex.socius.ui.components.contactsList
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
