@@ -1,3 +1,7 @@
+# UMGEZOGEN AUF [https://codeberg.org/Benkralex/Socius](https://codeberg.org/Benkralex/Socius)
+
+
+
 <img src="readme_content/banner.png" alt="Banner"><br>
 
 # Socius
